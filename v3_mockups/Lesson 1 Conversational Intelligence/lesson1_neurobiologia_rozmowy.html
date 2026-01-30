@@ -1,0 +1,3617 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lekcja 1: Neurobiologia Rozmowy | BrainVenture Academy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header lekcji */
+        .lesson-header {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .lesson-title {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .lesson-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #f0f0f0;
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            box-shadow: 0 2px 5px rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .xp-badge {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        /* Karta */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-number {
+            color: #667eea;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* Video Card */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .video-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .video-info h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .video-info ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .video-info ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+            color: #555;
+        }
+
+        .video-info ul li:last-child {
+            border-bottom: none;
+        }
+
+        .video-info ul li::before {
+            content: "✓ ";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Checkbox */
+        .checkbox-container {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            background: #e8f5e9;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-container:hover {
+            background: #c8e6c9;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            font-size: 1.1rem;
+            color: #2e7d32;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Prezentacja Card */
+        .presentation-content {
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .presentation-content h3 {
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            font-size: 1.5rem;
+        }
+
+        .presentation-content h4 {
+            color: #555;
+            margin: 20px 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .definition-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #4caf50;
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ff9800;
+            font-style: italic;
+            font-size: 1.3rem;
+            color: #e65100;
+            text-align: center;
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin: 25px 0;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .comparison-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: #e3f2fd;
+        }
+
+        .key-insight {
+            background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%);
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #0288d1;
+            font-weight: 500;
+            color: #01579b;
+        }
+
+        /* Case Study */
+        .case-study-header {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 5px solid #f44336;
+        }
+
+        .case-study-header h4 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+
+        .dialogue-box {
+            background: #f8d7da;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #dc3545;
+        }
+
+        .dialogue-box p {
+            color: #721c24;
+            font-style: italic;
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .dialogue-box strong {
+            color: #c62828;
+        }
+
+        .reaction-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .reaction-box p {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .question-section {
+            margin: 30px 0;
+        }
+
+        .question-item {
+            margin: 25px 0;
+        }
+
+        .question-item label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .question-item textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .question-item textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .multiple-choice {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .choice-option {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .choice-option:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+        }
+
+        .choice-option input[type="radio"] {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .choice-option.selected {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .choice-option.correct {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+
+        .choice-option.incorrect {
+            background: #ffcdd2;
+            border-color: #f44336;
+        }
+
+        .feedback-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 5px solid #4caf50;
+            display: none;
+        }
+
+        .feedback-box.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback-box p {
+            color: #2e7d32;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Navigation */
+        .card-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+        }
+
+        .nav-button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-prev {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #d0d0d0;
+            transform: translateX(-3px);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            margin-left: auto;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            transform: translateX(3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Tooltip */
+        .tooltip-field {
+            margin-top: 15px;
+        }
+
+        .tooltip-field input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .tooltip-field input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .tooltip-field label {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .lesson-header {
+                padding: 20px;
+            }
+
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-button {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Badge animations */
+        .badge-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            z-index: 1000;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .badge-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .badge-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .badge-overlay.show {
+            display: block;
+        }
+
+        /* Dual Path Cards */
+        .dual-path-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .path-card {
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .path-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .fear-path {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-color: #f44336;
+        }
+
+        .trust-path {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            border-color: #4caf50;
+        }
+
+        .path-card h3 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .fear-path h3 {
+            color: #c62828;
+        }
+
+        .trust-path h3 {
+            color: #2e7d32;
+        }
+
+        .path-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .path-section strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        .path-section ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+
+        .path-section ul li {
+            padding: 5px 0;
+            line-height: 1.6;
+        }
+
+        .hormone-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+
+        .fear-path .hormone-badge {
+            background: #f44336;
+            color: white;
+        }
+
+        .trust-path .hormone-badge {
+            background: #4caf50;
+            color: white;
+        }
+
+        .example-dialogue {
+            font-style: italic;
+            padding: 15px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 1.05rem;
+        }
+
+        /* Brain activation visual */
+        .brain-activation {
+            text-align: center;
+            padding: 15px;
+            font-size: 2rem;
+            margin: 15px 0;
+        }
+
+        /* Amygdala Card Styles */
+        .process-flow {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .flow-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            min-width: 60px;
+        }
+
+        .flow-content {
+            flex: 1;
+        }
+
+        .flow-content strong {
+            display: block;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .flow-content p {
+            color: #666;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .example-scenario {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #ff9800;
+        }
+
+        .scenario-dialogue {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-style: italic;
+            color: #e65100;
+        }
+
+        .reactions-list {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .reactions-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .reactions-list ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .reactions-list ul li:last-child {
+            border-bottom: none;
+        }
+
+        .avoidance-tips {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #4caf50;
+        }
+
+        .tips-section {
+            margin: 20px 0;
+        }
+
+        .tips-section h4 {
+            color: #2e7d32;
+            margin-bottom: 12px;
+        }
+
+        .tips-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tips-section ul li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .tips-section ul li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+
+        .memory-tip {
+            background: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            margin: 30px 0;
+        }
+
+        .quiz-question {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .quiz-question-number {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-question-text {
+            font-size: 1.15rem;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            background: white;
+            padding: 18px 25px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .quiz-option:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 15px;
+            margin-top: 3px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .quiz-option label {
+            cursor: pointer;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .quiz-option.selected {
+            background: #e3f2fd;
+            border-color: #667eea;
+        }
+
+        .quiz-score {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .quiz-score h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-score-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .quiz-interpretation {
+            background: rgba(255,255,255,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Flashcards Styles */
+        .flashcards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .flashcard {
+            height: 220px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .flashcard-back {
+            background: white;
+            color: #333;
+            transform: rotateY(180deg);
+            border: 2px solid #667eea;
+        }
+
+        .flashcard-term {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .flashcard-hint {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .flashcard-definition {
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .flashcard-actions {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .flashcard-btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-know {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-know:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .btn-review {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-review:hover {
+            background: #e68900;
+            transform: scale(1.05);
+        }
+
+        .flashcard-progress {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .flashcard-progress-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        /* Voice Note Styles */
+        .voice-recorder {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .record-button {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .record-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.6);
+        }
+
+        .record-button.recording {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .recording-status {
+            font-size: 1.2rem;
+            color: #e74c3c;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+
+        .recording-timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+
+        .audio-playback {
+            margin: 25px 0;
+            display: none;
+        }
+
+        .audio-playback.show {
+            display: block;
+        }
+
+        .audio-player {
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+        }
+
+        .voice-instructions {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .voice-instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .voice-instructions ul li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .voice-instructions ul li::before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+        }
+
+        /* Implementation Task Styles */
+        .implementation-container {
+            margin: 30px 0;
+        }
+
+        .task-description {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #ff9800;
+        }
+
+        .task-objectives {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        .task-objectives h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .task-objectives ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .task-objectives ul li {
+            padding: 10px 0;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .task-objectives ul li::before {
+            content: "🎯";
+            position: absolute;
+            left: 0;
+        }
+
+        .download-template {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .download-template:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .commitment-checkbox {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .commitment-checkbox:hover {
+            background: #e9ecef;
+        }
+
+        .commitment-checkbox input[type="checkbox"] {
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+
+        .commitment-checkbox label {
+            font-size: 1.1rem;
+            cursor: pointer;
+            line-height: 1.6;
+        }
+
+        .reminder-info {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            text-align: center;
+            border-left: 5px solid #4caf50;
+        }
+
+        .template-preview {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border: 2px dashed #ccc;
+        }
+
+        .template-preview table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .template-preview th,
+        .template-preview td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .template-preview th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .template-preview td {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* AI Evaluator Styles */
+        .ai-evaluator {
+            margin: 30px 0;
+        }
+
+        .pitch-input-area {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .pitch-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-family: inherit;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .pitch-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .evaluate-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .evaluate-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .ai-feedback {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .ai-feedback.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        .feedback-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+        }
+
+        .feedback-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .feedback-criteria {
+            background: white;
+            padding: 25px;
+            border-radius: 0 0 12px 12px;
+            border: 2px solid #667eea;
+            border-top: none;
+        }
+
+        .criterion {
+            margin: 20px 0;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .criterion:last-child {
+            border-bottom: none;
+        }
+
+        .criterion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .criterion-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .criterion-score {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .criterion-feedback {
+            color: #666;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        /* Comparison Table Styles */
+        .intelligence-comparison {
+            margin: 30px 0;
+        }
+
+        .comparison-intro {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #4caf50;
+        }
+
+        .three-column-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .three-column-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .three-column-table th {
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .three-column-table td {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            line-height: 1.6;
+        }
+
+        .three-column-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .three-column-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .synergy-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #ff9800;
+        }
+
+        .synergy-diagram {
+            text-align: center;
+            font-size: 2rem;
+            margin: 20px 0;
+            color: #667eea;
+        }
+
+        /* Reading List Styles */
+        .reading-resources {
+            margin: 30px 0;
+        }
+
+        .resource-category {
+            margin: 30px 0;
+        }
+
+        .resource-category h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .resource-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .resource-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .resource-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .resource-author {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .resource-description {
+            color: #777;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .resource-link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .resource-link:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        /* Summary Styles */
+        .summary-container {
+            margin: 30px 0;
+        }
+
+        .completion-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .completion-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .completion-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .learnings-checklist {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+        }
+
+        .learnings-checklist h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .learning-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .learning-item:last-child {
+            border-bottom: none;
+        }
+
+        .learning-check {
+            color: #4caf50;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .learning-text {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .badge-award {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            border: 3px solid #f9a825;
+        }
+
+        .badge-icon {
+            font-size: 5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .badge-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f57f17;
+            margin-bottom: 10px;
+        }
+
+        .badge-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .lesson-progress {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .progress-circle {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .next-lesson-cta {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 20px 50px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+
+        .next-lesson-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .next-lesson-cta:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .email-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border: 2px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .email-summary input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .email-summary label {
+            cursor: pointer;
+            font-size: 1.05rem;
+        }
+
+        @media (max-width: 768px) {
+            .dual-path-container {
+                grid-template-columns: 1fr;
+            }
+
+            .path-card {
+                padding: 20px;
+            }
+
+            .flashcards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flashcard {
+                height: 200px;
+            }
+
+            .record-button {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+
+            .completion-stats {
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .three-column-table {
+                font-size: 0.9rem;
+            }
+
+            .three-column-table th,
+            .three-column-table td {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Lekcji -->
+        <div class="lesson-header">
+            <div class="lesson-title">🧠 Lekcja 1: Neurobiologia Rozmowy</div>
+            <div class="lesson-subtitle">Jak rozmowy wpływają na nasz mózg</div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            
+            <div class="progress-info">
+                <span id="progressText">Karta 0 z 13</span>
+                <span class="xp-badge" id="xpBadge">⭐ 0 XP</span>
+            </div>
+        </div>
+
+        <!-- KARTA 1: Video Introduction -->
+        <div class="card active" data-card="1">
+            <div class="card-number">Karta 1 z 3</div>
+            <span class="card-icon">🎬</span>
+            <h2 class="card-title">Rozmowy, które zmieniają mózg</h2>
+            
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Obejrzyj 10-minutowy film wprowadzający do koncepcji <strong>Conversational Intelligence</strong>. 
+                Dowiesz się, jak każda rozmowa wpływa na chemię Twojego mózgu i mózgów rozmówców.
+            </p>
+
+            <div class="video-container">
+                <iframe 
+                    src="https://www.youtube.com/embed/zWBujW9o2Hc?rel=0&showinfo=0&modestbranding=1" 
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <div class="video-info">
+                <h4>🎯 Kluczowe tezy z filmu:</h4>
+                <ul>
+                    <li>Klucz do sukcesu nie w "co" mówimy, ale w "jak" to robimy</li>
+                    <li>Każda rozmowa wpływa bezpośrednio na neurochemię mózgu</li>
+                    <li>Dwie ścieżki: strach (kortyzol) vs zaufanie (oksytocyna)</li>
+                    <li>Trzy poziomy rozmów: Transakcyjny → Pozycyjny → Transformacyjny</li>
+                    <li>Porwanie amygdali - gdy mózg przełącza się w tryb obrony</li>
+                </ul>
+            </div>
+
+            <div class="checkbox-container" onclick="toggleCheckbox('video-watched')">
+                <input type="checkbox" id="video-watched" onclick="handleVideoWatched(event)">
+                <label for="video-watched">✅ Obejrzałem całe video</label>
+            </div>
+
+            <div class="tooltip-field">
+                <label>💡 Co najbardziej Cię zaskoczyło? (opcjonalnie)</label>
+                <input 
+                    type="text" 
+                    id="video-reflection" 
+                    placeholder="Np. To, że rozmowy dosłownie zmieniają chemię mózgu..."
+                    onchange="saveProgress()">
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()" disabled>
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 2: Prezentacja - Czym jest C-IQ? -->
+        <div class="card" data-card="2">
+            <div class="card-number">Karta 2 z 3</div>
+            <span class="card-icon">📖</span>
+            <h2 class="card-title">Czym jest Conversational Intelligence?</h2>
+
+            <div class="presentation-content">
+                <h3>🧠 Definicja C-IQ</h3>
+                
+                <div class="definition-box">
+                    <p style="font-size: 1.15rem; margin: 0; line-height: 1.8;">
+                        <strong>Conversational Intelligence (C-IQ)</strong> to umiejętność prowadzenia rozmów, które:
+                    </p>
+                    <ul style="margin-top: 15px; padding-left: 25px; line-height: 1.8;">
+                        <li>✅ Budują zaufanie zamiast je niszczyć</li>
+                        <li>✅ Inspirują zamiast stresować</li>
+                        <li>✅ Uruchamiają hormony współpracy (oksytocyna) zamiast obrony (kortyzol)</li>
+                    </ul>
+                </div>
+
+                <h3>💡 Kluczowa zasada Judith Glaser:</h3>
+                
+                <div class="quote-box">
+                    "Wszystko dzieje się poprzez rozmowy"
+                </div>
+
+                <p style="margin: 20px 0; line-height: 1.8;">To oznacza, że:</p>
+                <ul style="padding-left: 25px; line-height: 1.8; color: #555;">
+                    <li>Kultura organizacji = jakość rozmów</li>
+                    <li>Efektywność zespołu = jakość rozmów</li>
+                    <li>Twoje przywództwo = jakość rozmów</li>
+                </ul>
+
+                <h3>🎯 Dlaczego C-IQ > IQ lub EQ?</h3>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Typ inteligencji</th>
+                            <th>Focus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>IQ</strong></td>
+                            <td>Zdolności poznawcze</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EQ</strong></td>
+                            <td>Rozumienie emocji</td>
+                        </tr>
+                        <tr style="background: #e8f5e9;">
+                            <td><strong>C-IQ</strong></td>
+                            <td><strong>Kształtowanie emocji przez rozmowę</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="key-insight">
+                    <strong>💡 Kluczowy insight:</strong><br>
+                    C-IQ to "praktyczne przedłużenie" EQ - nie tylko rozumiesz emocje, 
+                    ale <strong>świadomie nimi zarządzasz poprzez sposób, w jaki rozmawiasz</strong>.
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 3: Case Study - Rozmowa Marty -->
+        <div class="card" data-card="3">
+            <div class="card-number">Karta 3 z 3</div>
+            <span class="card-icon">🎭</span>
+            <h2 class="card-title">Rozmowa, która zamknęła zespół</h2>
+
+            <div class="case-study-header">
+                <h4>📋 Kontekst:</h4>
+                <p style="color: #c62828; line-height: 1.7;">
+                    Marta jest liderką zespołu marketingowego. Projekt kampanii ma opóźnienie, 
+                    presja czasu jest duża, a wyniki - poniżej oczekiwań.
+                </p>
+            </div>
+
+            <h3 style="color: #667eea; margin: 30px 0 15px 0;">💬 Rozmowa na spotkaniu:</h3>
+
+            <div class="dialogue-box">
+                <p><strong>Marta zwraca się do zespołu ostrym tonem:</strong></p>
+                <p style="font-size: 1.1rem; margin: 15px 0;">
+                    "Nie rozumiem, dlaczego to wciąż nie działa. Powiedziałam przecież jasno, 
+                    jak ma wyglądać komunikacja. Czy ktoś w ogóle słucha?"
+                </p>
+                <p style="color: #999; font-style: normal; margin: 15px 0;">
+                    [Cisza w sali. Kasia spuszcza wzrok. Tomek próbuje coś powiedzieć...]
+                </p>
+                <p style="font-size: 1.1rem; margin: 15px 0;">
+                    "Nie tłumacz się, potrzebuję efektów, nie wymówek."
+                </p>
+            </div>
+
+            <div class="reaction-box">
+                <h4 style="color: #856404; margin-bottom: 10px;">⚡ Reakcja zespołu:</h4>
+                <p>
+                    Spotkanie kończy się szybko. Następnego dnia zespół milczy, unika kontaktu, 
+                    nie włącza się w planowanie. Atmosfera staje się napięta.
+                </p>
+            </div>
+
+            <div class="question-section">
+                <h3 style="color: #667eea; margin-bottom: 20px;">❓ Pytania do refleksji:</h3>
+
+                <div class="question-item">
+                    <label>1. Co wydarzyło się w tej rozmowie na poziomie emocji?</label>
+                    <textarea 
+                        id="question1" 
+                        placeholder="Pomyśl o reakcjach zespołu, języku ciała, emocjach..."
+                        onchange="saveProgress()"></textarea>
+                </div>
+
+                <div class="question-item">
+                    <label>2. Jakie reakcje chemiczne mogły zajść w mózgach zespołu?</label>
+                    <div class="multiple-choice">
+                        <div class="choice-option" onclick="selectChoice(this, 'A')">
+                            <input type="radio" name="chemistry" value="A" id="choiceA">
+                            <label for="choiceA">Wzrost oksytocyny (zaufanie)</label>
+                        </div>
+                        <div class="choice-option" onclick="selectChoice(this, 'B')">
+                            <input type="radio" name="chemistry" value="B" id="choiceB">
+                            <label for="choiceB">Wzrost kortyzolu (stres) ✓</label>
+                        </div>
+                        <div class="choice-option" onclick="selectChoice(this, 'C')">
+                            <input type="radio" name="chemistry" value="C" id="choiceC">
+                            <label for="choiceC">Brak reakcji</label>
+                        </div>
+                        <div class="choice-option" onclick="selectChoice(this, 'D')">
+                            <input type="radio" name="chemistry" value="D" id="choiceD">
+                            <label for="choiceD">Wzrost dopaminy (motywacja)</label>
+                        </div>
+                    </div>
+                    <div class="feedback-box" id="chemistryFeedback">
+                        <p><strong>✓ Dokładnie!</strong> Zespół przeszedł w tryb obrony - amygdala przejęła kontrolę. 
+                        Ostry ton i krytyka uruchomiły kortyzol, co zablokowało logiczne myślenie i wywołało reakcję "walcz lub uciekaj".</p>
+                    </div>
+                </div>
+
+                <div class="question-item">
+                    <label>3. Co mogła zrobić Marta inaczej?</label>
+                    <textarea 
+                        id="question3" 
+                        placeholder="Jakie pytania, jaki ton, jakie podejście..."
+                        onchange="saveProgress()"></textarea>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 4: Chemia zaufania vs strachu -->
+        <div class="card" data-card="4">
+            <div class="card-number">Karta 4 z 6</div>
+            <span class="card-icon">🧪</span>
+            <h2 class="card-title">Dwie ścieżki rozmowy</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Każda rozmowa może pójść jedną z dwóch dróg - <strong>ścieżką strachu</strong> 
+                lub <strong>ścieżką zaufania</strong>. To, którą ścieżkę uruchomisz, zależy od 
+                Twoich słów, tonu głosu i intencji.
+            </p>
+
+            <div class="dual-path-container">
+                <!-- Ścieżka Strachu -->
+                <div class="path-card fear-path">
+                    <h3>😰 Ścieżka Strachu</h3>
+                    
+                    <div class="path-section">
+                        <strong>Trigger:</strong>
+                        Krytyka, presja, brak zrozumienia
+                    </div>
+
+                    <div class="hormone-badge">💊 Kortyzol</div>
+                    <p style="font-size: 0.9rem; color: #c62828; margin-top: 5px;">hormon stresu</p>
+
+                    <div class="brain-activation">
+                        🧠<br>
+                        <span style="font-size: 1rem; color: #c62828;">Amygdala (ciało migdałowate)</span>
+                    </div>
+
+                    <div class="path-section">
+                        <strong>Efekty:</strong>
+                        <ul>
+                            <li>❌ Blokada logicznego myślenia</li>
+                            <li>❌ Reakcja: walcz / uciekaj / zastygnij</li>
+                            <li>❌ Zamknięcie na pomysły innych</li>
+                            <li>❌ Defensywność i stres</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-dialogue">
+                        💬 "To nie zadziała, ile razy mam powtarzać!"
+                    </div>
+                </div>
+
+                <!-- Ścieżka Zaufania -->
+                <div class="path-card trust-path">
+                    <h3>🌟 Ścieżka Zaufania</h3>
+                    
+                    <div class="path-section">
+                        <strong>Trigger:</strong>
+                        Szacunek, ciekawość, zrozumienie
+                    </div>
+
+                    <div class="hormone-badge">💚 Oksytocyna</div>
+                    <p style="font-size: 0.9rem; color: #2e7d32; margin-top: 5px;">hormon więzi</p>
+
+                    <div class="brain-activation">
+                        🧠<br>
+                        <span style="font-size: 1rem; color: #2e7d32;">Kora przedczołowa</span>
+                    </div>
+
+                    <div class="path-section">
+                        <strong>Efekty:</strong>
+                        <ul>
+                            <li>✅ Kreatywność i jasne myślenie</li>
+                            <li>✅ Otwartość na współpracę</li>
+                            <li>✅ Wyższa empatia i zaufanie</li>
+                            <li>✅ Motywacja do działania</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-dialogue">
+                        💬 "Jak Ty to widzisz? Co moglibyśmy zrobić razem?"
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Kluczowy insight:</strong><br>
+                Ty jako lider decydujesz, którą ścieżkę uruchomisz - swoimi słowami, 
+                tonem głosu i intencją rozmowy. To nie jest teoria - to <strong>neurobiologia w praktyce</strong>.
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 5: Porwanie Amygdali -->
+        <div class="card" data-card="5">
+            <div class="card-number">Karta 5 z 6</div>
+            <span class="card-icon">⚡</span>
+            <h2 class="card-title">Amygdala Hijack - gdy mózg ucieka spod kontroli</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                <strong>Porwanie amygdali</strong> to moment, w którym Twój mózg przejmuje kontrolę nad Tobą. 
+                Zrozumienie tego mechanizmu to klucz do zarządzania trudnymi rozmowami.
+            </p>
+
+            <h3 style="color: #667eea; margin: 30px 0 20px 0;">🧠 Co to jest "porwanie amygdali"?</h3>
+
+            <div class="definition-box">
+                <p style="margin: 0; line-height: 1.8;">
+                    <strong>Amygdala (ciało migdałowate)</strong> to część mózgu, która reaguje 
+                    <strong>błyskawicznie</strong> na zagrożenie - szybciej niż kora przedczołowa 
+                    (odpowiedzialna za logiczne myślenie). Gdy odczuwasz zagrożenie w rozmowie, 
+                    amygdala "przejmuje ster" i uruchamia tryb przetrwania.
+                </p>
+            </div>
+
+            <h3 style="color: #667eea; margin: 30px 0 20px 0;">⚡ Jak to działa?</h3>
+
+            <div class="process-flow">
+                <div class="flow-step">
+                    <div class="flow-number">1</div>
+                    <div class="flow-content">
+                        <strong>Trigger</strong>
+                        <p>Ktoś mówi coś, co odbierasz jako atak lub krytykę</p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">2</div>
+                    <div class="flow-content">
+                        <strong>0.5 sekundy</strong>
+                        <p>Amygdala przejmuje kontrolę - szybciej niż logiczne myślenie</p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">3</div>
+                    <div class="flow-content">
+                        <strong>Reakcja chemiczna</strong>
+                        <p>Kortyzol zalewa organizm, adrenalina rośnie</p>
+                    </div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-number">4</div>
+                    <div class="flow-content">
+                        <strong>Efekt</strong>
+                        <p>Tryb przetrwania: walcz / uciekaj / zastygnij</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="color: #667eea; margin: 30px 0 20px 0;">🎭 Przykład w praktyce:</h3>
+
+            <div class="example-scenario">
+                <h4 style="color: #e65100; margin-bottom: 15px;">Sytuacja:</h4>
+                <div class="scenario-dialogue">
+                    Szef mówi na spotkaniu:<br>
+                    💬 "Ten raport jest niekompletny, kto to robił?"
+                </div>
+
+                <h4 style="color: #e65100; margin: 20px 0 15px 0;">Reakcja amygdali:</h4>
+                <div class="reactions-list">
+                    <ul>
+                        <li>❤️ Przyspieszone bicie serca</li>
+                        <li>😡 Frustracja lub złość</li>
+                        <li>🧠 Trudność w formułowaniu myśli</li>
+                        <li>🗣️ Defensywna odpowiedź: "Ale nie dostałem wszystkich danych!"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="color: #667eea; margin: 30px 0 20px 0;">💡 Jak tego unikać?</h3>
+
+            <div class="avoidance-tips">
+                <div class="tips-section">
+                    <h4>Jako lider:</h4>
+                    <ul>
+                        <li>Mów o zachowaniu, nie o osobie</li>
+                        <li>Pytaj zamiast oskarżać: "Co utrudniło dokończenie raportu?"</li>
+                        <li>Daj czas na odpowiedź (nie naciskaj od razu)</li>
+                        <li>Użyj ciekawości zamiast krytyki</li>
+                    </ul>
+                </div>
+
+                <div class="tips-section" style="margin-top: 25px;">
+                    <h4>Gdy to czujesz u siebie:</h4>
+                    <ul>
+                        <li>Głęboki oddech (fizycznie obniża kortyzol)</li>
+                        <li>Pauza 6 sekund przed odpowiedzią</li>
+                        <li>Pomyśl: "Czy to faktycznie zagrożenie?"</li>
+                        <li>Nazwij emocję: "Czuję się zaatakowany"</li>
+                    </ul>
+                </div>
+
+                <div class="memory-tip">
+                    📌 Wskazówka do zapamiętania: <strong>6-sekundowa pauza = reset amygdali</strong>
+                </div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 6: Quiz Samodiagnozy -->
+        <div class="card" data-card="6">
+            <div class="card-number">Karta 6 z 6</div>
+            <span class="card-icon">❓</span>
+            <h2 class="card-title">Quiz: Jak często budujesz zaufanie w rozmowach?</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Oceń swój obecny styl komunikacji. Odpowiedz szczerze - to pomoże Ci zrozumieć, 
+                które obszary warto rozwijać.
+            </p>
+
+            <div class="quiz-container">
+                <!-- Pytanie 1 -->
+                <div class="quiz-question">
+                    <div class="quiz-question-number">Pytanie 1/5</div>
+                    <div class="quiz-question-text">
+                        Jak często zdarza Ci się, że po trudnej rozmowie druga strona "zamknęła się" 
+                        lub stała się defensywna?
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectQuizOption(this, 1, 'A', 3)">
+                            <input type="radio" name="q1" value="A" id="q1a">
+                            <label for="q1a">Prawie nigdy - ludzie zwykle są otwarci w rozmowach ze mną</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 1, 'B', 2)">
+                            <input type="radio" name="q1" value="B" id="q1b">
+                            <label for="q1b">Czasami, ale nie jest to dla mnie problemem</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 1, 'C', 1)">
+                            <input type="radio" name="q1" value="C" id="q1c">
+                            <label for="q1c">Dość często i zastanawiam się, jak to zmienić</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 1, 'D', 0)">
+                            <input type="radio" name="q1" value="D" id="q1d">
+                            <label for="q1d">Bardzo często i frustruje mnie to - chciałbym to poprawić</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pytanie 2 -->
+                <div class="quiz-question">
+                    <div class="quiz-question-number">Pytanie 2/5</div>
+                    <div class="quiz-question-text">
+                        Gdy ktoś krytykuje Twój pomysł, jak reagujesz?
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectQuizOption(this, 2, 'A', 0)">
+                            <input type="radio" name="q2" value="A" id="q2a">
+                            <label for="q2a">Bronię się i tłumaczę, dlaczego mam rację</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 2, 'B', 1)">
+                            <input type="radio" name="q2" value="B" id="q2b">
+                            <label for="q2b">Czuję frustrację wewnętrznie, ale staram się ukryć</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 2, 'C', 2)">
+                            <input type="radio" name="q2" value="C" id="q2c">
+                            <label for="q2c">Próbuję zrozumieć perspektywę drugiej osoby</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 2, 'D', 3)">
+                            <input type="radio" name="q2" value="D" id="q2d">
+                            <label for="q2d">Traktuję to jako okazję do wspólnego poszukiwania lepszego rozwiązania</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pytanie 3 -->
+                <div class="quiz-question">
+                    <div class="quiz-question-number">Pytanie 3/5</div>
+                    <div class="quiz-question-text">
+                        W kontekście Twoich obecnych celów zawodowych, czy umiejętność budowania 
+                        zaufania przez rozmowy jest dla Ciebie:
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectQuizOption(this, 3, 'A', 0)">
+                            <input type="radio" name="q3" value="A" id="q3a">
+                            <label for="q3a">Mało istotna - moje cele nie wymagają głębszych relacji</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 3, 'B', 1)">
+                            <input type="radio" name="q3" value="B" id="q3b">
+                            <label for="q3b">Przydatna, ale nie kluczowa dla mojego sukcesu</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 3, 'C', 2)">
+                            <input type="radio" name="q3" value="C" id="q3c">
+                            <label for="q3c">Ważna - lepsze relacje pomogłyby mi osiągnąć cele</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 3, 'D', 3)">
+                            <input type="radio" name="q3" value="D" id="q3d">
+                            <label for="q3d">Kluczowa - mój sukces bardzo zależy od jakości relacji i komunikacji</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pytanie 4 -->
+                <div class="quiz-question">
+                    <div class="quiz-question-number">Pytanie 4/5</div>
+                    <div class="quiz-question-text">
+                        Gdy myślisz o swojej roli lidera/współpracownika, które stwierdzenie 
+                        najlepiej opisuje Twoje wyzwania?
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectQuizOption(this, 4, 'A', 3)">
+                            <input type="radio" name="q4" value="A" id="q4a">
+                            <label for="q4a">Mam jasne cele i skutecznie je komunikuję - nie widzę większych problemów</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 4, 'B', 2)">
+                            <input type="radio" name="q4" value="B" id="q4b">
+                            <label for="q4b">Czasami ludzie nie reagują tak, jak bym chciał, ale jakoś sobie radzę</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 4, 'C', 1)">
+                            <input type="radio" name="q4" value="C" id="q4c">
+                            <label for="q4c">Często czuję, że mógłbym lepiej motywować i angażować innych</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 4, 'D', 0)">
+                            <input type="radio" name="q4" value="D" id="q4d">
+                            <label for="q4d">Mam wrażenie, że tracę dużo energii na niepotrzebne napięcia i nieporozumienia</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pytanie 5 -->
+                <div class="quiz-question">
+                    <div class="quiz-question-number">Pytanie 5/5</div>
+                    <div class="quiz-question-text">
+                        Jak często w rozmowach najpierw słuchasz, a potem mówisz?
+                    </div>
+                    <div class="quiz-options">
+                        <div class="quiz-option" onclick="selectQuizOption(this, 5, 'A', 0)">
+                            <input type="radio" name="q5" value="A" id="q5a">
+                            <label for="q5a">Rzadko - zazwyczaj przerywam i wyrażam swoją opinię</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 5, 'B', 1)">
+                            <input type="radio" name="q5" value="B" id="q5b">
+                            <label for="q5b">Czasami - zależy od sytuacji</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 5, 'C', 2)">
+                            <input type="radio" name="q5" value="C" id="q5c">
+                            <label for="q5c">Często - staram się najpierw zrozumieć</label>
+                        </div>
+                        <div class="quiz-option" onclick="selectQuizOption(this, 5, 'D', 3)">
+                            <input type="radio" name="q5" value="D" id="q5d">
+                            <label for="q5d">Zawsze - słuchanie jest dla mnie priorytetem</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-score" id="quizScore" style="display: none;">
+                <h3>Twój wynik:</h3>
+                <div class="quiz-score-number" id="scoreNumber">0/15</div>
+                <div class="quiz-interpretation" id="scoreInterpretation"></div>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="calculateQuizScore()">
+                    Zobacz wynik →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 7: Flashcards -->
+        <div class="card" data-card="7">
+            <div class="card-number">Karta 7 z 9</div>
+            <span class="card-icon">🗂️</span>
+            <h2 class="card-title">Flashcards: Kluczowe pojęcia C-IQ</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Kliknij na każdą kartę, aby zobaczyć definicję. Oznacz pojęcia, które już znasz.
+            </p>
+
+            <div class="flashcard-progress">
+                <div class="flashcard-progress-text" id="flashcardProgress">Poznane: 0/6</div>
+            </div>
+
+            <div class="flashcards-grid">
+                <!-- Flashcard 1: C-IQ -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-term">Conversational Intelligence (C-IQ)</div>
+                            <div class="flashcard-hint">Kliknij, aby zobaczyć definicję</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-definition">
+                                Umiejętność kształtowania relacji i wpływania na reakcje neurochemiczne 
+                                innych poprzez sposób prowadzenia rozmów.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flashcard 2: Oksytocyna -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-term">Oksytocyna</div>
+                            <div class="flashcard-hint">Kliknij, aby zobaczyć definicję</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-definition">
+                                "Hormon więzi" - uwalniany w sytuacjach zaufania, współpracy i pozytywnych 
+                                interakcji. Aktywuje korę przedczołową (myślenie wyższego rzędu).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flashcard 3: Kortyzol -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-term">Kortyzol</div>
+                            <div class="flashcard-hint">Kliknij, aby zobaczyć definicję</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-definition">
+                                "Hormon stresu" - uwalniany w sytuacjach zagrożenia lub krytyki. 
+                                Aktywuje amygdalę (reakcja walcz/uciekaj/zastygnij).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flashcard 4: Porwanie amygdali -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-term">Amygdala Hijack</div>
+                            <div class="flashcard-hint">Kliknij, aby zobaczyć definicję</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-definition">
+                                Moment, gdy amygdala (ciało migdałowate) przejmuje kontrolę nad mózgiem 
+                                w reakcji na postrzegane zagrożenie - szybciej niż kora przedczołowa może zareagować.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flashcard 5: Bezpieczeństwo psychologiczne -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-term">Bezpieczeństwo psychologiczne</div>
+                            <div class="flashcard-hint">Kliknij, aby zobaczyć definicję</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-definition">
+                                Stan, w którym ludzie czują się bezpiecznie wyrażając swoje opinie, 
+                                pomysły i pytania bez obawy przed krytyką lub odrzuceniem.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flashcard 6: Kora przedczołowa -->
+                <div class="flashcard" onclick="flipCard(this)">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="flashcard-term">Kora przedczołowa</div>
+                            <div class="flashcard-hint">Kliknij, aby zobaczyć definicję</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="flashcard-definition">
+                                Część mózgu odpowiedzialna za wyższe funkcje poznawcze: logiczne myślenie, 
+                                planowanie, empatię i kontrolę impulsów. Aktywna na Ścieżce Zaufania.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard-actions">
+                <button class="flashcard-btn btn-know" onclick="markAllAsKnown()">
+                    ✓ Znam wszystkie
+                </button>
+                <button class="flashcard-btn btn-review" onclick="resetFlashcards()">
+                    ↻ Przejrzyj ponownie
+                </button>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 8: Voice Note -->
+        <div class="card" data-card="8">
+            <div class="card-number">Karta 8 z 9</div>
+            <span class="card-icon">🎙️</span>
+            <h2 class="card-title">Voice Note: Twoja refleksja</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Nagraj krótką refleksję (max 3 min) odpowiadając na jedno z pytań poniżej.
+            </p>
+
+            <div class="voice-instructions">
+                <h4 style="color: #667eea; margin-bottom: 15px;">💭 Wybierz jedno z pytań:</h4>
+                <ul>
+                    <li>Kiedy ostatnio doświadczyłeś/aś "porwania amygdali" w pracy? Co się wydarzyło?</li>
+                    <li>Przypomnij sobie moment, gdy rozmowa poszła Ścieżką Strachu. Co mogłeś/aś zrobić inaczej?</li>
+                    <li>Opisz sytuację, w której Twoje słowa uruchomiły u kogoś Ścieżkę Zaufania.</li>
+                </ul>
+            </div>
+
+            <div class="voice-recorder">
+                <h3 style="color: #333; margin-bottom: 20px;">🎤 Nagrywanie audio</h3>
+                
+                <button class="record-button" id="recordButton" onclick="toggleRecording()">
+                    <span id="recordIcon">🎙️</span>
+                </button>
+
+                <div class="recording-status" id="recordingStatus" style="display: none;">
+                    ⏺️ Nagrywanie...
+                </div>
+
+                <div class="recording-timer" id="recordingTimer">00:00</div>
+
+                <p style="color: #666; margin: 15px 0;" id="recordingHint">
+                    Kliknij mikrofon, aby rozpocząć nagrywanie
+                </p>
+
+                <div class="audio-playback" id="audioPlayback">
+                    <h4 style="color: #667eea; margin-bottom: 15px;">✓ Nagranie zapisane</h4>
+                    <audio controls class="audio-player" id="audioPlayer"></audio>
+                    <p style="margin-top: 15px; color: #4caf50; font-weight: 600;">
+                        🎉 +10 XP za refleksję głosową!
+                    </p>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Dlaczego to ważne?</strong><br>
+                Werbalizacja doświadczeń (nawet dla siebie) pomaga w integracji wiedzy. 
+                Mówiąc o tym, co się wydarzyło, aktywujesz inne obszary mózgu niż przy czytaniu - 
+                co wzmacnia zapamiętywanie.
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 9: Implementation Task -->
+        <div class="card" data-card="9">
+            <div class="card-number">Karta 9 z 9</div>
+            <span class="card-icon">📋</span>
+            <h2 class="card-title">Zadanie praktyczne: 3-dniowa obserwacja</h2>
+
+            <div class="task-description">
+                <h3 style="color: #e65100; margin-bottom: 15px;">🎯 Twoje wyzwanie na najbliższe 3 dni:</h3>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Obserwuj swoje rozmowy przez pryzmat Ścieżki Strachu vs Ścieżki Zaufania. 
+                    Notuj co najmniej 1 przykład dziennie w poniższym szablonie.
+                </p>
+            </div>
+
+            <div class="task-objectives">
+                <h4>Co będziesz śledzić:</h4>
+                <ul>
+                    <li>Jaka była sytuacja? (krótki opis rozmowy)</li>
+                    <li>Którą ścieżkę uruchomiłeś/aś? (Strachu czy Zaufania)</li>
+                    <li>Jakie były sygnały? (reakcje drugiej osoby, Twoje odczucia)</li>
+                    <li>Co mogłeś/aś zrobić lepiej?</li>
+                </ul>
+            </div>
+
+            <div class="template-preview">
+                <h4 style="color: #667eea; margin-bottom: 15px; text-align: center;">📄 Szablon obserwacji</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dzień</th>
+                            <th>Sytuacja</th>
+                            <th>Ścieżka</th>
+                            <th>Sygnały</th>
+                            <th>Co mogłem/am zrobić lepiej?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dzień 1</td>
+                            <td>(Twoja notatka)</td>
+                            <td>Strachu / Zaufania</td>
+                            <td>(Obserwacje)</td>
+                            <td>(Refleksja)</td>
+                        </tr>
+                        <tr>
+                            <td>Dzień 2</td>
+                            <td>(Twoja notatka)</td>
+                            <td>Strachu / Zaufania</td>
+                            <td>(Obserwacje)</td>
+                            <td>(Refleksja)</td>
+                        </tr>
+                        <tr>
+                            <td>Dzień 3</td>
+                            <td>(Twoja notatka)</td>
+                            <td>Strachu / Zaufania</td>
+                            <td>(Obserwacje)</td>
+                            <td>(Refleksja)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="download-template" onclick="downloadTemplate()">
+                    📥 Pobierz szablon PDF
+                </button>
+            </div>
+
+            <div class="commitment-checkbox" onclick="toggleCommitment()">
+                <input type="checkbox" id="commitmentCheck">
+                <label for="commitmentCheck">
+                    <strong>Zobowiązuję się</strong> do przeprowadzenia tej 3-dniowej obserwacji 
+                    i wrócę do tego ćwiczenia z wnioskami przed przejściem do Lekcji 2.
+                </label>
+            </div>
+
+            <div class="reminder-info">
+                <strong>📧 Przypomnienie email:</strong><br>
+                Otrzymasz maila za 3 dni z pytaniem o Twoje wnioski z obserwacji.
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Dlaczego to działa?</strong><br>
+                Świadoma obserwacja to pierwszy krok do zmiany. Gdy zaczniesz dostrzegać wzorce 
+                w swoich rozmowach, naturalnie zaczynasz je modyfikować. To nie teoria - 
+                to <strong>trening neurobiologiczny</strong>.
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Zakończ podgląd →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 10: AI Pitch Evaluator -->
+        <div class="card" data-card="10">
+            <div class="card-number">Karta 10 z 13</div>
+            <span class="card-icon">🤖</span>
+            <h2 class="card-title">AI Pitch Evaluator: Wytłumacz C-IQ</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Wyobraź sobie, że spotykasz kolegę na konferencji i ma 2 minuty. Wytłumacz mu, 
+                <strong>czym jest Conversational Intelligence</strong> i dlaczego powinno go to zainteresować.
+            </p>
+
+            <div class="ai-evaluator">
+                <div class="pitch-input-area">
+                    <label for="pitchText" style="display: block; font-weight: 600; margin-bottom: 12px; color: #333;">
+                        📝 Twój pitch (min. 100 znaków):
+                    </label>
+                    <textarea 
+                        id="pitchText" 
+                        class="pitch-textarea" 
+                        placeholder="Wpisz tutaj swoje wyjaśnienie C-IQ... Przykład:&#10;&#10;'Conversational Intelligence to sposób prowadzenia rozmów, który wpływa na chemię mózgu - Twoją i rozmówcy. Gdy mówisz z szacunkiem i ciekawością, uruchamiasz oksytocynę (hormon zaufania), co otwiera drugą osobę na współpracę. Gdy krytykujesz lub naciskasz, uruchamiasz kortyzol (stres), co blokuje kreatywność. To nie teoria - to neurobiologia w praktyce. Świadome stosowanie C-IQ sprawia, że Twoje rozmowy budują relacje zamiast je niszczyć.'"></textarea>
+                    <button class="evaluate-button" onclick="evaluatePitch()">🚀 Oceń mój pitch</button>
+                </div>
+
+                <div class="ai-feedback" id="aiFeedback">
+                    <div class="feedback-header">
+                        <h3>🤖 Ocena AI</h3>
+                        <div class="feedback-score" id="feedbackScore">0/100</div>
+                    </div>
+                    <div class="feedback-criteria" id="feedbackCriteria">
+                        <!-- Dynamically generated -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Dlaczego to ćwiczenie?</strong><br>
+                Umiejętność zwięzłego wytłumaczenia koncepcji oznacza, że naprawdę ją rozumiesz. 
+                To test głębokości Twojego zrozumienia C-IQ.
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 11: Porównanie IQ/EQ/C-IQ -->
+        <div class="card" data-card="11">
+            <div class="card-number">Karta 11 z 13</div>
+            <span class="card-icon">🧩</span>
+            <h2 class="card-title">IQ + EQ + C-IQ = Kompletny obraz</h2>
+
+            <div class="comparison-intro">
+                <p style="font-size: 1.1rem; line-height: 1.8; margin: 0;">
+                    <strong>C-IQ nie zastępuje IQ ani EQ</strong> - uzupełnia je. To trzeci wymiar inteligencji, 
+                    który pokazuje, jak Twoje słowa i intencje wpływają na innych na poziomie neurochemicznym.
+                </p>
+            </div>
+
+            <div class="intelligence-comparison">
+                <table class="three-column-table">
+                    <thead>
+                        <tr>
+                            <th>IQ (Iloraz Inteligencji)</th>
+                            <th>EQ (Inteligencja Emocjonalna)</th>
+                            <th>C-IQ (Conversational Intelligence)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <strong>Czym jest:</strong><br>
+                                Zdolność do logicznego myślenia, analizy i rozwiązywania problemów
+                            </td>
+                            <td>
+                                <strong>Czym jest:</strong><br>
+                                Zdolność rozpoznawania i zarządzania własnymi emocjami oraz emocjami innych
+                            </td>
+                            <td>
+                                <strong>Czym jest:</strong><br>
+                                Zdolność do kształtowania reakcji neurochemicznych i relacji poprzez sposób prowadzenia rozmów
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Fokus:</strong><br>
+                                Twój umysł i zdolności poznawcze
+                            </td>
+                            <td>
+                                <strong>Fokus:</strong><br>
+                                Twoje emocje i emocje innych
+                            </td>
+                            <td>
+                                <strong>Fokus:</strong><br>
+                                Twoje rozmowy i ich wpływ na mózgi innych ludzi
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Przykład:</strong><br>
+                                Szybkie zrozumienie skomplikowanego problemu biznesowego
+                            </td>
+                            <td>
+                                <strong>Przykład:</strong><br>
+                                Zauważenie, że ktoś jest zdenerwowany i dostosowanie swojego podejścia
+                            </td>
+                            <td>
+                                <strong>Przykład:</strong><br>
+                                Zadanie pytania, które uruchamia oksytocynę i otwiera rozmówcę na współpracę
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Pytanie:</strong><br>
+                                "Czy potrafisz to rozwiązać?"
+                            </td>
+                            <td>
+                                <strong>Pytanie:</strong><br>
+                                "Jak się czujesz w tej sytuacji?"
+                            </td>
+                            <td>
+                                <strong>Pytanie:</strong><br>
+                                "Jak moje słowa wpływają na Twoją reakcję chemiczną?"
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="synergy-box">
+                <h3 style="color: #e65100; margin-bottom: 15px;">🔗 Synergia trzech inteligencji:</h3>
+                <div class="synergy-diagram">
+                    IQ + EQ + C-IQ = 🚀 Lider transformacyjny
+                </div>
+                <p style="line-height: 1.8; color: #666;">
+                    Najlepsi liderzy łączą wszystkie trzy:<br>
+                    • <strong>IQ</strong> pozwala zrozumieć problem<br>
+                    • <strong>EQ</strong> pozwala wyczuć emocje zespołu<br>
+                    • <strong>C-IQ</strong> pozwala prowadzić rozmowy, które uruchamiają Ścieżkę Zaufania i mobilizują do działania
+                </p>
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 12: Extended Reading -->
+        <div class="card" data-card="12">
+            <div class="card-number">Karta 12 z 13</div>
+            <span class="card-icon">📚</span>
+            <h2 class="card-title">Chcesz zgłębić temat? Zasoby</h2>
+
+            <p style="font-size: 1.1rem; color: #666; line-height: 1.8; margin-bottom: 30px;">
+                Ta karta jest <strong>całkowicie opcjonalna</strong>. Jeśli chcesz poznać C-IQ głębiej, 
+                poniżej znajdziesz najlepsze zasoby.
+            </p>
+
+            <div class="reading-resources">
+                <!-- Książki -->
+                <div class="resource-category">
+                    <h3>📖 Książki</h3>
+                    
+                    <div class="resource-item">
+                        <div class="resource-title">Conversational Intelligence: How Great Leaders Build Trust and Get Extraordinary Results</div>
+                        <div class="resource-author">Judith E. Glaser</div>
+                        <div class="resource-description">
+                            Fundamentalna książka o C-IQ. Judith Glaser wprowadza framework TRUST, 
+                            wyjaśnia neurobiologię rozmów i pokazuje praktyczne zastosowania w biznesie.
+                        </div>
+                        <a href="https://www.amazon.com/Conversational-Intelligence-Great-Leaders-Extraordinary/dp/1937134679" target="_blank" class="resource-link">
+                            📎 Zobacz na Amazon →
+                        </a>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-title">The Fearless Organization: Creating Psychological Safety in the Workplace</div>
+                        <div class="resource-author">Amy Edmondson</div>
+                        <div class="resource-description">
+                            Doskonale uzupełnia C-IQ - pokazuje, jak budować bezpieczeństwo psychologiczne, 
+                            które jest fundamentem Ścieżki Zaufania.
+                        </div>
+                        <a href="https://www.amazon.com/Fearless-Organization-Psychological-Workplace-Innovation/dp/1119477247" target="_blank" class="resource-link">
+                            📎 Zobacz na Amazon →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Artykuły -->
+                <div class="resource-category">
+                    <h3>📄 Artykuły</h3>
+                    
+                    <div class="resource-item">
+                        <div class="resource-title">The Neuroscience of Trust</div>
+                        <div class="resource-author">Paul J. Zak (Harvard Business Review)</div>
+                        <div class="resource-description">
+                            Badanie roli oksytocyny w budowaniu zaufania w zespołach. 
+                            Naukowe podstawy tego, czego nauczyłeś się w tej lekcji.
+                        </div>
+                        <a href="https://hbr.org/2017/01/the-neuroscience-of-trust" target="_blank" class="resource-link">
+                            📎 Przeczytaj artykuł →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Video -->
+                <div class="resource-category">
+                    <h3>🎥 Video</h3>
+                    
+                    <div class="resource-item">
+                        <div class="resource-title">The Power of Vulnerability</div>
+                        <div class="resource-author">Brené Brown (TEDx)</div>
+                        <div class="resource-description">
+                            Klasyczny talk o sile autentyczności i otwartości w budowaniu połączeń. 
+                            Idealnie wpisuje się w filozofię C-IQ.
+                        </div>
+                        <a href="https://www.youtube.com/watch?v=iCvmsMzlF7o" target="_blank" class="resource-link">
+                            📎 Zobacz na YouTube →
+                        </a>
+                    </div>
+
+                    <div class="resource-item">
+                        <div class="resource-title">How to Speak So That People Want to Listen</div>
+                        <div class="resource-author">Julian Treasure (TEDx)</div>
+                        <div class="resource-description">
+                            Praktyczne techniki komunikacji, które uruchamiają uwagę i zaangażowanie słuchaczy.
+                        </div>
+                        <a href="https://www.youtube.com/watch?v=eIho2S0ZahI" target="_blank" class="resource-link">
+                            📎 Zobacz na YouTube →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-insight">
+                <strong>💡 Jak korzystać z tych zasobów?</strong><br>
+                Nie musisz czytać wszystkiego. Wybierz 1 zasób, który najbardziej Cię zaciekawił, 
+                i zagłęb się w niego w wolnej chwili. Każdy z nich wzmocni Twoje zrozumienie C-IQ.
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" onclick="nextCard()">
+                    Następna →
+                </button>
+            </div>
+        </div>
+
+        <!-- KARTA 13: Summary + Badge -->
+        <div class="card" data-card="13">
+            <div class="card-number">Karta 13 z 13</div>
+            <span class="card-icon">🎯</span>
+            <h2 class="card-title">Gratulacje! Lekcja 1 ukończona</h2>
+
+            <div class="completion-header">
+                <h2>🎉 Brawo!</h2>
+                <p style="font-size: 1.2rem; margin: 15px 0;">
+                    Właśnie ukończyłeś Lekcję 1: <strong>Neurobiologia Rozmowy</strong>
+                </p>
+                <div class="completion-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="finalXP">0</span>
+                        <span class="stat-label">XP zdobyte</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">13</span>
+                        <span class="stat-label">Kart ukończonych</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">~90</span>
+                        <span class="stat-label">Minut nauki</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="learnings-checklist">
+                <h3>✅ Czego się nauczyłeś:</h3>
+                <div class="learning-item">
+                    <span class="learning-check">✓</span>
+                    <span class="learning-text">
+                        <strong>Neurobiologia rozmów:</strong> Rozumiesz, jak oksytocyna i kortyzol wpływają na reakcje ludzi w rozmowach
+                    </span>
+                </div>
+                <div class="learning-item">
+                    <span class="learning-check">✓</span>
+                    <span class="learning-text">
+                        <strong>Dwie ścieżki:</strong> Potrafisz rozpoznać Ścieżkę Strachu vs Ścieżkę Zaufania w swoich rozmowach
+                    </span>
+                </div>
+                <div class="learning-item">
+                    <span class="learning-check">✓</span>
+                    <span class="learning-text">
+                        <strong>Amygdala Hijack:</strong> Znasz mechanizm "porwania amygdali" i wiesz, jak go unikać
+                    </span>
+                </div>
+                <div class="learning-item">
+                    <span class="learning-check">✓</span>
+                    <span class="learning-text">
+                        <strong>Świadoma komunikacja:</strong> Rozumiesz, że Twoje słowa to nie tylko przekaz - to reakcja chemiczna w mózgu rozmówcy
+                    </span>
+                </div>
+                <div class="learning-item">
+                    <span class="learning-check">✓</span>
+                    <span class="learning-text">
+                        <strong>C-IQ w kontekście:</strong> Wiesz, jak C-IQ uzupełnia IQ i EQ w budowaniu Twojej skuteczności jako lidera
+                    </span>
+                </div>
+                <div class="learning-item">
+                    <span class="learning-check">✓</span>
+                    <span class="learning-text">
+                        <strong>Praktyczne narzędzia:</strong> Masz zadanie do wdrożenia (3-dniowa obserwacja) i szablon do śledzenia postępów
+                    </span>
+                </div>
+            </div>
+
+            <div class="badge-award">
+                <span class="badge-icon">🧠</span>
+                <div class="badge-name">Neuro-Conversationalist</div>
+                <div class="badge-description">
+                    Ukończyłeś fundamenty neurobiologii rozmów. Teraz wiesz, że każda rozmowa 
+                    to nie tylko wymiana słów - to neurochemiczny taniec mózgów.
+                </div>
+            </div>
+
+            <div class="lesson-progress">
+                <h3 style="color: #667eea; margin-bottom: 15px;">📊 Twój postęp w kursie C-IQ:</h3>
+                <div class="progress-circle">1/4</div>
+                <p style="color: #666; line-height: 1.6;">
+                    Ukończyłeś <strong>Lekcję 1</strong> z 4.<br>
+                    Następna lekcja: <strong>Trzy Poziomy Rozmów</strong>
+                </p>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="next-lesson-cta" onclick="startLesson2()">
+                    🚀 Rozpocznij Lekcję 2: Trzy Poziomy Rozmów
+                </button>
+                <p style="color: #999; margin-top: 15px; font-size: 0.95rem;">
+                    (W pełnej wersji przejdziesz do kolejnej lekcji)
+                </p>
+            </div>
+
+            <div class="email-summary">
+                <input type="checkbox" id="emailSummaryCheck">
+                <label for="emailSummaryCheck">
+                    📧 Wyślij mi podsumowanie tej lekcji mailem (z kluczowymi wnioskami i zadaniem)
+                </label>
+            </div>
+
+            <div class="key-insight">
+                <strong>🎯 Co dalej?</strong><br>
+                1. Wykonaj <strong>3-dniową obserwację</strong> z Karty 9<br>
+                2. Wróć do tej lekcji za 3 dni z wnioskami<br>
+                3. Przejdź do Lekcji 2, gdzie nauczysz się rozpoznawać i przechodzić między 3 poziomami rozmów
+            </div>
+
+            <div class="card-navigation">
+                <button class="nav-button btn-prev" onclick="prevCard()">
+                    ← Poprzednia
+                </button>
+                <button class="nav-button btn-next" disabled style="opacity: 0.5; cursor: not-allowed;">
+                    Koniec lekcji ✓
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badge Overlay (for future) -->
+    <div class="badge-overlay" id="badgeOverlay"></div>
+    <div class="badge-popup" id="badgePopup">
+        <div style="font-size: 4rem; margin-bottom: 20px;">🧠</div>
+        <h2 style="color: #667eea; margin-bottom: 10px;">Badge zdobyty!</h2>
+        <p style="color: #666; font-size: 1.1rem;">Neuro-Conversationalist</p>
+        <button onclick="closeBadgePopup()" style="margin-top: 20px; padding: 10px 30px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem;">
+            Kontynuuj
+        </button>
+    </div>
+
+    <script>
+        // State management
+        let currentCard = 1;
+        const totalCards = 13;
+        let earnedXP = 0;
+        let completedCards = new Set();
+        let quizAnswers = {};
+        let quizScore = 0;
+        let flashcardsKnown = new Set();
+        let isRecording = false;
+        let recordingStartTime = 0;
+        let recordingInterval = null;
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let pitchEvaluated = false;
+
+        // Progress tracking
+        const cardXPValues = {
+            1: 5,   // Video
+            2: 0,   // Presentation (no XP, just content)
+            3: 10,  // Case Study
+            4: 0,   // Presentation - Chemistry
+            5: 0,   // Presentation - Amygdala
+            6: 15,  // Quiz
+            7: 20,  // Flashcards
+            8: 10,  // Voice Note (bonus)
+            9: 10,  // Implementation Task
+            10: 20, // AI Pitch Evaluator
+            11: 0,  // Comparison (no XP, just content)
+            12: 0,  // Extended Reading (optional, no XP)
+            13: 10  // Summary completion bonus
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            updateProgress();
+            updateNavigation();
+        });
+
+        // Navigation
+        function nextCard() {
+            if (currentCard < totalCards) {
+                // Mark current card as completed
+                if (!completedCards.has(currentCard)) {
+                    completedCards.add(currentCard);
+                    if (cardXPValues[currentCard]) {
+                        earnedXP += cardXPValues[currentCard];
+                    }
+                }
+
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.remove('active');
+                currentCard++;
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.add('active');
+                
+                updateProgress();
+                updateNavigation();
+                saveProgress();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // Completed final card (13) - award completion XP
+                if (!completedCards.has(13)) {
+                    completedCards.add(13);
+                    earnedXP += cardXPValues[13];
+                    updateProgress();
+                    
+                    // Update final XP display
+                    const finalXPElement = document.getElementById('finalXP');
+                    if (finalXPElement) {
+                        finalXPElement.textContent = earnedXP;
+                    }
+                    
+                    // Show badge
+                    showBadge();
+                }
+                saveProgress();
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 1) {
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.remove('active');
+                currentCard--;
+                document.querySelector(`.card[data-card="${currentCard}"]`).classList.add('active');
+                
+                updateProgress();
+                updateNavigation();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.querySelector('.btn-prev');
+            const nextBtn = document.querySelector('.btn-next');
+            
+            prevBtn.disabled = currentCard === 1;
+            
+            if (currentCard === totalCards) {
+                nextBtn.textContent = 'Zakończ podgląd →';
+            } else {
+                nextBtn.textContent = 'Następna →';
+            }
+        }
+
+        function updateProgress() {
+            const progress = (completedCards.size / totalCards) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Karta ${currentCard} z ${totalCards}`;
+            document.getElementById('xpBadge').textContent = `⭐ ${earnedXP} XP`;
+        }
+
+        // Checkbox handling
+        function toggleCheckbox(id) {
+            const checkbox = document.getElementById(id);
+            checkbox.checked = !checkbox.checked;
+            handleVideoWatched({ target: checkbox });
+        }
+
+        function handleVideoWatched(event) {
+            event.stopPropagation();
+            saveProgress();
+            if (event.target.checked) {
+                // Could trigger some animation or badge here
+            }
+        }
+
+        // Multiple choice handling
+        function selectChoice(element, choice) {
+            // Remove previous selections
+            document.querySelectorAll('.choice-option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            // Mark selected
+            element.classList.add('selected');
+            
+            // Check if correct (B is correct)
+            if (choice === 'B') {
+                element.classList.add('correct');
+                document.getElementById('chemistryFeedback').classList.add('show');
+            } else {
+                element.classList.add('incorrect');
+                document.getElementById('chemistryFeedback').classList.remove('show');
+            }
+            
+            // Mark the radio
+            const radio = element.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            saveProgress();
+        }
+
+        // Local storage
+        function saveProgress() {
+            const progress = {
+                currentCard: currentCard,
+                earnedXP: earnedXP,
+                completedCards: Array.from(completedCards),
+                videoWatched: document.getElementById('video-watched')?.checked || false,
+                videoReflection: document.getElementById('video-reflection')?.value || '',
+                question1: document.getElementById('question1')?.value || '',
+                question3: document.getElementById('question3')?.value || '',
+                selectedChoice: document.querySelector('input[name="chemistry"]:checked')?.value || ''
+            };
+            
+            localStorage.setItem('lesson1_progress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('lesson1_progress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                
+                // Restore values
+                if (progress.videoWatched) {
+                    document.getElementById('video-watched').checked = true;
+                }
+                if (progress.videoReflection) {
+                    document.getElementById('video-reflection').value = progress.videoReflection;
+                }
+                if (progress.question1) {
+                    document.getElementById('question1').value = progress.question1;
+                }
+                if (progress.question3) {
+                    document.getElementById('question3').value = progress.question3;
+                }
+                if (progress.selectedChoice) {
+                    const choiceElement = document.getElementById('choice' + progress.selectedChoice);
+                    if (choiceElement) {
+                        choiceElement.checked = true;
+                        const parent = choiceElement.closest('.choice-option');
+                        if (parent) {
+                            selectChoice(parent, progress.selectedChoice);
+                        }
+                    }
+                }
+                
+                earnedXP = progress.earnedXP || 0;
+                completedCards = new Set(progress.completedCards || []);
+            }
+        }
+
+        // Badge popup (for future use)
+        function showBadgePopup() {
+            document.getElementById('badgeOverlay').classList.add('show');
+            document.getElementById('badgePopup').classList.add('show');
+        }
+
+        function closeBadgePopup() {
+            document.getElementById('badgeOverlay').classList.remove('show');
+            document.getElementById('badgePopup').classList.remove('show');
+        }
+
+        // Flashcards handling
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        function markAllAsKnown() {
+            flashcardsKnown.clear();
+            for (let i = 1; i <= 6; i++) {
+                flashcardsKnown.add(i);
+            }
+            updateFlashcardProgress();
+            
+            // Mark card as completed and award XP
+            if (!completedCards.has(7)) {
+                completedCards.add(7);
+                earnedXP += cardXPValues[7];
+                updateProgress();
+                alert('🎉 Świetnie! +20 XP za opanowanie kluczowych pojęć C-IQ!');
+            }
+            
+            saveProgress();
+        }
+
+        function resetFlashcards() {
+            // Flip all cards back
+            const cards = document.querySelectorAll('.flashcard');
+            cards.forEach(card => card.classList.remove('flipped'));
+            
+            // Reset progress
+            flashcardsKnown.clear();
+            updateFlashcardProgress();
+            
+            saveProgress();
+        }
+
+        function updateFlashcardProgress() {
+            const progressText = document.getElementById('flashcardProgress');
+            if (progressText) {
+                progressText.textContent = `Poznane: ${flashcardsKnown.size}/6`;
+            }
+        }
+
+        // Voice recording handling
+        function toggleRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.addEventListener('dataavailable', event => {
+                    audioChunks.push(event.data);
+                });
+
+                mediaRecorder.addEventListener('stop', () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audioPlayer = document.getElementById('audioPlayer');
+                    audioPlayer.src = audioUrl;
+                    
+                    // Show playback
+                    document.getElementById('audioPlayback').classList.add('show');
+                    
+                    // Award XP
+                    if (!completedCards.has(8)) {
+                        completedCards.add(8);
+                        earnedXP += cardXPValues[8];
+                        updateProgress();
+                    }
+                    
+                    saveProgress();
+                });
+
+                mediaRecorder.start();
+                isRecording = true;
+                recordingStartTime = Date.now();
+
+                // Update UI
+                document.getElementById('recordButton').classList.add('recording');
+                document.getElementById('recordIcon').textContent = '⏹️';
+                document.getElementById('recordingStatus').style.display = 'block';
+                document.getElementById('recordingHint').textContent = 'Kliknij ponownie, aby zatrzymać';
+
+                // Start timer
+                recordingInterval = setInterval(updateRecordingTimer, 100);
+
+                // Auto-stop after 3 minutes
+                setTimeout(() => {
+                    if (isRecording) {
+                        stopRecording();
+                    }
+                }, 180000);
+
+            } catch (error) {
+                alert('⚠️ Nie można uzyskać dostępu do mikrofonu. Sprawdź uprawnienia przeglądarki.');
+                console.error('Error accessing microphone:', error);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+
+            isRecording = false;
+            clearInterval(recordingInterval);
+
+            // Update UI
+            document.getElementById('recordButton').classList.remove('recording');
+            document.getElementById('recordIcon').textContent = '🎙️';
+            document.getElementById('recordingStatus').style.display = 'none';
+            document.getElementById('recordingHint').textContent = 'Nagranie zakończone ✓';
+        }
+
+        function updateRecordingTimer() {
+            const elapsed = Date.now() - recordingStartTime;
+            const seconds = Math.floor(elapsed / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            
+            const timerText = `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            document.getElementById('recordingTimer').textContent = timerText;
+
+            // Stop at 3 minutes
+            if (minutes >= 3) {
+                stopRecording();
+            }
+        }
+
+        // Implementation task handling
+        function toggleCommitment() {
+            const checkbox = document.getElementById('commitmentCheck');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                // Mark card as completed and award XP
+                if (!completedCards.has(9)) {
+                    completedCards.add(9);
+                    earnedXP += cardXPValues[9];
+                    updateProgress();
+                }
+            } else {
+                // Remove completion
+                if (completedCards.has(9)) {
+                    completedCards.delete(9);
+                    earnedXP -= cardXPValues[9];
+                    updateProgress();
+                }
+            }
+            
+            saveProgress();
+        }
+
+        function downloadTemplate() {
+            // In a real implementation, this would download a PDF
+            alert('📥 Funkcja pobierania szablonu PDF\n\nW pełnej wersji aplikacji automatycznie pobierze się szablon obserwacji w formacie PDF.\n\nNa razie możesz skopiować tabelę ręcznie lub zrobić zrzut ekranu.');
+        }
+
+        // AI Pitch Evaluator
+        function evaluatePitch() {
+            const pitchText = document.getElementById('pitchText').value.trim();
+            
+            if (pitchText.length < 100) {
+                alert('⚠️ Twój pitch jest za krótki. Napisz co najmniej 100 znaków (obecna długość: ' + pitchText.length + ').');
+                return;
+            }
+            
+            // Simple heuristic evaluation (in real app, this would call GPT-4)
+            const criteria = evaluatePitchCriteria(pitchText);
+            const totalScore = criteria.reduce((sum, c) => sum + c.score, 0);
+            
+            // Display feedback
+            const feedbackDiv = document.getElementById('aiFeedback');
+            const scoreDiv = document.getElementById('feedbackScore');
+            const criteriaDiv = document.getElementById('feedbackCriteria');
+            
+            scoreDiv.textContent = totalScore + '/100';
+            
+            let criteriaHTML = '';
+            criteria.forEach(c => {
+                criteriaHTML += `
+                    <div class="criterion">
+                        <div class="criterion-header">
+                            <span class="criterion-name">${c.name}</span>
+                            <span class="criterion-score">${c.score}/20</span>
+                        </div>
+                        <div class="criterion-feedback">${c.feedback}</div>
+                    </div>
+                `;
+            });
+            
+            criteriaDiv.innerHTML = criteriaHTML;
+            feedbackDiv.classList.add('show');
+            
+            // Award XP if score is good
+            if (totalScore >= 60 && !completedCards.has(10)) {
+                completedCards.add(10);
+                earnedXP += cardXPValues[10];
+                updateProgress();
+                pitchEvaluated = true;
+            }
+            
+            // Scroll to feedback
+            feedbackDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            saveProgress();
+        }
+
+        function evaluatePitchCriteria(text) {
+            const criteria = [];
+            const lower = text.toLowerCase();
+            
+            // Criterion 1: Wspomina neurobiologię
+            let neuroScore = 0;
+            let neuroFeedback = '';
+            if (lower.includes('oksytocyn') || lower.includes('kortyzol') || lower.includes('neurobiolog') || lower.includes('mózg') || lower.includes('chemi')) {
+                neuroScore = 20;
+                neuroFeedback = '✓ Świetnie! Wspomniałeś aspekt neurobiologiczny - to fundament C-IQ.';
+            } else {
+                neuroScore = 5;
+                neuroFeedback = '⚠️ Brakuje odwołania do neurobiologii. Wspomnij o oksytocynie, kortyzolie lub chemii mózgu.';
+            }
+            criteria.push({ name: '🧠 Neurobiologia', score: neuroScore, feedback: neuroFeedback });
+            
+            // Criterion 2: Wyjaśnia co to jest C-IQ
+            let defScore = 0;
+            let defFeedback = '';
+            if (lower.includes('rozmow') && (lower.includes('zaufani') || lower.includes('relacj') || lower.includes('wpływ'))) {
+                defScore = 20;
+                defFeedback = '✓ Jasna definicja - pokazujesz, czym jest C-IQ i jak działa.';
+            } else if (lower.includes('rozmow')) {
+                defScore = 12;
+                defFeedback = '⚠️ Wspominasz rozmowy, ale mogłobyś wyraźniej wyjaśnić, czym jest C-IQ.';
+            } else {
+                defScore = 5;
+                defFeedback = '⚠️ Brakuje wyraźnej definicji C-IQ. Powiedz wprost, czym jest Conversational Intelligence.';
+            }
+            criteria.push({ name: '📖 Definicja C-IQ', score: defScore, feedback: defFeedback });
+            
+            // Criterion 3: Pokazuje wartość praktyczną
+            let valueScore = 0;
+            let valueFeedback = '';
+            if ((lower.includes('lider') || lower.includes('praca') || lower.includes('zespo') || lower.includes('biznes')) && 
+                (lower.includes('skuteczn') || lower.includes('efektywn') || lower.includes('wynik') || lower.includes('relacj'))) {
+                valueScore = 20;
+                valueFeedback = '✓ Doskonale pokazujesz praktyczną wartość - dlaczego C-IQ ma znaczenie.';
+            } else {
+                valueScore = 10;
+                valueFeedback = '⚠️ Mogłobyś wyraźniej pokazać, dlaczego C-IQ jest ważne w praktyce (biznes, przywództwo).';
+            }
+            criteria.push({ name: '💼 Wartość praktyczna', score: valueScore, feedback: valueFeedback });
+            
+            // Criterion 4: Używa przykładów
+            let exampleScore = 0;
+            let exampleFeedback = '';
+            if (lower.includes('przykład') || lower.includes('sytuacj') || lower.includes('gdy ') || lower.includes('kiedy ')) {
+                exampleScore = 20;
+                exampleFeedback = '✓ Świetnie! Używasz przykładów, które ułatwiają zrozumienie.';
+            } else {
+                exampleScore = 8;
+                exampleFeedback = '⚠️ Rozważ dodanie konkretnego przykładu - to ułatwi zrozumienie.';
+            }
+            criteria.push({ name: '🎯 Przykłady', score: exampleScore, feedback: exampleFeedback });
+            
+            // Criterion 5: Zwięzłość i jasność
+            let clarityScore = 0;
+            let clarityFeedback = '';
+            if (text.length >= 100 && text.length <= 400) {
+                clarityScore = 20;
+                clarityFeedback = '✓ Idealna długość - zwięźle i na temat (2-minutowy pitch).';
+            } else if (text.length > 400) {
+                clarityScore = 12;
+                clarityFeedback = '⚠️ Trochę rozwlekły. W 2 minuty trudno powiedzieć więcej niż ' + text.length + ' znaków.';
+            } else {
+                clarityScore = 15;
+                clarityFeedback = '⚠️ Bardzo zwięźle, ale mogłobyś rozwinąć o jeden dodatkowy aspekt.';
+            }
+            criteria.push({ name: '✍️ Zwięzłość', score: clarityScore, feedback: clarityFeedback });
+            
+            return criteria;
+        }
+
+        // Lesson 2 start
+        function startLesson2() {
+            alert('🚀 Rozpoczynanie Lekcji 2: Trzy Poziomy Rozmów\n\nW pełnej wersji aplikacji przejdziesz teraz do kolejnej lekcji, gdzie nauczysz się:\n\n• Poziom I - Transakcyjny (wymiana informacji)\n• Poziom II - Pozycyjny (walka o rację)\n• Poziom III - Transformacyjny (współtworzenie)\n\nTo demo kończy się tutaj. Dziękuję za uwagę! 🎉');
+        }
+
+        // Badge display
+        function showBadge() {
+            const badgeOverlay = document.querySelector('.badge-overlay');
+            if (badgeOverlay) {
+                const badgeContent = document.querySelector('.badge-content');
+                badgeContent.innerHTML = `
+                    <h2>🎉 Nowa odznaka!</h2>
+                    <div style="font-size: 5rem; margin: 20px 0;">🧠</div>
+                    <h3 style="color: #667eea; margin-bottom: 10px;">Neuro-Conversationalist</h3>
+                    <p style="line-height: 1.6; color: #666;">
+                        Ukończyłeś fundamenty neurobiologii rozmów. Teraz wiesz, że każda rozmowa 
+                        to nie tylko wymiana słów - to neurochemiczny taniec mózgów.
+                    </p>
+                    <button onclick="closeBadge()" style="margin-top: 20px; padding: 12px 30px; background: #667eea; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer;">
+                        Zamknij
+                    </button>
+                `;
+                badgeOverlay.classList.add('show');
+            }
+        }
+
+        function closeBadge() {
+            const badgeOverlay = document.querySelector('.badge-overlay');
+            if (badgeOverlay) {
+                badgeOverlay.classList.remove('show');
+            }
+        }
+
+        // Quiz handling
+        function selectQuizOption(element, questionNum, option, points) {
+            // Remove previous selection for this question
+            const questionOptions = element.parentElement.querySelectorAll('.quiz-option');
+            questionOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Mark selected
+            element.classList.add('selected');
+            
+            // Mark the radio
+            const radio = element.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            // Store answer
+            quizAnswers[questionNum] = points;
+            
+            saveProgress();
+        }
+
+        function calculateQuizScore() {
+            // Calculate total score
+            let total = 0;
+            for (let q in quizAnswers) {
+                total += quizAnswers[q];
+            }
+            
+            // Check if all questions answered
+            if (Object.keys(quizAnswers).length < 5) {
+                alert('⚠️ Proszę odpowiedzieć na wszystkie 5 pytań przed obliczeniem wyniku.');
+                return;
+            }
+            
+            quizScore = total;
+            
+            // Show score
+            const scoreDiv = document.getElementById('quizScore');
+            const scoreNumber = document.getElementById('scoreNumber');
+            const interpretation = document.getElementById('scoreInterpretation');
+            
+            scoreNumber.textContent = total + '/15 pkt';
+            
+            // Interpretation based on score
+            let message = '';
+            if (total >= 0 && total <= 5) {
+                message = '🌱 <strong>Początek drogi</strong><br>Sporo do nauczenia - i to świetnie! Ta lekcja da Ci konkretne narzędzia do budowania zaufania w rozmowach. C-IQ może znacząco zmienić jakość Twoich relacji zawodowych.';
+            } else if (total >= 6 && total <= 10) {
+                message = '📈 <strong>Dobre podstawy</strong><br>Masz już intuicyjne wyczucie, jak prowadzić rozmowy. Teraz czas je systematyzować i rozwijać świadomie. C-IQ pomoże Ci zrozumieć "dlaczego" pewne podejścia działają.';
+            } else {
+                message = '🌟 <strong>Świetny start!</strong><br>Już teraz stosujesz wiele zasad budowania zaufania. C-IQ pomoże Ci to robić jeszcze bardziej świadomie i konsekwentnie. Jesteś gotowy na głębsze narzędzia!';
+            }
+            
+            interpretation.innerHTML = message;
+            scoreDiv.style.display = 'block';
+            
+            // Mark card as completed and award XP
+            if (!completedCards.has(6)) {
+                completedCards.add(6);
+                earnedXP += cardXPValues[6];
+                updateProgress();
+            }
+            
+            // Change button to "Następna"
+            const nextButton = document.querySelector('.card[data-card="6"] .btn-next');
+            if (nextButton) {
+                nextButton.textContent = 'Następna →';
+                nextButton.onclick = function() { nextCard(); };
+            }
+            
+            // Scroll to score
+            scoreDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            saveProgress();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextCard();
+            } else if (e.key === 'ArrowLeft') {
+                prevCard();
+            }
+        });
+    </script>
+</body>
+</html>

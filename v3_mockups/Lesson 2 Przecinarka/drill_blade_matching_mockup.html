@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drill: Dobór Tarcz - Milwaukee BrainVenture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .drill-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .drill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 136, 0, 0.2);
+            border: 1px solid rgba(255, 136, 0, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff8800;
+            margin-bottom: 16px;
+        }
+
+        .drill-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .drill-header p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Score Panel */
+        .score-panel {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .score-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .score-card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 8px;
+        }
+
+        .score-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ff8800;
+        }
+
+        .score-value.timer {
+            color: #00d4ff;
+        }
+
+        .score-value.streak {
+            color: #00ff88;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 16px;
+        }
+
+        .question-text {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 24px;
+        }
+
+        .question-context {
+            background: rgba(255, 136, 0, 0.1);
+            border-left: 4px solid #ff8800;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Answer Options */
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .answer-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        .answer-option.selected {
+            border-color: #ff8800;
+            background: rgba(255, 136, 0, 0.1);
+        }
+
+        .answer-option.correct {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .answer-option.incorrect {
+            border-color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .answer-letter {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .answer-option.correct .answer-letter {
+            background: #00ff88;
+            color: #0a0a1a;
+        }
+
+        .answer-option.incorrect .answer-letter {
+            background: #ff4444;
+            color: white;
+        }
+
+        .answer-content {
+            flex: 1;
+        }
+
+        .answer-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .answer-detail {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Feedback */
+        .feedback {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .feedback.correct {
+            border: 2px solid #00ff88;
+        }
+
+        .feedback.incorrect {
+            border: 2px solid #ff4444;
+        }
+
+        .feedback h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback.correct h3 {
+            color: #00ff88;
+        }
+
+        .feedback.incorrect h3 {
+            color: #ff4444;
+        }
+
+        .feedback p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff8800, #ffd700);
+            color: #0a0a1a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 136, 0, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Start Screen */
+        .start-screen {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .start-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+        }
+
+        .start-screen h2 {
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .start-screen p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .rules {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+            text-align: left;
+        }
+
+        .rules h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #ff8800;
+        }
+
+        .rules ul {
+            margin-left: 20px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .results-icon {
+            font-size: 100px;
+            margin-bottom: 24px;
+        }
+
+        .results-screen h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 32px 0;
+        }
+
+        .result-stat {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .result-stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ff8800;
+            margin-bottom: 8px;
+        }
+
+        .result-stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .performance-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            color: #0a0a1a;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 24px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="drill-header">
+            <div class="drill-badge">
+                <i data-lucide="zap" style="width: 14px; height: 14px;"></i>
+                DRILL - PRAKTYKA
+            </div>
+            <h1>⚡ Drill: Dobór Tarcz</h1>
+            <p>Sprawdź swoją wiedzę w symulowanych scenariuszach pracy</p>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="start-screen">
+            <div class="start-icon">🎯</div>
+            <h2>Gotowy na wyzwanie?</h2>
+            <p>Czeka na Ciebie 8 scenariuszy roboczych. Musisz dobrać odpowiednią tarczę do każdej sytuacji.</p>
+
+            <div class="rules">
+                <h3>📋 Zasady</h3>
+                <ul>
+                    <li>8 pytań z realistycznymi scenariuszami</li>
+                    <li>Wybierz najlepszą tarczę do danej sytuacji</li>
+                    <li>Otrzymasz szczegółową informację zwrotną</li>
+                    <li>Śledź swój wynik i serię poprawnych odpowiedzi</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-primary" onclick="startDrill()">
+                <i data-lucide="play" style="width: 18px; height: 18px;"></i>
+                Rozpocznij Drill
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen" class="hidden">
+            <!-- Score Panel -->
+            <div class="score-panel">
+                <div class="score-card">
+                    <div class="score-label">WYNIK</div>
+                    <div class="score-value" id="scoreDisplay">0/0</div>
+                </div>
+                <div class="score-card">
+                    <div class="score-label">PYTANIE</div>
+                    <div class="score-value timer" id="questionNumber">1/8</div>
+                </div>
+                <div class="score-card">
+                    <div class="score-label">SERIA</div>
+                    <div class="score-value streak" id="streakDisplay">0 🔥</div>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="question-card">
+                <div class="question-number" id="questionLabel">PYTANIE 1 / 8</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="question-context" id="questionContext"></div>
+
+                <div class="answers" id="answersContainer"></div>
+
+                <div id="feedbackContainer"></div>
+
+                <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()" disabled>
+                    <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+                    Sprawdź Odpowiedź
+                </button>
+
+                <button class="btn btn-secondary hidden" id="nextBtn" onclick="nextQuestion()">
+                    <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                    Następne Pytanie
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="hidden">
+            <div class="results-screen">
+                <div class="results-icon" id="resultsIcon">🏆</div>
+                <h2 id="resultsTitle">Gratulacje!</h2>
+                <div class="performance-badge" id="performanceBadge">EKSPERT TARCZ</div>
+
+                <div class="results-stats">
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="finalScore">0/8</div>
+                        <div class="result-stat-label">Poprawnych odpowiedzi</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="finalPercentage">0%</div>
+                        <div class="result-stat-label">Skuteczność</div>
+                    </div>
+                    <div class="result-stat">
+                        <div class="result-stat-value" id="maxStreak">0</div>
+                        <div class="result-stat-label">Najdłuższa seria</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="restartDrill()">
+                    <i data-lucide="refresh-ccw" style="width: 18px; height: 18px;"></i>
+                    Spróbuj Ponownie
+                </button>
+
+                <button class="btn btn-secondary" onclick="window.location.href='lesson_2_cut_off_saw_mockup.html'">
+                    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                    Wróć do Lekcji
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Quiz data
+        const questions = [
+            {
+                question: "Klient potrzebuje przeciąć 50 metrów bieżących betonu C25/30",
+                context: "📦 Projekt: Montaż instalacji w budynku biurowym<br>🎯 Grubość: 100 mm<br>💧 Dostęp do wody: TAK<br>⏱️ Czas: 2 dni pracy",
+                options: [
+                    { id: 'HUDD', text: 'HUDD 350 (Universal)', detail: 'Segment 8 mm, szerokość 2.6 mm' },
+                    { id: 'DUH', text: 'DUH 350 (Ultra Hard)', detail: 'Segment 10 mm, szerokość 2.8 mm' },
+                    { id: 'SCS', text: 'SCS 41/350 (Abrasive)', detail: 'Tarcza ścierna 4 mm' },
+                    { id: 'CCS', text: 'CCS 41/350 (Metal)', detail: 'Tarcza ścierna do metalu' }
+                ],
+                correct: 'HUDD',
+                explanation: "HUDD 350 to idealna uniwersalna tarcza do betonu C25/30. Segment 8 mm zapewnia dobrą żywotność przy 50 metrach cięcia, a dostęp do wody pozwala na optymalne wykorzystanie tarczy diamentowej. DUH byłaby przesadą dla zwykłego betonu, SCS zużyłaby się zbyt szybko przy takim wolumenie."
+            },
+            {
+                question: "Awaryjne cięcie rury stalowej Ø150 mm na budowie",
+                context: "⚠️ Projekt: Awaria instalacji wodnej<br>🎯 Materiał: Stal konstrukcyjna<br>💧 Brak dostępu do wody<br>⏱️ Pilne, jednorazowe cięcie",
+                options: [
+                    { id: 'STEELHEAD', text: 'STEELHEAD™ 350', detail: 'Tarcza diamentowa do metalu' },
+                    { id: 'CCS', text: 'CCS 41/350 PRO+', detail: 'Tarcza ścierna do metalu' },
+                    { id: 'HUDD', text: 'HUDD 350', detail: 'Tarcza uniwersalna' },
+                    { id: 'SCS', text: 'SCS 41/350', detail: 'Tarcza ścierna do kamienia' }
+                ],
+                correct: 'CCS',
+                explanation: "CCS 41/350 PRO+ to najlepsza opcja: brak dostępu do wody wyklucza STEELHEAD (wymaga wody), a tarcza ścierna do metalu CCS zapewni najszybsze cięcie w awaryjnej sytuacji. STEELHEAD byłby lepszy gdyby była woda, ale bez niej szybko się zniszczy."
+            },
+            {
+                question: "Cięcie nawierzchni asfaltowej przed remontem drogi",
+                context: "🛣️ Projekt: Naprawa jezdni miejskiej<br>🎯 Grubość: 120 mm asfaltu<br>💧 Dostęp do wody: TAK<br>⏱️ 200 mb cięcia, 1 tydzień pracy",
+                options: [
+                    { id: 'ADD', text: 'ADD 350 (Asphalt)', detail: 'Dedykowana do asfaltu, segment 10 mm' },
+                    { id: 'SCS', text: 'SCS 41/350', detail: 'Tarcza ścierna uniwersalna' },
+                    { id: 'HUDD', text: 'HUDD 350', detail: 'Tarcza uniwersalna diamentowa' },
+                    { id: 'DUH', text: 'DUH 350', detail: 'Ultra twarde materiały' }
+                ],
+                correct: 'ADD',
+                explanation: "ADD 350 to jedyna dedykowana tarcza do asfaltu w ofercie Milwaukee. Podwójnie naprężany rdzeń i segment 10 mm zapewniają maksymalną żywotność w abrazywnym asfalcie. 200 mb to duży wolumen - HUDD lub SCS zużyłyby się zbyt szybko."
+            },
+            {
+                question: "Cięcie betonu zbrojonego w fundamentach",
+                context: "🏗️ Projekt: Rozbiórka starego fundamentu<br>🎯 Materiał: Beton C30/37 ze zbrojeniem Ø12-16mm<br>💧 Dostęp do wody: TAK<br>⏱️ 30 cięć, 3 dni",
+                options: [
+                    { id: 'STEELHEAD', text: 'STEELHEAD™ 350', detail: 'Beton + stal, segment 4 mm' },
+                    { id: 'HUDD', text: 'HUDD 350', detail: 'Uniwersalna, segment 8 mm' },
+                    { id: 'DUH', text: 'DUH 350', detail: 'Ultra hard, segment 10 mm' },
+                    { id: 'CCS', text: 'CCS 41/350', detail: 'Tarcza ścierna metal' }
+                ],
+                correct: 'STEELHEAD',
+                explanation: "STEELHEAD™ to specjalistyczna tarcza do betonu zbrojonego. Radzi sobie zarówno z betonem jak i stalowym zbrojeniem - nie musisz przełączać tarcz przy trafieniu na pręt. HUDD mogłaby się uszkodzić na zbrojeniu, a CCS to tarcza ścierna (krótka żywotność przy 30 cięciach)."
+            },
+            {
+                question: "Cięcie klinkieru w elewacji - prace renowacyjne",
+                context: "🏛️ Projekt: Renowacja zabytkowej kamienicy<br>🎯 Materiał: Stary klinkier + spoiny cementowe<br>💧 Brak dostępu do wody (wewnątrz budynku)<br>⏱️ 15 otworów okiennych, 2 dni",
+                options: [
+                    { id: 'SCS', text: 'SCS 41/350', detail: 'Tarcza ścierna do kamienia' },
+                    { id: 'HUDD', text: 'HUDD 350', detail: 'Uniwersalna diamentowa' },
+                    { id: 'DUH', text: 'DUH 350', detail: 'Ultra hard diamentowa' },
+                    { id: 'STEELHEAD', text: 'STEELHEAD™ 350', detail: 'Beton zbrojony' }
+                ],
+                correct: 'SCS',
+                explanation: "SCS 41/350 to tarcza ścierna do kamienia, która może pracować na sucho. HUDD i DUH to tarcze diamentowe wymagające wody - bez niej szybko się zniszczą. SCS zapewni szybkie cięcie w klinkierze, a 15 otworów to akceptowalny wolumen dla tarczy ściernej."
+            },
+            {
+                question: "Precyzyjne cięcie rur z nierdzewnej stali kwasoodpornej",
+                context: "🏭 Projekt: Instalacja w zakładzie spożywczym<br>🎯 Materiał: Stal nierdzewna AISI 316L<br>💧 Dostęp do wody: TAK<br>⏱️ 40 cięć, wysoka jakość wykończenia",
+                options: [
+                    { id: 'STEELHEAD', text: 'STEELHEAD™ 350', detail: 'Wysoka gęstość diamentów' },
+                    { id: 'CCS', text: 'CCS 41/350 PRO+', detail: 'Tarcza ścierna metal PRO+' },
+                    { id: 'HUDD', text: 'HUDD 350', detail: 'Tarcza uniwersalna' },
+                    { id: 'ADD', text: 'ADD 350', detail: 'Dedykowana do asfaltu' }
+                ],
+                correct: 'STEELHEAD',
+                explanation: "STEELHEAD™ 350 z wysoką gęstością diamentów to najlepsza opcja dla stali nierdzewnej - zapewni czyste, precyzyjne cięcie i długą żywotność przy 40 cięciach. CCS byłaby szybsza, ale tarcza ścierna daje gorsze wykończenie i krótszą żywotność. Dostęp do wody pozwala wykorzystać pełny potencjał STEELHEAD."
+            },
+            {
+                question: "Awaryjne cięcie bloków betonowych - brak wody",
+                context: "⚡ Projekt: Pilna naprawa ogrodzenia<br>🎯 Materiał: Bloczki betonowe 24 cm<br>💧 Brak dostępu do wody (teren otwarty, zima)<br>⏱️ 8 cięć, jednorazowe zadanie",
+                options: [
+                    { id: 'SCS', text: 'SCS 41/350', detail: 'Szybka tarcza ścierna' },
+                    { id: 'HUDD', text: 'HUDD 350', detail: 'Uniwersalna SPEEDCROSS™' },
+                    { id: 'DUH', text: 'DUH 350', detail: 'Ultra hard SPEEDCROSS™' },
+                    { id: 'CCS', text: 'CCS 41/350', detail: 'Tarcza do metalu' }
+                ],
+                correct: 'SCS',
+                explanation: "Przy braku wody i małym wolumenie (8 cięć) SCS 41/350 to ekonomiczna opcja. Tarcza ścierna może pracować na sucho, a dla jednorazowego zadania jej niższa żywotność nie jest problemem. HUDD i DUH wymagają wody - bez niej szybko się zniszczą i będą kosztować więcej niż tania tarcza ścierna."
+            },
+            {
+                question: "Cięcie twardego betonu C40/50 w konstrukcji mostowej",
+                context: "🌉 Projekt: Modernizacja wiaduktu<br>🎯 Materiał: Beton wysokowytrzymały C40/50<br>💧 Dostęp do wody: TAK<br>⏱️ 100 cięć, długoterminowy projekt (3 tygodnie)",
+                options: [
+                    { id: 'DUH', text: 'DUH 350 (Ultra Hard)', detail: 'Segment 10 mm, max żywotność' },
+                    { id: 'HUDD', text: 'HUDD 350 (Universal)', detail: 'Segment 8 mm, uniwersalna' },
+                    { id: 'STEELHEAD', text: 'STEELHEAD™ 350', detail: 'Do betonu zbrojonego' },
+                    { id: 'SCS', text: 'SCS 41/350', detail: 'Tarcza ścierna' }
+                ],
+                correct: 'DUH',
+                explanation: "DUH 350 (Ultra Hard) to tarcza stworzona właśnie do bardzo twardych betonów jak C40/50. Segment 10 mm zapewnia najdłuższą żywotność - przy 100 cięciach w 3 tygodnie to kluczowe. HUDD zużyłaby się zbyt szybko w tak twardym betonie, a inwestycja w DUH zwróci się dzięki mniejszej liczbie wymian tarczy."
+            }
+        ];
+
+        // Game state
+        let currentQuestion = 0;
+        let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        let selectedAnswer = null;
+        let answered = false;
+
+        function startDrill() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showResults();
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            answered = false;
+            selectedAnswer = null;
+
+            // Update UI
+            document.getElementById('questionLabel').textContent = `PYTANIE ${currentQuestion + 1} / ${questions.length}`;
+            document.getElementById('questionNumber').textContent = `${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('questionText').textContent = q.question;
+            document.getElementById('questionContext').innerHTML = q.context;
+
+            // Load answers
+            const container = document.getElementById('answersContainer');
+            container.innerHTML = '';
+
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((option, index) => {
+                const div = document.createElement('div');
+                div.className = 'answer-option';
+                div.onclick = () => selectAnswer(option.id, div);
+                div.innerHTML = `
+                    <div class="answer-letter">${letters[index]}</div>
+                    <div class="answer-content">
+                        <div class="answer-title">${option.text}</div>
+                        <div class="answer-detail">${option.detail}</div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            // Reset buttons
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            document.getElementById('feedbackContainer').innerHTML = '';
+
+            lucide.createIcons();
+        }
+
+        function selectAnswer(answerId, element) {
+            if (answered) return;
+
+            // Deselect all
+            document.querySelectorAll('.answer-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+
+            // Select this one
+            element.classList.add('selected');
+            selectedAnswer = answerId;
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitAnswer() {
+            if (!selectedAnswer || answered) return;
+
+            answered = true;
+            const q = questions[currentQuestion];
+            const isCorrect = selectedAnswer === q.correct;
+
+            // Update score
+            if (isCorrect) {
+                score++;
+                streak++;
+                if (streak > maxStreak) maxStreak = streak;
+            } else {
+                streak = 0;
+            }
+
+            // Update displays
+            document.getElementById('scoreDisplay').textContent = `${score}/${currentQuestion + 1}`;
+            document.getElementById('streakDisplay').textContent = `${streak} 🔥`;
+
+            // Mark answers
+            document.querySelectorAll('.answer-option').forEach(opt => {
+                const optionId = q.options.find(o => o.text === opt.querySelector('.answer-title').textContent)?.id;
+                if (optionId === q.correct) {
+                    opt.classList.add('correct');
+                } else if (opt.classList.contains('selected')) {
+                    opt.classList.add('incorrect');
+                }
+                opt.style.cursor = 'default';
+                opt.onclick = null;
+            });
+
+            // Show feedback
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackDiv.innerHTML = `
+                <h3>
+                    ${isCorrect ? '✅ Świetnie!' : '❌ Niepoprawnie'}
+                </h3>
+                <p>${q.explanation}</p>
+            `;
+            document.getElementById('feedbackContainer').appendChild(feedbackDiv);
+
+            // Switch buttons
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+
+            lucide.createIcons();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+
+            const percentage = Math.round((score / questions.length) * 100);
+
+            // Set results
+            document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
+            document.getElementById('finalPercentage').textContent = `${percentage}%`;
+            document.getElementById('maxStreak').textContent = maxStreak;
+
+            // Performance badge
+            let badge, icon, title;
+            if (percentage >= 90) {
+                badge = '🏆 MISTRZ TARCZ';
+                icon = '🏆';
+                title = 'Gratulacje! Jesteś ekspertem!';
+            } else if (percentage >= 75) {
+                badge = '⭐ PROFESJONALISTA';
+                icon = '⭐';
+                title = 'Świetna robota!';
+            } else if (percentage >= 60) {
+                badge = '👍 DOBRA ROBOTA';
+                icon = '👍';
+                title = 'Całkiem nieźle!';
+            } else {
+                badge = '📚 ĆWICZ DALEJ';
+                icon = '📚';
+                title = 'Wróć do lekcji i spróbuj ponownie';
+            }
+
+            document.getElementById('performanceBadge').textContent = badge;
+            document.getElementById('resultsIcon').textContent = icon;
+            document.getElementById('resultsTitle').textContent = title;
+
+            lucide.createIcons();
+        }
+
+        function restartDrill() {
+            currentQuestion = 0;
+            score = 0;
+            streak = 0;
+            maxStreak = 0;
+            selectedAnswer = null;
+            answered = false;
+
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            loadQuestion();
+        }
+    </script>
+</body>
+
+</html>

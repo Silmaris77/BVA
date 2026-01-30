@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selektor Tarcz 350mm - Milwaukee BrainVenture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0a1a2a 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 32px 24px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 68, 68, 0.2);
+            border: 1px solid rgba(255, 68, 68, 0.4);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ff4444;
+            margin-bottom: 16px;
+        }
+
+        .tool-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ff4444, #ff8800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tool-header p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Layout */
+        .tool-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 968px) {
+            .tool-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Panels */
+        .panel {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .panel h2 {
+            font-size: 20px;
+            color: #ff4444;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Input Group */
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .input-sublabel {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+        }
+
+        select,
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #ff4444;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select option {
+            background: #1a1a2a;
+            color: white;
+        }
+
+        /* Checkbox Group */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* Output Panel */
+        .output-panel {
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .output-panel h2 {
+            font-size: 20px;
+            color: #ffd700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Recommendation Card */
+        .recommendation {
+            background: linear-gradient(135deg, rgba(255, 68, 68, 0.2), rgba(255, 136, 0, 0.2));
+            border: 2px solid rgba(255, 68, 68, 0.4);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .recommendation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+
+        .recommendation h3 {
+            font-size: 22px;
+            color: #ffd700;
+            margin-bottom: 4px;
+        }
+
+        .recommendation-code {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .confidence-badge {
+            padding: 6px 12px;
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #00ff88;
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .spec-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .spec-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .recommendation-reason {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+        }
+
+        .recommendation-reason h4 {
+            font-size: 14px;
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .recommendation-reason ul {
+            margin-left: 20px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* Alternative Option */
+        .alternative {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .alternative h4 {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        /* Button */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4444, #ff8800);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 68, 68, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid #ffd700;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .warning-box strong {
+            color: #ffd700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="tool-header">
+            <div class="tool-badge">
+                <i data-lucide="settings" style="width: 14px; height: 14px;"></i>
+                NARZĘDZIE INTERAKTYWNE
+            </div>
+            <h1>🎯 Selektor Tarcz 350mm</h1>
+            <p>Odpowiedz na pytania, a my dobierzemy idealną tarczę do Twojej pracy</p>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="tool-layout">
+            <!-- Input Panel -->
+            <div class="panel">
+                <h2>
+                    <i data-lucide="clipboard-list" style="width: 20px; height: 20px;"></i>
+                    Parametry Pracy
+                </h2>
+
+                <div class="input-group">
+                    <label class="input-label">1. Jaki materiał będziesz ciąć?</label>
+                    <select id="material" onchange="updateRecommendation()">
+                        <option value="">Wybierz materiał...</option>
+                        <option value="concrete_regular">Beton zwykły (C20/25 - C25/30)</option>
+                        <option value="concrete_hard">Beton twardy (C30/37+)</option>
+                        <option value="concrete_reinforced">Beton zbrojony</option>
+                        <option value="stone">Kamień naturalny/sztuczny</option>
+                        <option value="brick">Cegła, klinkier</option>
+                        <option value="asphalt">Asfalt, nawierzchnia drogowa</option>
+                        <option value="steel">Stal konstrukcyjna</option>
+                        <option value="stainless">Stal nierdzewna/kwasoodporna</option>
+                        <option value="cast_iron">Rury żeliwne</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">2. Jakiej grubości jest materiał?</label>
+                    <select id="thickness" onchange="updateRecommendation()">
+                        <option value="">Wybierz grubość...</option>
+                        <option value="thin">Do 50 mm (cienki)</option>
+                        <option value="medium">50-100 mm (średni)</option>
+                        <option value="thick">100-125 mm (gruby, pełna głębokość)</option>
+                    </select>
+                    <div class="input-sublabel">Maks. głębokość cięcia MXF COS350G2: 125 mm</div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">3. Ile materiału planujesz przeciąć?</label>
+                    <select id="volume" onchange="updateRecommendation()">
+                        <option value="">Wybierz zakres...</option>
+                        <option value="low">Mało (1-10 cięć, jednorazowe zadanie)</option>
+                        <option value="medium">Średnio (10-50 cięć, kilka dni pracy)</option>
+                        <option value="high">Dużo (50+ cięć, projekt długoterminowy)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">4. Czy masz dostęp do wody?</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="radio" id="water_yes" name="water" value="yes" onchange="updateRecommendation()">
+                            <label for="water_yes">✓ Tak, mogę używać wody</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="radio" id="water_no" name="water" value="no" onchange="updateRecommendation()">
+                            <label for="water_no">✗ Nie, muszę ciąć na sucho</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">5. Dodatkowe wymagania (opcjonalne)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="speed" onchange="updateRecommendation()">
+                            <label for="speed">⚡ Priorytet: Szybkość cięcia</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="durability" onchange="updateRecommendation()">
+                            <label for="durability">🛡️ Priorytet: Długa żywotność tarczy</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="indoor" onchange="updateRecommendation()">
+                            <label for="indoor">🏠 Praca w pomieszczeniu zamkniętym</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="updateRecommendation()">
+                    <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+                    Znajdź Idealną Tarczę
+                </button>
+
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    <i data-lucide="refresh-ccw" style="width: 18px; height: 18px;"></i>
+                    Wyczyść Formularz
+                </button>
+            </div>
+
+            <!-- Output Panel -->
+            <div class="output-panel">
+                <h2>
+                    <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+                    Rekomendacja
+                </h2>
+
+                <div id="output">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🪚</div>
+                        <p>Wypełnij formularz, aby otrzymać rekomendację tarczy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Blade database
+        const blades = {
+            HUDD: {
+                name: "HUDD 350",
+                code: "4932471985",
+                type: "SPEEDCROSS™ Universal",
+                segment: "8 mm",
+                width: "2.6 mm",
+                water: "required",
+                materials: ["concrete_regular", "stone", "cast_iron", "brick"],
+                durability: "high",
+                speed: "high"
+            },
+            DUH: {
+                name: "DUH 350",
+                code: "4932471986",
+                type: "SPEEDCROSS™ Ultra Hard",
+                segment: "10 mm",
+                width: "2.8 mm",
+                water: "required",
+                materials: ["concrete_hard", "brick"],
+                durability: "very_high",
+                speed: "medium"
+            },
+            STEELHEAD: {
+                name: "STEELHEAD™ 350",
+                code: "4932471988",
+                type: "SPEEDCROSS™ Metal",
+                segment: "4 mm",
+                width: "2.8 mm",
+                water: "required",
+                materials: ["concrete_reinforced", "steel", "stainless"],
+                durability: "high",
+                speed: "high"
+            },
+            ADD: {
+                name: "ADD 350",
+                code: "4932478952",
+                type: "SPEEDCROSS™ Asphalt",
+                segment: "10 mm",
+                width: "2.8 mm",
+                water: "required",
+                materials: ["asphalt"],
+                durability: "very_high",
+                speed: "high"
+            },
+            CCS: {
+                name: "CCS 41 / 350",
+                code: "4932472264",
+                type: "Abrasive PRO+ Metal",
+                thickness: "4 mm",
+                width: "N/A",
+                water: "no",
+                materials: ["steel", "stainless"],
+                durability: "medium",
+                speed: "very_high"
+            },
+            SCS: {
+                name: "SCS 41 / 350",
+                code: "4932471989",
+                type: "Abrasive Stone",
+                thickness: "4 mm",
+                width: "N/A",
+                water: "optional",
+                materials: ["concrete_regular", "stone", "brick"],
+                durability: "low",
+                speed: "very_high"
+            }
+        };
+
+        function updateRecommendation() {
+            const material = document.getElementById('material').value;
+            const thickness = document.getElementById('thickness').value;
+            const volume = document.getElementById('volume').value;
+            const water = document.querySelector('input[name="water"]:checked')?.value;
+            const speed = document.getElementById('speed').checked;
+            const durability = document.getElementById('durability').checked;
+            const indoor = document.getElementById('indoor').checked;
+
+            // If no material selected, show empty state
+            if (!material) {
+                document.getElementById('output').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🪚</div>
+                        <p>Wypełnij formularz, aby otrzymać rekomendację tarczy</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Decision logic
+            let recommended = null;
+            let reason = [];
+            let confidence = "WYSOKA";
+            let alternatives = [];
+
+            // Material-based selection
+            if (material === 'asphalt') {
+                recommended = blades.ADD;
+                reason.push("Tarcza ADD dedykowana do asfaltu z podwójnie naprężanym rdzeniem");
+                reason.push("Segment 10 mm zapewnia długą żywotność w abrazywnym asfalcie");
+            } else if (material === 'concrete_reinforced') {
+                recommended = blades.STEELHEAD;
+                reason.push("STEELHEAD™ radzi sobie zarówno z betonem jak i stalowym zbrojeniem");
+                reason.push("Nie musisz przełączać tarcz przy trafieniu na pręt zbrojeniowy");
+            } else if (material === 'steel' || material === 'stainless') {
+                if (water === 'no') {
+                    recommended = blades.CCS;
+                    reason.push("Tarcza ścierna CCS PRO+ do metalu (cięcie na sucho)");
+                    reason.push("20% dłuższa żywotność, 50% szybsze cięcie niż standardowe tarcze");
+                } else {
+                    recommended = blades.STEELHEAD;
+                    reason.push("Tarcza diamentowa STEELHEAD™ z dużą gęstością diamentów");
+                    reason.push("Agresywne cięcie metalu z możliwością użycia wody");
+                    alternatives.push({
+                        blade: blades.CCS,
+                        why: "Szybsza opcja jeśli priorytetem jest prędkość (cięcie na sucho)"
+                    });
+                }
+            } else if (material === 'concrete_hard' || (material === 'brick' && durability)) {
+                recommended = blades.DUH;
+                reason.push("Segment 10 mm zapewnia najdłuższą żywotność w twardych materiałach");
+                reason.push("Profesjonalna tarcza do najtrudniejszych warunków");
+            } else if (material === 'concrete_regular' || material === 'stone' || material === 'brick' || material === 'cast_iron') {
+                if (water === 'no') {
+                    recommended = blades.SCS;
+                    reason.push("Tarcza ścierna SCS do szybkiego cięcia (możliwe na sucho)");
+                    reason.push("Krótsza żywotność, ale ekonomiczna dla krótkich zadań");
+                    confidence = "ŚREDNIA";
+                } else if (speed && volume === 'low') {
+                    recommended = blades.SCS;
+                    reason.push("Tarcza ścierna zapewnia najszybsze cięcie");
+                    reason.push("Dla krótkiego zadania ekonomiczna opcja");
+                    alternatives.push({
+                        blade: blades.HUDD,
+                        why: "Dłuższa żywotność jeśli planujesz więcej pracy"
+                    });
+                } else {
+                    recommended = blades.HUDD;
+                    reason.push("Uniwersalna tarcza SPEEDCROSS™ do większości zastosowań");
+                    reason.push("Optymalna równowaga: prędkość, żywotność, wszechstronność");
+                }
+            }
+
+            // Water check
+            if (water === 'no' && recommended && recommended.water === 'required') {
+                const warning = `
+                    <div class="warning-box">
+                        <strong>⚠️ Uwaga:</strong> Wybrana tarcza ${recommended.name} wymaga użycia wody. 
+                        Bez wody tarcza szybko się zużyje i może ulec uszkodzeniu.
+                    </div>
+                `;
+                reason.push("WYMAGA użycia wody - brak wody może uszkodzić tarczę");
+            }
+
+            // Indoor work
+            if (indoor && water === 'no') {
+                reason.push("⚠️ Praca w pomieszczeniu bez wody = duże zapylenie. Użyj maski FFP3!");
+            }
+
+            // Render recommendation
+            if (recommended) {
+                let html = `
+                    <div class="recommendation">
+                        <div class="recommendation-header">
+                            <div>
+                                <h3>${recommended.name}</h3>
+                                <div class="recommendation-code">Art. ${recommended.code}</div>
+                            </div>
+                            <div class="confidence-badge">${confidence}</div>
+                        </div>
+
+                        <div style="font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 16px;">
+                            ${recommended.type}
+                        </div>
+
+                        <div class="spec-grid">
+                            <div class="spec-item">
+                                <div class="spec-label">${recommended.segment ? 'Wysokość segmentu' : 'Grubość tarczy'}</div>
+                                <div class="spec-value">${recommended.segment || recommended.thickness}</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Szerokość cięcia</div>
+                                <div class="spec-value">${recommended.width}</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Użycie wody</div>
+                                <div class="spec-value">${recommended.water === 'required' ? '✓ Wymagana' : recommended.water === 'optional' ? '○ Opcjonalna' : '✗ Nie'}</div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-label">Żywotność</div>
+                                <div class="spec-value">${
+                                    recommended.durability === 'very_high' ? '⭐⭐⭐⭐⭐' :
+                                    recommended.durability === 'high' ? '⭐⭐⭐⭐' :
+                                    recommended.durability === 'medium' ? '⭐⭐⭐' : '⭐⭐'
+                                }</div>
+                            </div>
+                        </div>
+
+                        <div class="recommendation-reason">
+                            <h4>💡 Dlaczego ta tarcza?</h4>
+                            <ul>
+                                ${reason.map(r => `<li>${r}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+                // Add alternatives
+                if (alternatives.length > 0) {
+                    alternatives.forEach(alt => {
+                        html += `
+                            <div class="alternative">
+                                <h4>🔄 Alternatywa: ${alt.blade.name}</h4>
+                                <p style="font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px;">
+                                    ${alt.why}
+                                </p>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Water warning if needed
+                if (water === 'no' && recommended.water === 'required') {
+                    html += `
+                        <div class="warning-box">
+                            <strong>⚠️ Uwaga:</strong> Tarcza ${recommended.name} wymaga użycia wody. 
+                            Bez wody tarcza szybko się zużyje i może ulec uszkodzeniu. Rozważ:
+                            <ul style="margin-left: 20px; margin-top: 8px;">
+                                <li>Użycie opryskiwacza M18™ SWITCH TANK™</li>
+                                <li>Zmianę tarczy na opcję do cięcia na sucho (jeśli dostępna)</li>
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('output').innerHTML = html;
+            }
+
+            // Reinitialize icons
+            lucide.createIcons();
+        }
+
+        function resetForm() {
+            document.getElementById('material').value = '';
+            document.getElementById('thickness').value = '';
+            document.getElementById('volume').value = '';
+            document.querySelectorAll('input[name="water"]').forEach(r => r.checked = false);
+            document.getElementById('speed').checked = false;
+            document.getElementById('durability').checked = false;
+            document.getElementById('indoor').checked = false;
+
+            document.getElementById('output').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">🪚</div>
+                    <p>Wypełnij formularz, aby otrzymać rekomendację tarczy</p>
+                </div>
+            `;
+
+            lucide.createIcons();
+        }
+    </script>
+</body>
+
+</html>
