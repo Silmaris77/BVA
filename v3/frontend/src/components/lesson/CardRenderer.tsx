@@ -9,6 +9,8 @@ import TrueFalseCard from './math/TrueFalseCard'
 import ComparisonCard from './math/ComparisonCard'
 import FillGapCard from './math/FillGapCard'
 import DigitSelectorCard from './math/DigitSelectorCard'
+import SignPredictorCard from './math/SignPredictorCard'
+import ExpressionBuilderCard from './math/ExpressionBuilderCard'
 
 import QuestionCard from './QuestionCard'
 import SummaryCard from './SummaryCard'
@@ -37,7 +39,7 @@ import CuriosityCard from './CuriosityCard'
 import ActionCard from './ActionCard'
 import DiagnosticCard from './DiagnosticCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity' | 'action' | 'diagnostic' | 'digit-selector'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity' | 'action' | 'diagnostic' | 'digit-selector' | 'sign-predictor' | 'expression-builder'
 
 export interface LessonCardData {
     type: CardType
@@ -129,12 +131,24 @@ export interface LessonCardData {
     // Math New Cards
     pairs?: { id: string, left: string, right: string }[]
     statements?: { id: string, text: string, isTrue: boolean, explanation?: string }[]
-    expression?: { left: string, right: string, relationship: '>' | '<' | '=' }
     parts?: (string | { id: string, correctRange?: { min: number, max: number }, correctExact?: number, placeholder?: string })[]
 
     // Digit Selector
     number?: string | number
     correctIndex?: number
+
+    // Sign Predictor & Compare-Expression
+    expression?: string | { left: string, right: string, relationship: '>' | '<' | '=' }
+    correctSign?: 'positive' | 'negative' | 'zero'
+
+    // Expression Builder
+    targetValue?: number
+    availableNumbers?: number[]
+    availableOperations?: string[]
+    sampleSolutions?: string[]
+    instruction?: string
+    inputs?: any[]
+    sampleAnswers?: any
 
     [key: string]: any
 }
@@ -407,7 +421,7 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
         case 'comparison':
             return <ComparisonCard
                 title={card.title || 'Porównaj'}
-                expression={card.expression || { left: '0', right: '0', relationship: '=' }}
+                expression={typeof card.expression === 'object' && card.expression !== null ? card.expression : { left: '0', right: '0', relationship: '=' }}
                 explanation={card.explanation}
             />
         case 'fill-gap':
@@ -474,6 +488,24 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 description={card.description || ''}
                 questions={card.questions as any || []}
                 results={card.results as any || []}
+            />
+        case 'sign-predictor':
+            return <SignPredictorCard
+                title={card.title}
+                question={card.question || 'Jaki znak będzie miał wynik?'}
+                expression={typeof card.expression === 'string' ? card.expression : '0'}
+                correctSign={card.correctSign || 'positive'}
+                explanation={card.explanation}
+            />
+        case 'expression-builder':
+            return <ExpressionBuilderCard
+                title={card.title}
+                instruction={card.instruction}
+                targetValue={card.targetValue || 0}
+                availableNumbers={card.availableNumbers || []}
+                availableOperations={card.availableOperations || ['+', '-', '*', '/']}
+                sampleSolutions={card.sampleSolutions}
+                explanation={card.explanation}
             />
         default:
             return (

@@ -1931,8 +1931,94 @@ html[data-theme='modern-ios'] .active-event-widget {
 }
 
 html[data-theme='modern-ios'] ::selection {
-    background: rgba(10, 132, 255, 0.3);
     color: white;
+}
+
+/* MOONSHOT THEME 🚀 */
+:root[data-theme='moonshot'] {
+    --bg-deep: #05070a;
+    --glass-bg: rgba(10, 15, 20, 0.8);
+    --glass-border: rgba(0, 255, 157, 0.2);
+    --text-main: #ffffff;
+    --text-muted: #8899a6;
+    --neon-purple: #00ff9d; /* Primary Green */
+    --neon-blue: #00d4ff;
+    --neon-gold: #f3ba2f;
+    --neon-red: #ff4d4d;
+}
+
+html[data-theme='moonshot'] {
+    background: #05070a !important;
+    background-image: 
+        radial-gradient(circle at 50% 50%, rgba(0, 255, 157, 0.05) 0%, transparent 70%),
+        linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px) !important;
+    background-size: 100% 100%, 30px 30px, 30px 30px !important;
+}
+
+html[data-theme='moonshot'] body {
+    font-family: 'Inter', 'Outfit', sans-serif !important;
+}
+
+/* Technical Monospace for data */
+html[data-theme='moonshot'] .stat-value,
+html[data-theme='moonshot'] .score,
+html[data-theme='moonshot'] .points,
+html[data-theme='moonshot'] .level-badge {
+    font-family: 'JetBrains Mono', 'Roboto Mono', monospace !important;
+    color: #00ff9d !important;
+    text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+}
+
+html[data-theme='moonshot'] .glass-card {
+    background: rgba(10, 15, 20, 0.9) !important;
+    border: 1px solid rgba(0, 255, 157, 0.15) !important;
+    border-radius: 4px !important; /* Sharper corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 255, 157, 0.02) !important;
+}
+
+html[data-theme='moonshot'] .glass-card:hover {
+    border-color: rgba(0, 255, 157, 0.4) !important;
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.1) !important;
+}
+
+html[data-theme='moonshot'] button:not(.nav-item) {
+    background: #00ff9d !important;
+    color: #05070a !important;
+    border-radius: 2px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none !important;
+    box-shadow: 0 4px 0 #008f58 !important;
+}
+
+html[data-theme='moonshot'] button:not(.nav-item):active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #008f58 !important;
+}
+
+html[data-theme='moonshot'] .nav-item.active {
+    background: rgba(0, 255, 157, 0.1) !important;
+    border-left: 3px solid #00ff9d !important;
+    color: #00ff9d !important;
+}
+
+html[data-theme='moonshot'] .orb {
+    opacity: 0.2;
+    background: #00ff9d;
+    filter: blur(120px);
+}
+
+/* Headers */
+html[data-theme='moonshot'] h1, 
+html[data-theme='moonshot'] h2,
+html[data-theme='moonshot'] .page-title h1 {
+    font-weight: 900 !important;
+    letter-spacing: -1px;
+    background: linear-gradient(to bottom, #ffffff, #00ff9d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }/* =========================================
    LAYOUT COMPONENTS (Themeable)
    ========================================= */

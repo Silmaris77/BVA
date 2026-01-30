@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nowe typy kart - Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .card-question {
+            font-size: 1.1rem;
+            color: #2d3748;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .expression {
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f6f8fc 0%, #e9ecf5 100%);
+            border-radius: 16px;
+            color: #2d3748;
+            font-family: 'Courier New', monospace;
+            border: 2px solid #e2e8f0;
+        }
+
+        /* Sign Predictor Styles */
+        .sign-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .sign-option {
+            padding: 20px;
+            border: 3px solid #e2e8f0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .sign-option:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+            transform: scale(1.05);
+        }
+
+        .sign-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .sign-option.correct {
+            border-color: #48bb78;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .sign-option.incorrect {
+            border-color: #f56565;
+            background: #fff5f5;
+            opacity: 0.5;
+        }
+
+        .sign-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .sign-label {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Expression Builder Styles */
+        .builder-workspace {
+            background: #f7fafc;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 2px dashed #cbd5e0;
+            min-height: 120px;
+        }
+
+        .target-display {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, #fbd38d 0%, #f6ad55 100%);
+            border-radius: 12px;
+            color: #744210;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .expression-display {
+            min-height: 60px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .expression-display.correct {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .result-display {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #718096;
+            min-height: 30px;
+        }
+
+        .result-display.show {
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .result-display.correct {
+            color: #48bb78;
+        }
+
+        .tiles-container {
+            margin-top: 20px;
+        }
+
+        .tiles-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 12px;
+        }
+
+        .tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .tile {
+            padding: 16px 12px;
+            background: white;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #2d3748;
+        }
+
+        .tile:hover:not(.used) {
+            border-color: #667eea;
+            background: #f7fafc;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .tile.used {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .tile.operation {
+            background: linear-gradient(135deg, #e9ecf5 0%, #d4dae6 100%);
+            color: #667eea;
+        }
+
+        .builder-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-clear {
+            background: #edf2f7;
+            color: #4a5568;
+        }
+
+        .btn-clear:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-check {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-check:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-check:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 16px;
+            background: #edf2f7;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .explanation-text {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .sample-solutions {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f7fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .sample-solutions.show {
+            display: block;
+        }
+
+        .sample-title {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .sample-list {
+            list-style: none;
+        }
+
+        .sample-list li {
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+            color: #4a5568;
+            border-left: 3px solid #cbd5e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🆕 Nowe Typy Kart - Mockup</h1>
+        
+        <div class="cards-grid">
+            <!-- CARD 1: Sign Predictor -->
+            <div class="card">
+                <div class="badge">TYP 1: SIGN-PREDICTOR</div>
+                <h2 class="card-title">Przewidź znak wyniku</h2>
+                <p class="card-subtitle">Nie licząc dokładnego wyniku, określ czy wynik będzie dodatni, ujemny czy zero</p>
+                
+                <p class="card-question">Jaki znak będzie miał wynik tego działania?</p>
+                
+                <div class="expression">
+                    -3⅓ - (-4 1/15)
+                </div>
+                
+                <div class="sign-options" id="signOptions">
+                    <div class="sign-option" data-sign="positive">
+                        <div class="sign-icon">➕</div>
+                        <div class="sign-label">Dodatni</div>
+                    </div>
+                    <div class="sign-option" data-sign="negative">
+                        <div class="sign-icon">➖</div>
+                        <div class="sign-label">Ujemny</div>
+                    </div>
+                    <div class="sign-option" data-sign="zero">
+                        <div class="sign-icon">⚖️</div>
+                        <div class="sign-label">Zero</div>
+                    </div>
+                </div>
+                
+                <div class="explanation" id="signExplanation">
+                    <div class="explanation-title">💡 Wyjaśnienie:</div>
+                    <div class="explanation-text">
+                        Odejmujemy liczbę ujemną, więc w rzeczywistości <strong>dodajemy</strong> liczbę dodatnią:<br>
+                        <code>-3⅓ - (-4 1/15) = -3⅓ + 4 1/15</code><br><br>
+                        Ponieważ <code>4 1/15 > 3⅓</code>, wynik będzie <strong>dodatni</strong>!
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: Expression Builder -->
+            <div class="card">
+                <div class="badge">TYP 2: EXPRESSION-BUILDER</div>
+                <h2 class="card-title">Zbuduj wyrażenie</h2>
+                <p class="card-subtitle">Użyj dostępnych liczb i operacji, aby uzyskać docelowy wynik</p>
+                
+                <div class="target-display">
+                    🎯 Cel: <strong>-10</strong>
+                </div>
+                
+                <div class="builder-workspace">
+                    <div class="expression-display" id="expressionDisplay">
+                        <span style="color: #cbd5e0; font-size: 1.2rem;">Kliknij liczby i operacje poniżej...</span>
+                    </div>
+                    <div class="result-display" id="resultDisplay"></div>
+                </div>
+                
+                <div class="tiles-container">
+                    <div class="tiles-label">📊 Dostępne liczby:</div>
+                    <div class="tiles-grid" id="numberTiles">
+                        <div class="tile" data-value="5" data-type="number">5</div>
+                        <div class="tile" data-value="-3" data-type="number">-3</div>
+                        <div class="tile" data-value="2" data-type="number">2</div>
+                        <div class="tile" data-value="-15" data-type="number">-15</div>
+                    </div>
+                    
+                    <div class="tiles-label">🔢 Dostępne operacje:</div>
+                    <div class="tiles-grid" id="operationTiles">
+                        <div class="tile operation" data-value="+" data-type="operation">+</div>
+                        <div class="tile operation" data-value="-" data-type="operation">−</div>
+                        <div class="tile operation" data-value="*" data-type="operation">×</div>
+                        <div class="tile operation" data-value="/" data-type="operation">÷</div>
+                    </div>
+                </div>
+                
+                <div class="builder-actions">
+                    <button class="btn btn-clear" id="btnClear">🔄 Wyczyść</button>
+                    <button class="btn btn-check" id="btnCheck">✓ Sprawdź</button>
+                </div>
+                
+                <div class="explanation" id="builderExplanation">
+                    <div class="explanation-title">✅ Świetnie!</div>
+                    <div class="explanation-text">
+                        Twoje wyrażenie jest poprawne! To jeden z wielu możliwych sposobów na uzyskanie wyniku <strong>-10</strong>.
+                    </div>
+                </div>
+
+                <div class="sample-solutions" id="sampleSolutions">
+                    <div class="sample-title">💡 Przykładowe rozwiązania:</div>
+                    <ul class="sample-list">
+                        <li>-15 + 5 = -10</li>
+                        <li>5 - 15 = -10</li>
+                        <li>2 × (-3) - 4 = -10 <em>(wymaga 4)</em></li>
+                        <li>-3 × 2 - 4 = -10 <em>(wymaga 4)</em></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SIGN PREDICTOR LOGIC
+        const signOptions = document.querySelectorAll('.sign-option');
+        const signExplanation = document.getElementById('signExplanation');
+        const correctSign = 'positive'; // Hardcoded for demo
+
+        signOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const selectedSign = this.dataset.sign;
+                
+                // Remove all states
+                signOptions.forEach(opt => {
+                    opt.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                // Mark selection
+                this.classList.add('selected');
+                
+                // Check if correct
+                if (selectedSign === correctSign) {
+                    this.classList.add('correct');
+                    signExplanation.classList.add('show');
+                } else {
+                    this.classList.add('incorrect');
+                    // Show correct answer
+                    signOptions.forEach(opt => {
+                        if (opt.dataset.sign === correctSign) {
+                            opt.classList.add('correct');
+                        }
+                    });
+                    signExplanation.classList.add('show');
+                }
+            });
+        });
+
+        // EXPRESSION BUILDER LOGIC
+        let expression = [];
+        let usedNumbers = new Set();
+        const targetValue = -10;
+
+        const expressionDisplay = document.getElementById('expressionDisplay');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const btnClear = document.getElementById('btnClear');
+        const btnCheck = document.getElementById('btnCheck');
+        const builderExplanation = document.getElementById('builderExplanation');
+        const sampleSolutions = document.getElementById('sampleSolutions');
+
+        const allTiles = document.querySelectorAll('.tile');
+
+        allTiles.forEach(tile => {
+            tile.addEventListener('click', function() {
+                if (this.classList.contains('used')) return;
+
+                const value = this.dataset.value;
+                const type = this.dataset.type;
+
+                // Add to expression
+                expression.push({ value, type, element: this });
+
+                // Mark as used if it's a number
+                if (type === 'number') {
+                    this.classList.add('used');
+                    usedNumbers.add(value);
+                }
+
+                updateDisplay();
+            });
+        });
+
+        btnClear.addEventListener('click', () => {
+            expression = [];
+            usedNumbers.clear();
+            allTiles.forEach(tile => tile.classList.remove('used'));
+            builderExplanation.classList.remove('show');
+            sampleSolutions.classList.remove('show');
+            updateDisplay();
+        });
+
+        btnCheck.addEventListener('click', () => {
+            const result = evaluateExpression();
+            if (result === targetValue) {
+                builderExplanation.classList.add('show');
+                resultDisplay.classList.add('correct');
+            } else {
+                builderExplanation.classList.remove('show');
+                sampleSolutions.classList.add('show');
+                resultDisplay.classList.remove('correct');
+            }
+        });
+
+        function updateDisplay() {
+            if (expression.length === 0) {
+                expressionDisplay.innerHTML = '<span style="color: #cbd5e0; font-size: 1.2rem;">Kliknij liczby i operacje poniżej...</span>';
+                resultDisplay.textContent = '';
+                resultDisplay.classList.remove('show', 'correct');
+                expressionDisplay.classList.remove('correct');
+                return;
+            }
+
+            // Display expression
+            expressionDisplay.innerHTML = expression.map(item => {
+                if (item.value === '*') return '×';
+                if (item.value === '/') return '÷';
+                return item.value;
+            }).join(' ');
+
+            // Calculate and display result
+            const result = evaluateExpression();
+            if (!isNaN(result)) {
+                resultDisplay.textContent = `= ${result}`;
+                resultDisplay.classList.add('show');
+                
+                if (result === targetValue) {
+                    expressionDisplay.classList.add('correct');
+                    resultDisplay.classList.add('correct');
+                } else {
+                    expressionDisplay.classList.remove('correct');
+                    resultDisplay.classList.remove('correct');
+                }
+            } else {
+                resultDisplay.textContent = '';
+                resultDisplay.classList.remove('show');
+            }
+        }
+
+        function evaluateExpression() {
+            try {
+                const exprString = expression.map(item => item.value).join(' ');
+                // Simple eval (in production, use proper parser)
+                return eval(exprString);
+            } catch (e) {
+                return NaN;
+            }
+        }
+    </script>
+</body>
+</html>

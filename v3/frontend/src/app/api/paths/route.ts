@@ -108,9 +108,51 @@ export async function GET() {
             };
         }) || [];
 
+        // INJECT LOCAL MATH PATH
+        const mathLessonId = 'math-g7-l1';
+        const mathPathSlug = 'math-grade-7';
+
+        const mathLessonSequence = [mathLessonId];
+        const mathCompletedLessons = mathLessonSequence.filter(id => lessonProgressMap[id]?.status === 'completed');
+        const mathInProgressLessons = mathLessonSequence.filter(id => lessonProgressMap[id]?.status === 'in_progress');
+        const mathTotalLessons = mathLessonSequence.length;
+        const mathCompletedCount = mathCompletedLessons.length;
+        const mathProgressPercent = mathTotalLessons > 0 ? Math.round((mathCompletedCount / mathTotalLessons) * 100) : 0;
+
+        let mathStatus: 'not_started' | 'in_progress' | 'completed' = 'not_started';
+        if (mathCompletedCount === mathTotalLessons && mathTotalLessons > 0) {
+            mathStatus = 'completed';
+        } else if (mathCompletedCount > 0 || mathInProgressLessons.length > 0) {
+            mathStatus = 'in_progress';
+        }
+
+        const localMathPath = {
+            id: 'math-path-001',
+            path_slug: mathPathSlug,
+            title: 'Matematyka (Klasa 7)',
+            description: 'Kompleksowa ścieżka edukacyjna z matematyki dla klasy 7, zgodna z podstawą programową.',
+            estimated_hours: 40,
+            total_xp_reward: 2000,
+            difficulty: 'beginner',
+            lesson_sequence: mathLessonSequence,
+            lesson_count: mathTotalLessons,
+            completed_lessons: mathCompletedCount,
+            progress_percent: mathProgressPercent,
+            status: mathStatus,
+            user_progress: pathProgressMap[mathPathSlug] || null,
+            is_local: true
+        };
+
+        if (!enrichedPaths.some(p => p.path_slug === mathPathSlug)) {
+            enrichedPaths.unshift(localMathPath);
+        }
+
         // Apply Access Mode Filtering
         if (accessMode === 'whitelist') {
             enrichedPaths = enrichedPaths.filter(path => {
+                // Local Math path is always allowed
+                if (path.path_slug === 'math-grade-7') return true;
+
                 const config = permissionsConfig.find(p => p.resource_id === path.path_slug); // Using slug as ID
 
                 // No config = HIDE in whitelist mode

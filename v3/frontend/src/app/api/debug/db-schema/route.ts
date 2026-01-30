@@ -13,7 +13,7 @@ export async function GET() {
 
         // Let's try to insert without input_data and see if it works.
         const { data, error } = await supabase
-            .from('resources')
+            .from('lessons')
             .select('*')
 
         return NextResponse.json({

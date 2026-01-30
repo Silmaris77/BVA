@@ -19,6 +19,7 @@ export default function ThemeSelector() {
         { id: 'diplomat', name: '🏛️ SENATOR', color: '#722F37' },
         { id: 'brainventure', name: '🧠 BRAINVENTURE', color: '#B10A4A' },
         { id: 'modern-ios', name: '📱 MODERN iOS', color: '#000000' },
+        { id: 'moonshot', name: '🚀 MOONSHOT', color: '#00ff9d' },
     ]
 
     return (

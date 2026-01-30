@@ -16,11 +16,18 @@ export async function GET(
         const { slug } = await params;
 
         // Get path details
-        const { data: path, error: pathError } = await supabase
+        let path: any = null;
+        let pathError: any = null;
+
+        // Always fetch from database (no hardcoded fallback)
+        const { data, error } = await supabase
             .from('learning_paths')
             .select('*')
             .eq('path_slug', slug)
             .single();
+        
+        path = data;
+        pathError = error;
 
         if (pathError || !path) {
             return NextResponse.json({ error: 'Path not found' }, { status: 404 });
@@ -75,9 +82,37 @@ export async function GET(
             return NextResponse.json({ error: lessonsError.message }, { status: 500 });
         }
 
+        const allLessons = lessons || [];
+
+        // INJECT LOCAL MATH LESSON IF NEEDED
+        if (lessonIds.includes('math-g7-l1') && !allLessons.some(l => l.lesson_id === 'math-g7-l1')) {
+            try {
+                const fs = await import('fs');
+                const pathTool = await import('path');
+                const filePath = pathTool.join(process.cwd(), 'src/data/math/grade7/lesson1.json');
+                if (fs.existsSync(filePath)) {
+                    const localLesson = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                    allLessons.push({
+                        lesson_id: localLesson.lesson_id,
+                        title: localLesson.title,
+                        description: localLesson.subtitle || "Lekcja matematyki",
+                        duration_minutes: 15,
+                        xp_reward: localLesson.xp_reward || 100,
+                        difficulty: 'beginner',
+                        category: 'Matematyka',
+                        content: localLesson.content,
+                        module_id: null,
+                        modules: []
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to inject local math lesson:', err);
+            }
+        }
+
         // Sort lessons by the order in lesson_sequence
         const sortedLessons = lessonIds.map((id: string) => {
-            const lesson = lessons?.find(l => l.lesson_id === id);
+            const lesson = allLessons?.find(l => l.lesson_id === id);
             if (!lesson) return null;
 
             // If lesson doesn't have a module from DB relation, but we have it in JSON structure, attach it

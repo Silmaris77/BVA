@@ -150,5 +150,59 @@ export default function EffectsOverlay() {
         )
     }
 
+    // MOONSHOT MODE 🚀 (Candlesticks)
+    if (theme === 'moonshot') {
+        const candles = [...Array(30)].map((_, i) => ({
+            id: i,
+            left: Math.random() * 100,
+            duration: Math.random() * 8 + 4,
+            delay: Math.random() * 5,
+            isGreen: Math.random() > 0.4,
+            height: Math.random() * 20 + 10,
+            width: Math.random() * 3 + 2
+        }))
+
+        return (
+            <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 9999, overflow: 'hidden' }}>
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    @keyframes candleFall {
+                        0% { transform: translateY(-100px); opacity: 0; }
+                        10% { opacity: 0.6; }
+                        90% { opacity: 0.6; }
+                        100% { transform: translateY(110vh); opacity: 0; }
+                    }
+                    .candle {
+                        position: absolute;
+                        animation: candleFall linear infinite;
+                    }
+                `}} />
+                {candles.map((c) => (
+                    <div key={c.id} className="candle" style={{
+                        left: c.left + 'vw',
+                        width: c.width + 'px',
+                        height: c.height + 'px',
+                        background: c.isGreen ? '#00ff9d' : '#ff4d4d',
+                        boxShadow: `0 0 8px ${c.isGreen ? '#00ff9d' : '#ff4d4d'}`,
+                        animationDuration: c.duration + 's',
+                        animationDelay: c.delay + 's'
+                    }}>
+                        {/* Wick */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '-5px',
+                            left: '50%',
+                            width: '1px',
+                            height: c.height + 10 + 'px',
+                            background: 'currentColor',
+                            transform: 'translateX(-50%)',
+                            opacity: 0.5
+                        }} />
+                    </div>
+                ))}
+            </div>
+        )
+    }
+
     return null
 }
