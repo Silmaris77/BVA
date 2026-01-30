@@ -343,6 +343,16 @@ export default function LessonsPage() {
                             >
                                 <BookOpen size={16} />
                                 <span className="tab-text">Pojedyncze lekcje</span>
+                                {!loading && lessons.length > 0 && (
+                                    <span style={{
+                                        padding: '2px 8px',
+                                        background: 'rgba(0, 212, 255, 0.3)',
+                                        borderRadius: '10px',
+                                        fontSize: '11px'
+                                    }}>
+                                        {lessons.length}
+                                    </span>
+                                )}
                             </button>
 
                             <button
@@ -436,7 +446,7 @@ export default function LessonsPage() {
                                 {/* Search and Sort */}
                                 <div className="filter-bar">
                                     {/* Search */}
-                                    <div className="search-container">
+                                    <div className="search-container" style={{ position: 'relative', flex: 1 }}>
                                         <input
                                             type="text"
                                             placeholder="Szukaj lekcji..."
@@ -520,27 +530,6 @@ export default function LessonsPage() {
                                         </button>
                                     ))}
                                 </div>
-
-                                {/* Statistics Bar */}
-                                {!loading && (
-                                    <div style={{
-                                        display: 'flex',
-                                        gap: '24px',
-                                        padding: '16px 24px',
-                                        background: 'rgba(255, 255, 255, 0.03)',
-                                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                                        borderRadius: '12px',
-                                        marginBottom: '24px',
-                                        fontSize: '14px'
-                                    }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <span>📊</span>
-                                            <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                                                <strong style={{ color: 'white' }}>{lessons.length}</strong> lekcji dostępnych
-                                            </span>
-                                        </div>
-                                    </div>
-                                )}
 
                                 {/* Flat List */}
                                 {loading ? (

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Minus, Send, Bot, UserMinus, Palette, User, MessageCircle } from 'lucide-react'
 import { useAIConversation } from '@/contexts/AIConversationContext'
 import { Persona } from '@/components/ai/types'
+import MathRenderer from '@/components/lesson/math/MathRenderer'
 
 // Map known icons
 const IconMap: Record<string, any> = {
@@ -103,11 +104,11 @@ export default function AIConversationWidget() {
                             >
                                 <div
                                     className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${isUser
-                                            ? 'bg-blue-600 text-white rounded-br-none'
-                                            : 'bg-white/10 text-gray-100 rounded-bl-none border border-white/5'
+                                        ? 'bg-blue-600 text-white rounded-br-none'
+                                        : 'bg-white/10 text-gray-100 rounded-bl-none border border-white/5'
                                         }`}
                                 >
-                                    {msg.content}
+                                    <MathRenderer content={msg.content} />
                                     <div className={`text-[10px] mt-1 opacity-50 ${isUser ? 'text-right' : 'text-left'}`}>
                                         {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </div>
@@ -148,13 +149,18 @@ export default function AIConversationWidget() {
                         }}
                         className="flex gap-2"
                     >
-                        <input
-                            type="text"
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            placeholder={`Message ${activePersona?.name || 'AI'}...`}
-                            className="flex-1 bg-slate-800 text-white placeholder-slate-400 text-sm rounded-xl px-4 py-3 border border-slate-700 focus:border-blue-500 focus:bg-slate-750 focus:outline-none transition-colors"
-                        />
+                        <div className="flex-1 relative">
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                placeholder={`Message ${activePersona?.name || 'AI'}...`}
+                                className="w-full bg-slate-800 text-white placeholder-slate-400 text-sm rounded-xl pl-4 pr-10 py-3 border border-slate-700 focus:border-blue-500 focus:bg-slate-750 focus:outline-none transition-colors"
+                            />
+                            <MicButton
+                                onResult={(text) => setInputValue(prev => prev + (prev ? ' ' : '') + text)}
+                            />
+                        </div>
                         <button
                             type="submit"
                             disabled={!inputValue.trim() || state.status !== 'idle'}
@@ -166,6 +172,31 @@ export default function AIConversationWidget() {
                 </div>
             </motion.div>
         </AnimatePresence>
+    )
+}
+
+import { Mic, Loader2 } from 'lucide-react'
+import { useSpeechRecognition } from '@/hooks/useSpeechRecognition'
+
+function MicButton({ onResult }: { onResult: (text: string) => void }) {
+    const { isListening, toggleListening, error } = useSpeechRecognition({ onResult })
+
+    return (
+        <button
+            type="button"
+            onClick={toggleListening}
+            className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg transition-all ${isListening
+                ? 'text-red-500 hover:bg-red-500/10 animate-pulse'
+                : 'text-slate-400 hover:text-white hover:bg-white/10'
+                }`}
+            title={error || (isListening ? 'Stop recording' : 'Start recording')}
+        >
+            {isListening ? (
+                <div className="w-4 h-4 rounded-full bg-current animate-pulse" />
+            ) : (
+                <Mic size={18} />
+            )}
+        </button>
     )
 }
 
