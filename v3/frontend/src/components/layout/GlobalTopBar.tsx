@@ -77,6 +77,7 @@ export default function TopBar() {
 
     const PROFILE_TABS = [
         { id: 'informacje', label: 'Informacje', value: 'informacje', icon: User },
+        { id: 'potencjal', label: 'Potencjał', value: 'potencjal', icon: Brain },
         { id: 'postepy', label: 'Postępy', value: 'postepy', icon: TrendingUp },
         { id: 'cele', label: 'Cele', value: 'cele', icon: Target },
         { id: 'ustawienia', label: 'Ustawienia', value: 'ustawienia', icon: LogOut }

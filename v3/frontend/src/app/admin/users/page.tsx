@@ -15,6 +15,7 @@ interface User {
     engrams_installed: number
     user_roles: { role_slug: string; display_name: string } | null
     companies: { company_slug: string; name: string } | null
+    access_mode?: string
     created_at: string
 }
 
@@ -118,6 +119,36 @@ export default function AdminUsersPage() {
         }
     }
 
+    const handleUpdateAccessMode = async (userId: string, accessMode: string) => {
+        setUpdating(userId)
+        try {
+            console.log('Updating access mode:', { userId, accessMode })
+            const response = await fetch('/api/admin/users', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId, access_mode: accessMode })
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                console.error('API Error:', errorData)
+                alert(`Błąd: ${errorData.error || 'Nie udało się zaktualizować trybu dostępu'}`)
+                return
+            }
+
+            console.log('Access mode updated successfully')
+            const res = await fetch('/api/admin/users')
+            const data = await res.json()
+            setUsers(data.users || [])
+            alert('Tryb dostępu zaktualizowany!')
+        } catch (error) {
+            console.error('Error updating access mode:', error)
+            alert('Wystąpił błąd. Sprawdź konsolę przeglądarki (F12)')
+        } finally {
+            setUpdating(null)
+        }
+    }
+
     if (authLoading || loading) {
         return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>Ładowanie...</div>
     }
@@ -148,6 +179,7 @@ export default function AdminUsersPage() {
                             <th style={{ padding: '16px', textAlign: 'left', fontSize: '13px', fontWeight: 600, color: 'rgba(255, 255, 255, 0.7)' }}>Użytkownik</th>
                             <th style={{ padding: '16px', textAlign: 'left', fontSize: '13px', fontWeight: 600, color: 'rgba(255, 255, 255, 0.7)' }}>Rola</th>
                             <th style={{ padding: '16px', textAlign: 'left', fontSize: '13px', fontWeight: 600, color: 'rgba(255, 255, 255, 0.7)' }}>Firma</th>
+                            <th style={{ padding: '16px', textAlign: 'left', fontSize: '13px', fontWeight: 600, color: 'rgba(255, 255, 255, 0.7)' }}>Tryb Dostępu</th>
                             <th style={{ padding: '16px', textAlign: 'right', fontSize: '13px', fontWeight: 600, color: 'rgba(255, 255, 255, 0.7)' }}>Statystyki</th>
                         </tr>
                     </thead>
@@ -193,6 +225,18 @@ export default function AdminUsersPage() {
                                         {companies.map(c => (
                                             <option key={c.company_slug} value={c.company_slug} style={{ background: '#1a1a2e', color: 'white' }}>{c.name}</option>
                                         ))}
+                                    </select>
+                                </td>
+                                <td style={{ padding: '16px' }}>
+                                    <select
+                                        value={u.access_mode || 'standard'}
+                                        onChange={(e) => handleUpdateAccessMode(u.id, e.target.value)}
+                                        disabled={updating === u.id}
+                                        style={{ padding: '6px 12px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '8px', color: 'white', fontSize: '13px', cursor: 'pointer' }}
+                                        className="admin-select"
+                                    >
+                                        <option value="standard" style={{ background: '#1a1a2e', color: 'white' }}>Standard</option>
+                                        <option value="whitelist" style={{ background: '#1a1a2e', color: 'white' }}>Whitelist</option>
                                     </select>
                                 </td>
                                 <td style={{ padding: '16px', textAlign: 'right' }}>

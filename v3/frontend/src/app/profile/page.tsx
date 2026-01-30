@@ -11,12 +11,13 @@ import AchievementsGrid from '@/components/profile/AchievementsGrid'
 import CompetencyRadar from '@/components/profile/CompetencyRadar'
 import EditProfileModal, { ARCHETYPES } from '@/components/profile/EditProfileModal'
 import ThemeSelector from '@/components/profile/ThemeSelector'
+import IdentityReport from '@/components/profile/IdentityReport'
 
 function ProfileContent() {
     const { user, profile, signOut } = useAuth()
     const router = useRouter()
     const searchParams = useSearchParams()
-    const activeTab = (searchParams.get('tab') as 'informacje' | 'postepy' | 'cele' | 'ustawienia') || 'informacje'
+    const activeTab = (searchParams.get('tab') as 'informacje' | 'potencjal' | 'postepy' | 'cele' | 'ustawienia') || 'informacje'
     const [isEditing, setIsEditing] = useState(false)
     const [userStats, setUserStats] = useState<any[]>([])
     const [userClasses, setUserClasses] = useState<any[]>([])
@@ -186,6 +187,10 @@ function ProfileContent() {
                             <GoalItem title="30-dniowy streak nauki" progress={23} current={7} target={30} />
                         </div>
                     </>
+                )}
+
+                {activeTab === 'potencjal' && (
+                    <IdentityReport />
                 )}
 
                 {activeTab === 'postepy' && (

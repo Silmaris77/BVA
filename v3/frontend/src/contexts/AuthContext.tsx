@@ -24,11 +24,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function fetchProfile(userId: string) {
     const { data, error } = await supabase
       .from('user_profiles')
-      .select('*')
+      .select('*, user_roles (role_slug)')
       .eq('id', userId)
       .single()
 
-    if (data) setProfile(data)
+    if (data) {
+      // Map nested role_slug to flat role property to match Profile type
+      const flattenedProfile = {
+        ...data,
+        role: data.user_roles?.role_slug || 'user' // Default to 'user' or empty
+      }
+      setProfile(flattenedProfile)
+    }
     setLoading(false)
   }
 

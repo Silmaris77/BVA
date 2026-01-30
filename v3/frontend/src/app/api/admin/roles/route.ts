@@ -19,7 +19,18 @@ export async function GET() {
             return NextResponse.json({ error: error.message }, { status: 500 })
         }
 
-        return NextResponse.json({ roles: roles || [] })
+        const safeRoles = roles || []
+
+        // Inject 'Inwestor' role if missing (temporary fix for UI)
+        if (!safeRoles.find((r: any) => r.role_slug === 'inwestor' || r.role_slug === 'Inwestor')) {
+            safeRoles.push({
+                role_slug: 'inwestor',
+                display_name: 'Inwestor',
+                description: 'Dostęp do narzędzi inwestycyjnych'
+            })
+        }
+
+        return NextResponse.json({ roles: safeRoles })
     } catch (error) {
         console.error('Admin roles GET error:', error)
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

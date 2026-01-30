@@ -402,6 +402,26 @@ export default function AdminDashboard() {
                     Analityka
                 </Link>
                 <Link
+                    href="/admin/permissions"
+                    style={{
+                        padding: '16px 24px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '12px',
+                        color: 'rgba(255, 255, 255, 0.8)',
+                        textDecoration: 'none',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        fontSize: '14px',
+                        fontWeight: 500,
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    <Shield size={20} />
+                    Uprawnienia (RBAC)
+                </Link>
+                <Link
                     href="/admin/settings"
                     style={{
                         padding: '16px 24px',

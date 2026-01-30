@@ -25,6 +25,7 @@ interface Lesson {
     content?: {
         cards: any[]
     }
+    is_locked?: boolean
 }
 
 interface Module {
@@ -390,6 +391,16 @@ export default function LessonsPage() {
                             >
                                 <Folder size={16} />
                                 <span className="tab-text">Moduły</span>
+                                {!loading && modules.length > 0 && (
+                                    <span style={{
+                                        padding: '2px 8px',
+                                        background: 'rgba(255, 215, 0, 0.3)',
+                                        borderRadius: '10px',
+                                        fontSize: '11px'
+                                    }}>
+                                        {modules.length}
+                                    </span>
+                                )}
                             </button>
 
                             <button
@@ -625,7 +636,7 @@ export default function LessonsPage() {
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '24px' }}>
                                 {modules.map(module => {
                                     const moduleLessons = sortedLessons.filter(l => l.module_id === module.id)
-                                    // if (moduleLessons.length === 0) return null
+                                    if (moduleLessons.length === 0) return null
 
                                     return (
                                         <ModuleCard

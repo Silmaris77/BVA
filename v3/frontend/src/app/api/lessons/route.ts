@@ -130,7 +130,102 @@ export async function GET() {
             }
         }
 
-        return NextResponse.json({ lessons, modules, progress: progressMap });
+        // Fetch dynamic permissions
+        const { data: permissionsConfig } = await supabase
+            .from('resource_permissions')
+            .select('resource_id, allowed_roles');
+
+        // Determine user access context + access mode
+        let userRole = '';
+        let accessMode = 'standard';
+
+        if (user) {
+            try {
+                const { data: profile } = await supabase
+                    .from('user_profiles')
+                    .select('*, role:user_roles(role_slug)')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profile && profile.role) {
+                    userRole = profile.role.role_slug;
+                }
+
+                // Get access mode (whitelist vs standard)
+                accessMode = profile?.access_mode || 'standard';
+            } catch (e) { /* ignore */ }
+        }
+
+        // Apply permissions based on access mode
+        let finalLessons = [];
+        let finalModules = modules;
+
+        if (accessMode === 'whitelist') {
+            console.log('🔒 WHITELIST MODE ACTIVE for user:', user?.id)
+            console.log('User role:', userRole)
+            console.log('Total lessons before filter:', lessons?.length)
+            console.log('Permissions config:', permissionsConfig)
+
+            // WHITELIST MODE: Show ONLY explicitly allowed content
+            finalLessons = lessons?.filter((lesson: any) => {
+                const config = permissionsConfig?.find((p: any) => p.resource_id === lesson.lesson_id);
+
+                // No config = HIDE
+                if (!config) {
+                    console.log(`❌ No config for ${lesson.lesson_id} - HIDING`)
+                    return false;
+                }
+
+                // Has config, check if user role is allowed
+                const isAllowed = config.allowed_roles.includes(userRole) || config.allowed_roles.includes('all');
+                console.log(`Lesson ${lesson.lesson_id}: allowed_roles=${JSON.stringify(config.allowed_roles)}, userRole=${userRole}, isAllowed=${isAllowed}`)
+                return isAllowed;
+            }).map((lesson: any) => ({ ...lesson, is_locked: false })) || [];
+
+            console.log('✅ Final lessons count:', finalLessons.length)
+
+            // WHITELIST MODE: Filter modules too
+            // WHITELIST MODE: Filter modules too
+            finalModules = modules?.filter((module: any) => {
+                // Check direct module permission
+                const moduleConfig = permissionsConfig?.find((p: any) => p.resource_id === module.id);
+                // Check parent track permission (fallback)
+                const trackConfig = module.track ? permissionsConfig?.find((p: any) => p.resource_id === module.track) : null;
+
+                const config = moduleConfig || trackConfig;
+
+                // No config = HIDE
+                if (!config) return false;
+
+                // Has config, check if user role is allowed
+                const isAllowed = config.allowed_roles.includes(userRole) || config.allowed_roles.includes('all');
+                return isAllowed;
+            }) || [];
+
+        } else {
+            // STANDARD MODE: Show all, lock restricted content
+            finalLessons = lessons?.map((lesson: any) => {
+                const config = permissionsConfig?.find((p: any) => p.resource_id === lesson.lesson_id);
+
+                // No config = ALLOW
+                if (!config) return { ...lesson, is_locked: false };
+
+                const isAllowed = config.allowed_roles.includes(userRole) || config.allowed_roles.includes('admin');
+
+                if (!isAllowed) {
+                    // Return locked lesson without content
+                    const { content, ...safeLesson } = lesson;
+                    return { ...safeLesson, is_locked: true, content: null };
+                }
+
+                return { ...lesson, is_locked: false };
+            }) || [];
+        }
+
+        // Also process injected Math lesson (if applicable)
+        // ... (existing math logic or skipping) ...
+
+        return NextResponse.json({ lessons: finalLessons, modules: finalModules, progress: progressMap });
 
     } catch (error) {
         console.error('API error:', error);

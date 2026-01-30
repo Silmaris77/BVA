@@ -16,11 +16,14 @@ export async function GET() {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
-        // Get user progress if authenticated
+        // Get user progress and profile if authenticated
         const { data: { user } } = await supabase.auth.getUser();
 
         let pathProgressMap: Record<string, any> = {};
         let lessonProgressMap: Record<string, any> = {};
+        let accessMode = 'standard';
+        let userRole = '';
+        let permissionsConfig: any[] = [];
 
         if (user) {
             // Get user's path progress
@@ -48,10 +51,31 @@ export async function GET() {
                     return acc;
                 }, {} as Record<string, any>);
             }
+
+            // Get user profile for access mode and role
+            try {
+                const { data: profile } = await supabase
+                    .from('user_profiles')
+                    .select('*, role:user_roles(role_slug)')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profile) {
+                    accessMode = profile.access_mode || 'standard';
+                    userRole = profile.role?.role_slug || '';
+                }
+
+                // Get permissions config
+                const { data: perms } = await supabase.from('resource_permissions').select('*');
+                permissionsConfig = perms || [];
+
+            } catch (e) {
+                console.error('Error fetching profile/permissions:', e);
+            }
         }
 
-        // Enrich paths with progress data
-        const enrichedPaths = paths?.map(path => {
+        // Enrich paths with progress data AND apply filtering
+        let enrichedPaths = paths?.map(path => {
             const lessonSequence = path.lesson_sequence as string[];
             const completedLessons = lessonSequence.filter(
                 lessonId => lessonProgressMap[lessonId]?.status === 'completed'
@@ -82,7 +106,20 @@ export async function GET() {
                 status,
                 user_progress: pathProgressMap[path.path_slug] || null
             };
-        });
+        }) || [];
+
+        // Apply Access Mode Filtering
+        if (accessMode === 'whitelist') {
+            enrichedPaths = enrichedPaths.filter(path => {
+                const config = permissionsConfig.find(p => p.resource_id === path.path_slug); // Using slug as ID
+
+                // No config = HIDE in whitelist mode
+                if (!config) return false;
+
+                // Check role
+                return config.allowed_roles.includes(userRole) || config.allowed_roles.includes('all');
+            });
+        }
 
         return NextResponse.json({ paths: enrichedPaths });
 

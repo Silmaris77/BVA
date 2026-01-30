@@ -13,6 +13,7 @@ interface LessonCardProps {
         status?: 'published' | 'coming_soon' | 'draft' | 'archived'
         release_date?: string
         track?: string
+        is_locked?: boolean
     }
     progress?: {
         status: 'not_started' | 'in_progress' | 'completed'
@@ -27,6 +28,7 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
     const isCompleted = progress?.status === 'completed'
     const isInProgress = progress?.status === 'in_progress'
     const isComingSoon = lesson.status === 'coming_soon'
+    const isLocked = lesson.is_locked
 
     // Format release date if present
     const formattedDate = lesson.release_date
@@ -61,6 +63,9 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
     if (isComingSoon) {
         badgeText = '🚧 W przygotowaniu'
         badgeColor = '#888888'
+    } else if (isLocked) {
+        badgeText = '🔒 Dostęp zablokowany'
+        badgeColor = '#ff4444'
     } else if (isCompleted) {
         badgeText = '✓ Ukończone'
         badgeColor = '#ffd700'
@@ -71,7 +76,7 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
 
     return (
         <div
-            onClick={isComingSoon ? undefined : onClick}
+            onClick={(isComingSoon || isLocked) ? undefined : onClick}
             style={{
                 background: 'rgba(20, 20, 35, 0.4)',
                 backdropFilter: 'blur(20px)',
@@ -79,11 +84,11 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
                 border: '1px solid rgba(255, 255, 255, 0.08)',
                 borderRadius: '16px',
                 padding: '20px',
-                cursor: isComingSoon ? 'not-allowed' : 'pointer',
+                cursor: (isComingSoon || isLocked) ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s',
                 position: 'relative',
                 overflow: 'hidden',
-                opacity: isComingSoon ? 0.7 : 1
+                opacity: (isComingSoon || isLocked) ? 0.7 : 1
             }}
             onMouseOver={(e) => {
                 if (isComingSoon) return

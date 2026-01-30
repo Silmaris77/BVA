@@ -20,6 +20,7 @@ interface Tool {
 export default function ToolsPage() {
     const [tools, setTools] = useState<Tool[]>([])
     const [loading, setLoading] = useState(true)
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
     const [selectedTier, setSelectedTier] = useState<number | null>(null)
 
     useEffect(() => {
@@ -37,9 +38,11 @@ export default function ToolsPage() {
         loadTools()
     }, [])
 
-    const filteredTools = selectedTier
-        ? tools.filter(t => t.tier === selectedTier)
-        : tools
+    const filteredTools = tools.filter(t => {
+        if (selectedTier && t.tier !== selectedTier) return false
+        if (selectedCategory && (t as any).category !== selectedCategory) return false
+        return true
+    })
 
     const getTierBadge = (tier: number) => {
         const tiers = {
@@ -67,51 +70,100 @@ export default function ToolsPage() {
                         <Wrench size={28} style={{ color: '#ff8800' }} />
                     </div>
                     <div>
-                        <h1 style={{ fontSize: '36px', fontWeight: 700, margin: 0 }}>Narzędzia</h1>
+                        <h1 style={{ fontSize: '36px', fontWeight: 700, margin: 0 }}>Narzędzia & Diagnostyka</h1>
                         <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px', margin: '4px 0 0 0' }}>
-                            Kalkulatory, generatory i inne przydatne narzędzia do pracy
+                            Centrum narzędzi operacyjnych i testów kompetencji
                         </p>
                     </div>
                 </div>
             </div>
 
             {/* Filters */}
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '32px', flexWrap: 'wrap' }}>
-                <button
-                    onClick={() => setSelectedTier(null)}
-                    style={{
-                        padding: '10px 20px',
-                        background: !selectedTier ? 'linear-gradient(135deg, #ff8800, #cc6600)' : 'rgba(255,255,255,0.05)',
-                        border: `1px solid ${!selectedTier ? '#ff8800' : 'rgba(255,255,255,0.1)'}`,
-                        borderRadius: '12px',
-                        color: 'white',
-                        cursor: 'pointer',
-                        fontSize: '14px',
-                        fontWeight: 500,
-                        transition: 'all 0.3s'
-                    }}
-                >
-                    Wszystkie
-                </button>
-                {[1, 2, 3].map(tier => (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
+                {/* Categories */}
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     <button
-                        key={tier}
-                        onClick={() => setSelectedTier(tier)}
+                        onClick={() => setSelectedCategory(null)}
                         style={{
                             padding: '10px 20px',
-                            background: selectedTier === tier ? 'linear-gradient(135deg, #ff8800, #cc6600)' : 'rgba(255,255,255,0.05)',
-                            border: `1px solid ${selectedTier === tier ? '#ff8800' : 'rgba(255,255,255,0.1)'}`,
+                            background: !selectedCategory ? 'white' : 'rgba(255,255,255,0.05)',
+                            color: !selectedCategory ? 'black' : 'white',
+                            border: `1px solid ${!selectedCategory ? 'white' : 'rgba(255,255,255,0.1)'}`,
                             borderRadius: '12px',
-                            color: 'white',
                             cursor: 'pointer',
                             fontSize: '14px',
-                            fontWeight: 500,
-                            transition: 'all 0.3s'
+                            fontWeight: 600
                         }}
                     >
-                        Tier {tier}
+                        Wszystkie
                     </button>
-                ))}
+                    <button
+                        onClick={() => setSelectedCategory('diagnosis')}
+                        style={{
+                            padding: '10px 20px',
+                            background: selectedCategory === 'diagnosis' ? '#b000ff' : 'rgba(255,255,255,0.05)',
+                            color: 'white',
+                            border: `1px solid ${selectedCategory === 'diagnosis' ? '#b000ff' : 'rgba(255,255,255,0.1)'}`,
+                            borderRadius: '12px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            fontWeight: 600
+                        }}
+                    >
+                        🧪 Diagnostyka
+                    </button>
+                    <button
+                        onClick={() => setSelectedCategory('utility')}
+                        style={{
+                            padding: '10px 20px',
+                            background: selectedCategory === 'utility' ? '#ff8800' : 'rgba(255,255,255,0.05)',
+                            color: 'white',
+                            border: `1px solid ${selectedCategory === 'utility' ? '#ff8800' : 'rgba(255,255,255,0.1)'}`,
+                            borderRadius: '12px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            fontWeight: 600
+                        }}
+                    >
+                        🛠️ Narzędzia
+                    </button>
+                </div>
+
+                {/* Tiers */}
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                    <button
+                        onClick={() => setSelectedTier(null)}
+                        style={{
+                            padding: '8px 16px',
+                            background: 'transparent',
+                            border: 'none',
+                            color: !selectedTier ? 'white' : 'rgba(255,255,255,0.4)',
+                            cursor: 'pointer',
+                            fontSize: '13px',
+                            fontWeight: 500
+                        }}
+                    >
+                        Każdy poziom
+                    </button>
+                    {[1, 2, 3].map(tier => (
+                        <button
+                            key={tier}
+                            onClick={() => setSelectedTier(tier)}
+                            style={{
+                                padding: '8px 16px',
+                                background: selectedTier === tier ? 'rgba(255,255,255,0.1)' : 'transparent',
+                                border: 'none',
+                                borderRadius: '8px',
+                                color: selectedTier === tier ? 'white' : 'rgba(255,255,255,0.4)',
+                                cursor: 'pointer',
+                                fontSize: '13px',
+                                fontWeight: 500
+                            }}
+                        >
+                            Tier {tier}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Tools Grid */}

@@ -46,7 +46,21 @@ export default function ResourcesPage() {
                     .select('*')
 
                 if (error) throw error
-                setResources(data || [])
+
+                // Inject Static Resources (e.g. Degen Atlas)
+                const staticResources: Resource[] = [{
+                    id: 'degen-atlas-static',
+                    title: 'Atlas Degenów 🌍',
+                    description: 'Kompendium 8 typów osobowości inwestycyjnych. Poznaj ich mocne i słabe strony, aby lepiej inwestować.',
+                    resource_type: 'article',
+                    category: 'Mindset',
+                    locked: false,
+                    tier: 1,
+                    download_xp: 50,
+                    external_url: '/learning/resources/degen-atlas'
+                }]
+
+                setResources([...staticResources, ...(data || [])])
             } catch (error) {
                 console.error('Error loading resources:', error)
             } finally {
@@ -58,6 +72,16 @@ export default function ResourcesPage() {
 
     const handleDownload = async (resource: Resource) => {
         if (resource.locked) return { success: false, xp: 0 }
+
+        // Handle External/Internal Links without downloading
+        if (resource.external_url) {
+            if (resource.external_url.startsWith('/')) {
+                router.push(resource.external_url)
+            } else {
+                window.open(resource.external_url, '_blank')
+            }
+            return { success: true, xp: resource.download_xp || 0 }
+        }
 
         setDownloadingId(resource.id)
         try {
@@ -297,7 +321,7 @@ function ResourceCard({
     return (
         <div
             style={{
-                background: 'rgba(20, 20, 35, 0.4)',
+                background: 'rgba(255, 255, 255, 0.03)',
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
                 border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -399,7 +423,7 @@ function ResourceCard({
                         left: 0,
                         width: '100%',
                         height: '100%',
-                        background: 'linear-gradient(to bottom, rgba(20,20,35,0.8), rgba(20,20,35,0.95))',
+                        background: 'linear-gradient(to bottom, rgba(20,20,35,0.3), rgba(20,20,35,0.85))',
                         zIndex: 1
                     }} />
                 </>

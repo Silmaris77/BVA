@@ -16,9 +16,10 @@ interface ToolShellProps {
     children: ReactNode
     stats?: { label: string; value: string | number }[]
     tips?: string[]
+    resources?: { label: string; url: string; type: 'doc' | 'guide' | 'video' }[]
 }
 
-export default function ToolShell({ tool, children, stats, tips }: ToolShellProps) {
+export default function ToolShell({ tool, children, stats, tips, resources }: ToolShellProps) {
     const getTierBadge = (tier: number) => {
         const tiers = {
             1: { label: 'Tier 1 - Podstawowy', color: '#00ff88', bg: 'rgba(0,255,136,0.2)' },
@@ -111,19 +112,29 @@ export default function ToolShell({ tool, children, stats, tips }: ToolShellProp
             </div>
 
             {/* Body */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
-                {/* Main Content */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
+                {/* Main Content - Full Width */}
+                <div style={{ width: '100%' }}>
                     {children}
+                </div>
 
-                    {/* Tips (if provided) */}
+                {/* Footer Section - Grid for auxiliary info */}
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                    gap: '24px',
+                    borderTop: '1px solid rgba(255,255,255,0.05)',
+                    paddingTop: '32px'
+                }}>
+                    {/* Tips (Moved from main column) */}
                     {tips && tips.length > 0 && (
                         <div style={{
                             background: 'rgba(20, 20, 35, 0.4)',
                             backdropFilter: 'blur(15px)',
                             border: '1px solid rgba(255,255,255,0.08)',
-                            borderRadius: '20px',
-                            padding: '24px'
+                            borderRadius: '16px',
+                            padding: '24px',
+                            height: '100%'
                         }}>
                             <h4 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px', color: '#ff8800' }}>
                                 💡 Wskazówki
@@ -135,17 +146,15 @@ export default function ToolShell({ tool, children, stats, tips }: ToolShellProp
                             </ul>
                         </div>
                     )}
-                </div>
 
-                {/* Sidebar */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     {/* Stats */}
                     <div style={{
                         background: 'rgba(20, 20, 35, 0.4)',
                         backdropFilter: 'blur(15px)',
                         border: '1px solid rgba(255,255,255,0.08)',
                         borderRadius: '16px',
-                        padding: '24px'
+                        padding: '24px',
+                        height: '100%'
                     }}>
                         <h4 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px', color: '#ff8800' }}>
                             📊 Statystyki
@@ -164,26 +173,51 @@ export default function ToolShell({ tool, children, stats, tips }: ToolShellProp
                         </div>
                     </div>
 
-                    {/* Related Content (Static for now) */}
+                    {/* Resources */}
                     <div style={{
                         background: 'rgba(20, 20, 35, 0.4)',
                         backdropFilter: 'blur(15px)',
                         border: '1px solid rgba(255,255,255,0.08)',
                         borderRadius: '16px',
-                        padding: '24px'
+                        padding: '24px',
+                        height: '100%'
                     }}>
                         <h4 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '12px', color: '#ff8800' }}>
                             📚 Zasoby
                         </h4>
                         <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)' }}>
-                            <div style={{ padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <FileText size={14} style={{ display: 'inline', marginRight: '8px' }} />
-                                Tabele i dokumenty
-                            </div>
-                            <div style={{ padding: '8px 0' }}>
-                                <BookOpen size={14} style={{ display: 'inline', marginRight: '8px' }} />
-                                Poradniki
-                            </div>
+                            {resources && resources.length > 0 ? (
+                                resources.map((res, idx) => (
+                                    <Link
+                                        key={idx}
+                                        href={res.url}
+                                        style={{
+                                            display: 'block',
+                                            padding: '8px 0',
+                                            borderBottom: idx < resources.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                                            textDecoration: 'none',
+                                            color: 'inherit',
+                                            transition: 'color 0.2s'
+                                        }}
+                                        className="hover:text-white"
+                                    >
+                                        {res.type === 'guide' && <BookOpen size={14} style={{ display: 'inline', marginRight: '8px' }} />}
+                                        {res.type === 'doc' && <FileText size={14} style={{ display: 'inline', marginRight: '8px' }} />}
+                                        {res.label}
+                                    </Link>
+                                ))
+                            ) : (
+                                <>
+                                    <div style={{ padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                        <FileText size={14} style={{ display: 'inline', marginRight: '8px' }} />
+                                        <span style={{ opacity: 0.7 }}>Tabele i dokumenty (wkrótce)</span>
+                                    </div>
+                                    <div style={{ padding: '8px 0' }}>
+                                        <BookOpen size={14} style={{ display: 'inline', marginRight: '8px' }} />
+                                        <span style={{ opacity: 0.7 }}>Poradniki (wkrótce)</span>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
