@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/contexts/AuthContext'
-import { Zap, Bell, Flame, BookOpen, Brain, Library, LayoutDashboard, Gamepad2, Folder, User, TrendingUp, Target, LogOut, Menu, Wrench } from 'lucide-react'
+import { Zap, Bell, Flame, BookOpen, Brain, Library, LayoutDashboard, Gamepad2, Folder, User, TrendingUp, Target, LogOut, Menu, Wrench, Bot } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { ARCHETYPES } from '@/components/profile/EditProfileModal'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'

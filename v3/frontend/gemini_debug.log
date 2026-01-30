@@ -1,0 +1,136 @@
+
+[2026-01-30T00:20:11.979Z] ERROR:
+Message: [GoogleGenerativeAI Error]: First content should be with role 'user', got model
+Stack: Error: [GoogleGenerativeAI Error]: First content should be with role 'user', got model
+    at validateChatHistory (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:10093:19)
+    at new ChatSession (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:10185:13)
+    at GenerativeModel.startChat (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:10439:16)
+    at POST (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\[root-of-the-server]__7d13b6b8._.js:105:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async AppRouteRouteModule.do (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:37866)
+    at async AppRouteRouteModule.handle (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:45156)
+    at async responseGenerator (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16373:38)
+    at async AppRouteRouteModule.handleResponse (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:1:187713)
+    at async handleResponse (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16436:32)
+    at async Module.handler (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16489:13)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1422:9)
+    at async DevServer.renderPageComponent (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1474:24)
+    at async DevServer.renderToResponseImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1524:32)
+    at async DevServer.pipeImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1018:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\next-server.js:395:17)
+    at async DevServer.handleRequestImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:909:17)
+    at async C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\dev\next-dev-server.js:387:20
+    at async Span.traceAsyncFn (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\trace\trace.js:157:20)
+    at async DevServer.handleRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\dev\next-dev-server.js:383:24)
+    at async invokeRender (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:248:21)
+    at async handleRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:447:24)
+    at async requestHandlerImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:496:13)
+    at async Server.requestListener (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\start-server.js:226:13)
+Detail: {}
+API Key Present: true
+----------------------------------------
+
+[2026-01-30T00:21:43.274Z] ERROR:
+Message: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Stack: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent: [404 Not Found] models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9461:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async makeRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9433:9)
+    at async generateContent (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9875:22)
+    at async ChatSession.sendMessage (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:10245:9)
+    at async POST (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\[root-of-the-server]__7d13b6b8._.js:123:24)
+    at async AppRouteRouteModule.do (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:37866)
+    at async AppRouteRouteModule.handle (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:45156)
+    at async responseGenerator (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16373:38)
+    at async AppRouteRouteModule.handleResponse (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:1:187713)
+    at async handleResponse (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16436:32)
+    at async Module.handler (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16489:13)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1422:9)
+    at async DevServer.renderPageComponent (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1474:24)
+    at async DevServer.renderToResponseImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1524:32)
+    at async DevServer.pipeImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1018:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\next-server.js:395:17)
+    at async DevServer.handleRequestImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:909:17)
+    at async C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\dev\next-dev-server.js:387:20
+    at async Span.traceAsyncFn (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\trace\trace.js:157:20)
+    at async DevServer.handleRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\dev\next-dev-server.js:383:24)
+    at async invokeRender (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:248:21)
+    at async handleRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:447:24)
+    at async requestHandlerImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:496:13)
+    at async Server.requestListener (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\start-server.js:226:13)
+Detail: {
+  "status": 404,
+  "statusText": "Not Found"
+}
+API Key Present: true
+----------------------------------------
+
+[2026-01-30T00:22:54.151Z] ERROR:
+Message: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent: [404 Not Found] models/gemini-1.5-flash-001 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Stack: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent: [404 Not Found] models/gemini-1.5-flash-001 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9461:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async makeRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9433:9)
+    at async generateContent (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9875:22)
+    at async ChatSession.sendMessage (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:10245:9)
+    at async POST (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\[root-of-the-server]__7d13b6b8._.js:123:24)
+    at async AppRouteRouteModule.do (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:37866)
+    at async AppRouteRouteModule.handle (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:45156)
+    at async responseGenerator (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16373:38)
+    at async AppRouteRouteModule.handleResponse (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:1:187713)
+    at async handleResponse (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16436:32)
+    at async Module.handler (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16489:13)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1422:9)
+    at async DevServer.renderPageComponent (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1474:24)
+    at async DevServer.renderToResponseImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1524:32)
+    at async DevServer.pipeImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1018:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\next-server.js:395:17)
+    at async DevServer.handleRequestImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:909:17)
+    at async C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\dev\next-dev-server.js:387:20
+    at async Span.traceAsyncFn (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\trace\trace.js:157:20)
+    at async DevServer.handleRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\dev\next-dev-server.js:383:24)
+    at async invokeRender (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:248:21)
+    at async handleRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:447:24)
+    at async requestHandlerImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:496:13)
+    at async Server.requestListener (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\start-server.js:226:13)
+Detail: {
+  "status": 404,
+  "statusText": "Not Found"
+}
+API Key Present: true
+----------------------------------------
+
+[2026-01-30T00:24:18.259Z] ERROR:
+Message: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Stack: Error: [GoogleGenerativeAI Error]: Error fetching from https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent: [404 Not Found] models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+    at handleResponseNotOk (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9461:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async makeRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9433:9)
+    at async generateContent (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:9875:22)
+    at async ChatSession.sendMessage (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:10245:9)
+    at async POST (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\[root-of-the-server]__7d13b6b8._.js:123:24)
+    at async AppRouteRouteModule.do (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:37866)
+    at async AppRouteRouteModule.handle (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:5:45156)
+    at async responseGenerator (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16373:38)
+    at async AppRouteRouteModule.handleResponse (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\compiled\next-server\app-route-turbo.runtime.dev.js:1:187713)
+    at async handleResponse (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16436:32)
+    at async Module.handler (C:\Users\pksia\Dropbox\BVA\v3\frontend\.next\dev\server\chunks\node_modules_6d7f2c0a._.js:16489:13)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1422:9)
+    at async DevServer.renderPageComponent (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1474:24)
+    at async DevServer.renderToResponseImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1524:32)
+    at async DevServer.pipeImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:1018:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\next-server.js:395:17)
+    at async DevServer.handleRequestImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\base-server.js:909:17)
+    at async C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\dev\next-dev-server.js:387:20
+    at async Span.traceAsyncFn (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\trace\trace.js:157:20)
+    at async DevServer.handleRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\dev\next-dev-server.js:383:24)
+    at async invokeRender (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:248:21)
+    at async handleRequest (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:447:24)
+    at async requestHandlerImpl (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\router-server.js:496:13)
+    at async Server.requestListener (C:\Users\pksia\Dropbox\BVA\v3\frontend\node_modules\next\dist\server\lib\start-server.js:226:13)
+Detail: {
+  "status": 404,
+  "statusText": "Not Found"
+}
+API Key Present: true
+----------------------------------------

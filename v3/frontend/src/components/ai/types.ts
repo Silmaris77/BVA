@@ -24,7 +24,7 @@ export interface ConversationState {
     isMinimized: boolean
     activePersonaId: string | null
     messages: ChatMessage[]
-    status: 'idle' | 'thinking' | 'typing' | 'speaking'
+    status: 'idle' | 'thinking' | 'typing' | 'speaking' | 'error'
 }
 
 export type ConversationAction =

@@ -69,53 +69,81 @@ export function AIConversationProvider({ children }: { children: ReactNode }) {
 
     const activePersona = state.activePersonaId ? getPersona(state.activePersonaId) : null
 
+
     // --- Actions ---
     const startConversation = useCallback((personaId: string, initialMessage?: string) => {
         dispatch({ type: 'OPEN_CHAT', payload: { personaId, initialMessage } })
+
+        // If there's an internal monologue or initial greeting needed from AI, we could trigger it here.
+        // For now, if we start with a user message (e.g. from a trigger), we handle it.
+        // But usually startConversation just opens the window.
     }, [])
 
-    const closeConversation = useCallback(() => {
-        dispatch({ type: 'CLOSE_CHAT' })
-    }, [])
+    const closeConversation = useCallback(() => dispatch({ type: 'CLOSE_CHAT' }), [])
 
-    const minimizeConversation = useCallback(() => {
-        dispatch({ type: 'MINIMIZE_CHAT' })
-    }, [])
+    const minimizeConversation = useCallback(() => dispatch({ type: 'MINIMIZE_CHAT' }), [])
+    const maximizeConversation = useCallback(() => dispatch({ type: 'MAXIMIZE_CHAT' }), [])
 
-    const maximizeConversation = useCallback(() => {
-        dispatch({ type: 'MAXIMIZE_CHAT' })
-    }, [])
-
-    // --- Mock Intelligence for now ---
     const sendMessage = useCallback(async (content: string) => {
-        // 1. Add User Message
-        const userMsg: ChatMessage = {
-            id: uuidv4(),
+        if (!state.activePersonaId || !activePersona) return
+
+        const userMsgId = uuidv4()
+        const userMessage: ChatMessage = {
+            id: userMsgId,
             role: 'user',
             content,
             timestamp: Date.now()
         }
-        dispatch({ type: 'ADD_MESSAGE', payload: userMsg })
+
+        dispatch({ type: 'ADD_MESSAGE', payload: userMessage })
         dispatch({ type: 'SET_STATUS', payload: 'thinking' })
 
-        // 2. Simulate Delay for "AI Thinking"
-        setTimeout(() => {
-            dispatch({ type: 'SET_STATUS', payload: 'typing' })
+        try {
+            // Prepare messages context including the new user message
+            const conversationHistory = [...state.messages, userMessage];
 
-            setTimeout(() => {
-                // 3. Add Assistant Response (Mock)
-                const responseMsg: ChatMessage = {
-                    id: uuidv4(),
-                    role: 'assistant',
-                    content: `[MOCK RESPONSE from ${activePersona?.name || 'AI'}]\nI received your message: "${content}". \n\nI am currently a simulated intelligence. Connect me to an LLM API to get real responses!`,
+            const response = await fetch('/api/ai/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    messages: conversationHistory,
+                    systemPrompt: activePersona.systemPrompt
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to fetch AI response');
+            }
+
+            const data = await response.json();
+
+            const aiMsgId = uuidv4()
+            const aiMessage: ChatMessage = {
+                id: aiMsgId,
+                role: 'assistant',
+                content: data.response,
+                timestamp: Date.now()
+            }
+
+            dispatch({ type: 'ADD_MESSAGE', payload: aiMessage })
+            dispatch({ type: 'SET_STATUS', payload: 'idle' })
+
+        } catch (error) {
+            console.error("Chat Error:", error);
+            // Optional: Add an error message to the chat
+            const errorMsgId = uuidv4()
+            dispatch({
+                type: 'ADD_MESSAGE', payload: {
+                    id: errorMsgId,
+                    role: 'assistant', // Or a system role if we had one
+                    content: "Przepraszam, napotkałem problem z połączeniem. Spróbuj ponownie później.",
                     timestamp: Date.now()
                 }
-                dispatch({ type: 'ADD_MESSAGE', payload: responseMsg })
-                dispatch({ type: 'SET_STATUS', payload: 'idle' })
-            }, 1500) // Typing delay
-
-        }, 1000) // Thinking delay
-    }, [activePersona])
+            })
+            dispatch({ type: 'SET_STATUS', payload: 'error' })
+        }
+    }, [state.activePersonaId, state.messages, activePersona])
 
     return (
         <AIConversationContext.Provider value={{
