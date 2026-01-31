@@ -11,6 +11,7 @@ import FillGapCard from './math/FillGapCard'
 import DigitSelectorCard from './math/DigitSelectorCard'
 import SignPredictorCard from './math/SignPredictorCard'
 import ExpressionBuilderCard from './math/ExpressionBuilderCard'
+import DistanceVisualizerCard from './math/DistanceVisualizerCard'
 
 import QuestionCard from './QuestionCard'
 import SummaryCard from './SummaryCard'
@@ -39,7 +40,7 @@ import CuriosityCard from './CuriosityCard'
 import ActionCard from './ActionCard'
 import DiagnosticCard from './DiagnosticCard'
 
-export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity' | 'action' | 'diagnostic' | 'digit-selector' | 'sign-predictor' | 'expression-builder'
+export type CardType = 'intro' | 'concept' | 'question' | 'summary' | 'practice' | 'warning' | 'hero' | 'content' | 'interactive' | 'timeline' | 'lightbulb' | 'flashcards' | 'quiz' | 'achievement' | 'habit' | 'quote' | 'data' | 'story' | 'ending' | 'test' | 'checklist' | 'input' | 'number-line' | 'fraction-visual' | 'number-sort' | 'matching' | 'true-false' | 'comparison' | 'fill-gap' | 'cover' | 'learning-path' | 'cycle' | 'cycle-b' | 'dunning-kruger' | 'readiness' | 'curiosity' | 'action' | 'diagnostic' | 'digit-selector' | 'sign-predictor' | 'expression-builder' | 'distance-visualizer'
 
 export interface LessonCardData {
     type: CardType
@@ -150,6 +151,13 @@ export interface LessonCardData {
     inputs?: any[]
     sampleAnswers?: any
 
+    // Distance Visualizer
+    numbers?: number[]
+    correctDistance?: number
+    showSymmetry?: boolean
+    compareMode?: boolean
+
+    lessonId?: string
     [key: string]: any
 }
 
@@ -363,6 +371,7 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 durationMinutes={card.durationMinutes}
                 xpReward={card.xpReward}
                 image={card.image}
+                lessonId={card.lessonId}
                 onStart={onNext}
             />
 
@@ -505,6 +514,16 @@ export default function CardRenderer({ card, onAnswer, onTestResult, onReset, on
                 availableNumbers={card.availableNumbers || []}
                 availableOperations={card.availableOperations || ['+', '-', '*', '/']}
                 sampleSolutions={card.sampleSolutions}
+                explanation={card.explanation}
+            />
+        case 'distance-visualizer':
+            return <DistanceVisualizerCard
+                title={card.title}
+                question={card.question || 'Obserwuj odległości'}
+                numbers={card.numbers || [0]}
+                correctDistance={card.correctDistance || 0}
+                showSymmetry={card.showSymmetry}
+                compareMode={card.compareMode}
                 explanation={card.explanation}
             />
         default:

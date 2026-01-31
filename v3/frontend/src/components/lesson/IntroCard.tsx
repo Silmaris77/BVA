@@ -1,7 +1,6 @@
 'use client'
 
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import MathRenderer from './math/MathRenderer'
 
 interface IntroCardProps {
     title: string
@@ -98,9 +97,7 @@ export default function IntroCard({ title, subtitle, description, icon = '🎯' 
                 maxWidth: '600px',
                 textAlign: 'center'
             }}>
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {description}
-                </ReactMarkdown>
+                <MathRenderer content={description} />
             </div>
 
             {/* Decorative gradient line */}

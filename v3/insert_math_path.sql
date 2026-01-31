@@ -1143,21 +1143,22 @@ INSERT INTO learning_paths (
     'Matematyka - 7 klasa',
     'Kompletny kurs matematyki dla klasy 7, zgodny z podstawą programową. Odkryj fascynujący świat liczb, algebry i geometrii.',
     'beginner',
-    1000,
+    1270,
     -- Structure with Module info.
     '[
         {
             "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
             "type": "module",
             "title": "Matematyka: Liczby i Działania",
-            "lessons": ["math-g7-l1", "math-g7-l2", "math-g7-l3", "math-g7-l4", "math-g7-l5"]
+            "lessons": ["math-g7-l1", "math-g7-l2", "math-g7-l3", "math-g7-l4", "math-g7-l5", "math-g7-l6", "math-g7-l7", "math-g7-l8"]
         }
     ]'::jsonb,
     true
 ) ON CONFLICT (path_slug) DO UPDATE SET
     title = EXCLUDED.title,
     description = EXCLUDED.description,
-    lesson_sequence = EXCLUDED.lesson_sequence;
+    lesson_sequence = EXCLUDED.lesson_sequence,
+    total_xp_reward = EXCLUDED.total_xp_reward;
 
 -- LESSON 5: Mnożenie i dzielenie liczb dodatnich
 INSERT INTO lessons (

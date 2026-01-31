@@ -24,6 +24,28 @@ INSERT INTO lessons (
             "description": "Przez setki lat matematycy nie akceptowali liczb ujemnych, uważając je za ''dziwne'' i ''abstrakcyjne''. Dopiero w XVIII wieku uznano je w pełni. Dziś nauczysz się z nimi pewnie działać!"
         },
         {
+            "type": "flashcards",
+            "title": "Gdzie spotkasz liczby ujemne?",
+            "cards": [
+                {
+                    "front": "🌡️ **Temperatura i pogoda**\\n\\nDziś w nocy było **-5°C**, w dzień temperatura wzrosła o **7°C**. Jaka była temperatura w dzień?",
+                    "back": "**Rozwiązanie:** $-5 + 7 = 2$ °C\\n\\nWzrost temperatury = dodawanie!"
+                },
+                {
+                    "front": "💰 **Finanse i oszczędności**\\n\\nMasz dług **-20 zł** u kolegi, dostajesz **50 zł** od rodziców. Ile masz teraz?",
+                    "back": "**Rozwiązanie:** $-20 + 50 = 30$ zł\\n\\nDług to liczba ujemna, wpływ to dodawanie!"
+                },
+                {
+                    "front": "🎮 **Punkty w grach**\\n\\nZaczynasz z **100 punktami**, dostajesz karę **-30 punktów**, potem bonus **+50**. Jaki masz wynik?",
+                    "back": "**Rozwiązanie:** $100 - 30 + 50 = 120$ punktów\\n\\nKary i bonusy = dodawanie i odejmowanie!"
+                },
+                {
+                    "front": "🏔️ **Geografia i wysokości**\\n\\nMorze Martwe leży na wysokości **-430 m**, lecisz samolotem na **3000 m**. O ile metrów się wzniosłeś?",
+                    "back": "**Rozwiązanie:** $3000 - (-430) = 3430$ m\\n\\nWzrost wysokości = odejmowanie liczby ujemnej!"
+                }
+            ]
+        },
+        {
             "type": "concept",
             "title": "Przypomnienie: Liczby przeciwne",
             "content": "Każda liczba ma swoją **liczbę przeciwną** - leżącą po drugiej stronie zera na osi liczbowej:\\n\\n- Liczba przeciwna do $5$ to $-5$\\n- Liczba przeciwna do $-3$ to $3$\\n- Liczba przeciwna do $0$ to $0$\\n\\n**Ważne:** Suma liczby i jej liczby przeciwnej zawsze wynosi $0$:\\n$$5 + (-5) = 0$$\\n$$-3 + 3 = 0$$"
@@ -238,10 +260,9 @@ INSERT INTO lessons (
             "availableOperations": ["+", "-", "*", "/"],
             "sampleSolutions": [
                 "$-15 + 5 = -10$",
-                "$5 - 15 = -10$",
-                "$5 + (-15) = -10$"
+                "$5 - 15 = -10$"
             ],
-            "explanation": "Istnieje wiele sposobów! Najprostrze to: $-15 + 5 = -10$ lub $5 - 15 = -10$"
+            "explanation": "Istnieje wiele sposobów! Najprostsze to: $-15 + 5 = -10$ lub $5 - 15 = -10$"
         },
         {
             "type": "sign-predictor",
@@ -294,9 +315,7 @@ INSERT INTO lessons (
             "availableNumbers": [10, -5, 4, -2],
             "availableOperations": ["+", "-", "*", "/"],
             "sampleSolutions": [
-                "$10 - (-5) + 4 + (-2) + (-2) = 20$ (problem - brak drugiej -2)",
-                "$10 + (-5) \\times (-2) = 10 + 10 = 20$",
-                "$10 \\times 4 : (-2) = -20$ (zły znak)"
+                "$10 + (-5) \\times (-2) = 10 + 10 = 20$"
             ],
             "explanation": "Sprytne rozwiązanie: $10 + (-5) \\times (-2) = 10 + 10 = 20$. Pamiętaj o kolejności działań!"
         },
@@ -366,7 +385,7 @@ INSERT INTO lessons (
                     "explanation": "Różne znaki: $27 - 12 = 15$, znak ujemny → $-15$"
                 },
                 {
-                    "question": "Oblicz: $-4,5 - 2\\\\frac{1}{5}$",
+                    "question": "Oblicz: $-4,5 - 2\\frac{1}{5}$",
                     "options": [
                         "$-6,7$",
                         "$-2,3$",
@@ -374,10 +393,10 @@ INSERT INTO lessons (
                         "$6,7$"
                     ],
                     "correctAnswer": 0,
-                    "explanation": "$2\\\\frac{1}{5} = 2,2$, więc $-4,5 - 2,2 = -4,5 + (-2,2) = -6,7$"
+                    "explanation": "$2\\frac{1}{5} = 2,2$, więc $-4,5 - 2,2 = -4,5 + (-2,2) = -6,7$"
                 },
                 {
-                    "question": "Oblicz: $(-15) \\\\times (-3)$",
+                    "question": "Oblicz: $(-15) \\times (-3)$",
                     "options": [
                         "$-45$",
                         "$45$",
@@ -385,10 +404,10 @@ INSERT INTO lessons (
                         "$5$"
                     ],
                     "correctAnswer": 1,
-                    "explanation": "Te same znaki → dodatnie: $15 \\\\times 3 = 45$"
+                    "explanation": "Te same znaki → dodatnie: $15 \\times 3 = 45$"
                 },
                 {
-                    "question": "Oblicz: $(-2) \\\\times (7 - 11)$",
+                    "question": "Oblicz: $(-2) \\times (7 - 11)$",
                     "options": [
                         "$-8$",
                         "$8$",
@@ -396,7 +415,7 @@ INSERT INTO lessons (
                         "$36$"
                     ],
                     "correctAnswer": 1,
-                    "explanation": "Najpierw nawias: $7 - 11 = -4$. Potem: $(-2) \\\\times (-4) = 8$"
+                    "explanation": "Najpierw nawias: $7 - 11 = -4$. Potem: $(-2) \\times (-4) = 8$"
                 },
                 {
                     "question": "Temperatura spadła z $2°C$ do $-5°C$. O ile stopni spadła?",

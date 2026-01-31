@@ -21,6 +21,7 @@ interface Lesson {
         title: string
         display_order: number
     }
+    card_count?: number
 }
 
 interface PathData {
@@ -405,29 +406,30 @@ export default function PathDetailPage() {
                                         color: 'rgba(255, 255, 255, 0.4)'
                                     }}>
                                         <span>⏱️ {lesson.duration_minutes} min</span>
-                                        <span>📄 {lesson.content?.cards?.length || 0} kart</span>
+                                        <span>📄 {lesson.card_count || 0} kart</span>
                                         <span>⭐ +{lesson.xp_reward} XP</span>
                                     </div>
                                 </div>
 
                                 {/* Status Badge */}
-                                {(isCompleted || isCurrent) && (
-                                    <span style={{
-                                        position: 'absolute',
-                                        top: '16px',
-                                        right: '16px',
-                                        padding: '6px 12px',
-                                        borderRadius: '20px',
-                                        fontSize: '12px',
-                                        fontWeight: 600,
-                                        background: isCompleted
-                                            ? 'rgba(0, 255, 136, 0.15)'
-                                            : 'rgba(0, 212, 255, 0.15)',
-                                        color: isCompleted ? '#00ff88' : '#00d4ff'
-                                    }}>
-                                        {isCompleted ? '✅ Ukończone' : '🔵 W trakcie'}
-                                    </span>
-                                )}
+                                <span style={{
+                                    position: 'absolute',
+                                    top: '16px',
+                                    right: '16px',
+                                    padding: '6px 12px',
+                                    borderRadius: '20px',
+                                    fontSize: '12px',
+                                    fontWeight: 600,
+                                    background: isCompleted
+                                        ? 'rgba(0, 255, 136, 0.15)'
+                                        : isCurrent
+                                            ? 'rgba(0, 212, 255, 0.15)'
+                                            : 'rgba(255, 255, 255, 0.05)',
+                                    color: isCompleted ? '#00ff88' : isCurrent ? '#00d4ff' : 'rgba(255, 255, 255, 0.4)',
+                                    border: `1px solid ${isCompleted ? '#00ff88' : isCurrent ? '#00d4ff' : 'rgba(255, 255, 255, 0.1)'}`
+                                }}>
+                                    {isCompleted ? '✅ Ukończone' : isCurrent ? '🔵 W trakcie' : '⚪ Nierozpoczęte'}
+                                </span>
 
                                 {/* Arrow */}
                                 <ChevronRight

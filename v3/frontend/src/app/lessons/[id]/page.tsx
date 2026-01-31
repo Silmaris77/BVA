@@ -29,7 +29,7 @@ interface Lesson {
 const TRACK_TITLES: Record<string, string> = {
     'sales-manager': 'Akademia Menedżera',
     'sales': 'Akademia B2B',
-    'math': 'Matematyka'
+    'math': 'Matematyka Klasa 7'
 }
 
 export default function LessonPlayerPage() {
@@ -147,7 +147,8 @@ export default function LessonPlayerPage() {
                             description: data.lesson.description,
                             category: categoryDisplay,
                             durationMinutes: data.lesson.duration_minutes,
-                            xpReward: data.lesson.xp_reward
+                            xpReward: data.lesson.xp_reward,
+                            lessonId: data.lesson.lesson_id
                         }
 
                         // Prepend cover card

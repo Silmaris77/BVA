@@ -20,6 +20,7 @@ export default function ThemeSelector() {
         { id: 'brainventure', name: '🧠 BRAINVENTURE', color: '#B10A4A' },
         { id: 'modern-ios', name: '📱 MODERN iOS', color: '#000000' },
         { id: 'moonshot', name: '🚀 MOONSHOT', color: '#00ff9d' },
+        { id: 'voltage', name: '⚡ VOLTAGE', color: '#ffcc00' },
     ]
 
     return (

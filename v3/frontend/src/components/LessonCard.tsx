@@ -72,40 +72,20 @@ export default function LessonCard({ lesson, progress, onClick }: LessonCardProp
     } else if (isInProgress) {
         badgeText = 'W trakcie'
         badgeColor = '#00d4ff'
+    } else if (!isComingSoon && !isLocked) {
+        badgeText = 'Nierozpoczęte'
+        badgeColor = 'rgba(255, 255, 255, 0.4)'
     }
 
     return (
         <div
+            className="glass-card lesson-card-v3"
             onClick={(isComingSoon || isLocked) ? undefined : onClick}
             style={{
-                background: 'rgba(20, 20, 35, 0.4)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                borderRadius: '16px',
-                padding: '20px',
+                '--category-color': categoryColor,
                 cursor: (isComingSoon || isLocked) ? 'not-allowed' : 'pointer',
-                transition: 'all 0.2s',
-                position: 'relative',
-                overflow: 'hidden',
                 opacity: (isComingSoon || isLocked) ? 0.7 : 1
-            }}
-            onMouseOver={(e) => {
-                if (isComingSoon) return
-                e.currentTarget.style.borderColor = categoryColor
-                e.currentTarget.style.transform = 'translateY(-4px)'
-                e.currentTarget.style.boxShadow = `0 12px 40px ${categoryColor}33`
-                const shine = e.currentTarget.querySelector('.shine-lesson') as HTMLElement
-                if (shine) shine.style.left = '100%'
-            }}
-            onMouseOut={(e) => {
-                if (isComingSoon) return
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)'
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = 'none'
-                const shine = e.currentTarget.querySelector('.shine-lesson') as HTMLElement
-                if (shine) shine.style.left = '-100%'
-            }}
+            } as any}
         >
             {/* Shine overlay */}
             <div

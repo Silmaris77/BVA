@@ -10,6 +10,7 @@ interface CoverCardProps {
     durationMinutes?: number
     xpReward?: number
     image?: string
+    lessonId?: string
     onStart?: () => void
 }
 
@@ -21,6 +22,7 @@ export default function CoverCard({
     durationMinutes,
     xpReward,
     image,
+    lessonId,
     onStart
 }: CoverCardProps) {
 
@@ -33,23 +35,24 @@ export default function CoverCard({
         const c = category ? category.toLowerCase() : ''
 
         // 2. SPECIFIC TITLE OVERRIDES
+
+        // New Math Module Background - Rule: Module 1 "Liczby i Działania"
+        // Stable rule: check for "math-g7-l" prefix in lessonId
+        const mathModule1Regex = /modu[łl]\s*1|liczb/i;
+        const isMathModule1 =
+            (lessonId && lessonId.startsWith('math-g7-l')) ||
+            mathModule1Regex.test(title) ||
+            (subtitle && mathModule1Regex.test(subtitle)) ||
+            (category && category.toLowerCase().includes('matematyka'));
+
+        if (isMathModule1) {
+            return '/lessons/math/modul1_cover.jpg'
+        }
+
         if (t.includes('historia') && t.includes('milwaukee')) {
             return '/lessons/milwaukee/history/oldtimesnewtimes.png'
         }
 
-        if (t.includes('ojt') || t.includes('on the job') || t.includes('on-the-job')) {
-            return '/lessons/ojt/cover.png'
-        }
-
-        if (t.includes('fundamenty') || t.includes('historia') || t.includes('dna')) {
-            // User Choice: Specific Unsplash Image
-            return 'https://images.unsplash.com/photo-1649908787172-7945c00fafa2?auto=format&fit=crop&w=1600&q=80'
-        }
-
-        // New Math Module Background
-        if ((t.includes('liczby') || (subtitle && subtitle.toLowerCase().includes('liczby'))) || (subtitle && subtitle.toLowerCase().includes('moduł 1'))) {
-            return '/lessons/math/modul1_cover.jpg'
-        }
 
         // 3. Category Fallbacks
         if (t.includes('sprzedaż') || c.includes('sprzedaż') || t.includes('wizyta')) {

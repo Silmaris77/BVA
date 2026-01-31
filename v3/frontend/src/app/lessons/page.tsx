@@ -25,6 +25,7 @@ interface Lesson {
     content?: {
         cards: any[]
     }
+    card_count?: number
     is_locked?: boolean
 }
 
@@ -617,7 +618,7 @@ export default function LessonsPage() {
                                                     difficulty: lesson.difficulty,
                                                     duration_minutes: lesson.duration_minutes,
                                                     xp_reward: lesson.xp_reward,
-                                                    card_count: lesson.content?.cards?.length || 0,
+                                                    card_count: (lesson as any).card_count || lesson.content?.cards?.length || 0,
                                                     status: lesson.status,
                                                     release_date: lesson.release_date,
                                                     track: lesson.track

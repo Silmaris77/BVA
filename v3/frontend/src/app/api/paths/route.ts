@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
     try {
         const supabase = await createClient();
@@ -108,11 +110,33 @@ export async function GET() {
             };
         }) || [];
 
-        // INJECT LOCAL MATH PATH
-        const mathLessonId = 'math-g7-l1';
+        // INJECT LOCAL MATH PATH DYNAMICALLY
         const mathPathSlug = 'math-grade-7';
+        let mathLessonSequence: string[] = [];
 
-        const mathLessonSequence = [mathLessonId];
+        try {
+            const fs = await import('fs');
+            const pathTool = await import('path');
+            const mathDir = pathTool.join(process.cwd(), 'src/data/math/grade7');
+
+            if (fs.existsSync(mathDir)) {
+                const files = fs.readdirSync(mathDir).filter(f => f.endsWith('.json'));
+                const sortedFiles = files.sort((a, b) => {
+                    const aNum = parseInt(a.match(/lesson(\d+)/)?.[1] || '0');
+                    const bNum = parseInt(b.match(/lesson(\d+)/)?.[1] || '0');
+                    return aNum - bNum;
+                });
+
+                mathLessonSequence = sortedFiles.map(f => {
+                    const content = fs.readFileSync(pathTool.join(mathDir, f), 'utf-8');
+                    return JSON.parse(content).lesson_id;
+                });
+            }
+        } catch (err) {
+            console.error('Failed to build math lesson sequence:', err);
+            mathLessonSequence = ['math-g7-l1']; // Fallback
+        }
+
         const mathCompletedLessons = mathLessonSequence.filter(id => lessonProgressMap[id]?.status === 'completed');
         const mathInProgressLessons = mathLessonSequence.filter(id => lessonProgressMap[id]?.status === 'in_progress');
         const mathTotalLessons = mathLessonSequence.length;

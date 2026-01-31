@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import { RotateCw } from 'lucide-react'
+import MathRenderer from './math/MathRenderer'
 
 interface FlashcardItem {
     front: string
@@ -132,7 +131,7 @@ export default function FlashcardsCard({ title, cards }: FlashcardsCardProps) {
                                         fontWeight: 600,
                                         color: '#fff'
                                     }}>
-                                        {card.front}
+                                        <MathRenderer content={card.front.replace(/\\n/g, '\n')} />
                                     </div>
                                     <div style={{
                                         marginTop: 'auto',
@@ -170,9 +169,7 @@ export default function FlashcardsCard({ title, cards }: FlashcardsCardProps) {
                                         lineHeight: '1.6',
                                         color: '#fff'
                                     }}>
-                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                            {card.back}
-                                        </ReactMarkdown>
+                                        <MathRenderer content={card.back.replace(/\\n/g, '\n')} />
                                     </div>
                                 </div>
                             </div>

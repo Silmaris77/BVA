@@ -1,8 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
-    const supabase = await createClient()
+    const supabase = createAdminClient()
     try {
         // Inspect the columns of user_tool_usage
         // Since we can't run raw SQL easily via client, we'll try to insert a dummy record with JUST required fields
@@ -12,15 +12,11 @@ export async function GET() {
         // but often we don't.
 
         // Let's try to insert without input_data and see if it works.
-        const { data, error } = await supabase
-            .from('lessons')
+        const result = await supabase
+            .from('learning_paths')
             .select('*')
 
-        return NextResponse.json({
-            count: data?.length || 0,
-            data,
-            error
-        })
+        return NextResponse.json(result)
     } catch (e: any) {
         return NextResponse.json({ status: 'exception', message: e.message })
     }

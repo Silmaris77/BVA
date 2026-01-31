@@ -31,21 +31,41 @@ export async function GET(
                 try {
                     const fs = await import('fs');
                     const path = await import('path');
-                    // math-g7-l1 -> lesson1.json
-                    const filePath = path.join(process.cwd(), 'src/data/math/grade7/lesson1.json');
+
+                    // Extract lesson number from ID: math-g7-l1, math-g7-l2, etc.
+                    const lessonMatch = lessonId.match(/l(\d+)$/);
+                    const fileName = lessonMatch ? `lesson${lessonMatch[1]}.json` : 'lesson1.json';
+
+                    const filePath = path.join(process.cwd(), 'src/data/math/grade7', fileName);
 
                     if (fs.existsSync(filePath)) {
                         const fileContent = fs.readFileSync(filePath, 'utf-8');
                         const localLesson = JSON.parse(fileContent);
 
+                        // Fetch real progress from DB for math lesson
+                        let progress = null;
+                        if (currentUser) {
+                            const { data: progressData } = await supabase
+                                .from('user_lesson_progress')
+                                .select('*')
+                                .eq('user_id', currentUser.id)
+                                .eq('lesson_id', lessonId)
+                                .single();
+
+                            if (progressData) {
+                                progress = {
+                                    ...progressData,
+                                    current_card_index: progressData.current_card
+                                };
+                            }
+                        }
+
                         return NextResponse.json({
-                            lesson: localLesson,
-                            // Dummy progress for local file
-                            progress: currentUser ? {
-                                status: 'not_started',
-                                current_card: 0,
-                                current_card_index: 0
-                            } : null
+                            lesson: {
+                                ...localLesson,
+                                track: 'math'
+                            },
+                            progress
                         });
                     }
                 } catch (err) {
@@ -103,7 +123,10 @@ export async function GET(
                 .single();
 
             return NextResponse.json({
-                lesson,
+                lesson: {
+                    ...lesson,
+                    track: lessonId.startsWith('math-') ? 'math' : lesson.track
+                },
                 progress: progress ? {
                     ...progress,
                     current_card_index: progress.current_card // Map for frontend
@@ -112,7 +135,12 @@ export async function GET(
         }
 
         // If not authenticated, return lesson only
-        return NextResponse.json({ lesson });
+        return NextResponse.json({
+            lesson: {
+                ...lesson,
+                track: lessonId.startsWith('math-') ? 'math' : lesson.track
+            }
+        });
 
     } catch (error) {
         console.error('API error:', error);
@@ -162,14 +190,33 @@ export async function POST(
         }
 
         if (action === 'complete') {
-            // Get lesson to fetch XP reward
-            const { data: lesson } = await supabase
-                .from('lessons')
-                .select('xp_reward')
-                .eq('lesson_id', lessonId)
-                .single();
+            let xpAmount = 100;
 
-            const xpAmount = lesson?.xp_reward || 100;
+            if (lessonId.startsWith('math-')) {
+                try {
+                    const fs = await import('fs');
+                    const path = await import('path');
+                    const lessonMatch = lessonId.match(/l(\d+)$/);
+                    const fileName = lessonMatch ? `lesson${lessonMatch[1]}.json` : 'lesson1.json';
+                    const filePath = path.join(process.cwd(), 'src/data/math/grade7', fileName);
+
+                    if (fs.existsSync(filePath)) {
+                        const localLesson = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                        xpAmount = localLesson.xp_reward || 100;
+                    }
+                } catch (err) {
+                    console.error('Failed to load XP for math lesson:', err);
+                }
+            } else {
+                // Get lesson from DB to fetch XP reward
+                const { data: lesson } = await supabase
+                    .from('lessons')
+                    .select('xp_reward')
+                    .eq('lesson_id', lessonId)
+                    .single();
+
+                xpAmount = lesson?.xp_reward || 100;
+            }
 
             // Mark lesson as completed
             const { data: progress, error: progressError } = await supabase
@@ -223,12 +270,15 @@ export async function POST(
 
             const { data: progress, error: progressError } = await supabase
                 .from('user_lesson_progress')
-                .update({
+                .upsert({
+                    user_id: user.id,
+                    lesson_id: lessonId,
                     current_card: current_card,
-                    status: 'in_progress'
+                    status: 'in_progress',
+                    updated_at: new Date().toISOString()
+                }, {
+                    onConflict: 'user_id,lesson_id'
                 })
-                .eq('user_id', user.id)
-                .eq('lesson_id', lessonId)
                 .select()
                 .single();
 

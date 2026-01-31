@@ -262,7 +262,7 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
                     }}>
                         <h4 style={{ color: '#ff8800', marginBottom: '10px', fontSize: '1rem', fontWeight: 600 }}>Scenariusz:</h4>
                         <div style={{ fontSize: '15px', lineHeight: '1.7', color: 'rgba(255, 255, 255, 0.9)' }}>
-                            <MathRenderer content={scenario} />
+                            <MathRenderer content={scenario.replace(/\\n/g, '\n')} />
                         </div>
                     </div>
                 )}
@@ -448,7 +448,7 @@ export default function PracticeCard({ title, content, keyPoints, actionSteps, s
                                             lineHeight: '1.7',
                                             color: 'rgba(255, 255, 255, 0.9)'
                                         }}>
-                                            <MathRenderer content={answer} />
+                                            <MathRenderer content={answer.replace(/\\n/g, '\n')} />
                                         </li>
                                     ))}
                                 </ol>

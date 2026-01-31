@@ -524,10 +524,8 @@ html[data-theme='milwaukee'] {
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px) !important;
     background-size: 20px 20px !important;
-    /* Industrial Grid */
 }
 
-/* Industrial Typography */
 html[data-theme='milwaukee'] body {
     font-family: 'Roboto Condensed', 'Oswald', sans-serif !important;
     text-transform: uppercase;
@@ -536,10 +534,203 @@ html[data-theme='milwaukee'] body {
 
 html[data-theme='milwaukee'] .orb {
     display: none;
-    /* No soft orbs in industrial setting */
 }
 
-/* Rugged Cards */
+html[data-theme='milwaukee'] .glass-card {
+    border-radius: 4px;
+    border: 2px solid #333;
+    border-top: 4px solid #db0000;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
+    background: #222;
+}
+
+/* VOLTAGE THEME (Electrician/Industrial) ⚡ */
+:root[data-theme='voltage'] {
+    --bg-deep: #0c0e14;
+    --glass-bg: rgba(22, 26, 38, 0.95);
+    --glass-border: rgba(0, 229, 255, 0.3);
+    /* Cyan Spark */
+    --text-main: #f0f0f5;
+    --text-muted: #8a8d9b;
+    --neon-purple: #ffcc00;
+    /* Warning Yellow */
+    --neon-blue: #00e5ff;
+    /* Electric Cyan */
+    --neon-gold: #ffcc00;
+}
+
+html[data-theme='voltage'] {
+    background-color: #080a0f !important;
+    background-image:
+        /* Minor Grid */
+        linear-gradient(rgba(0, 229, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.1) 1px, transparent 1px),
+        /* Major Grid */
+        linear-gradient(rgba(0, 229, 255, 0.2) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.2) 2px, transparent 2px),
+        radial-gradient(circle at 50% 50%, rgba(26, 31, 51, 1) 0%, rgba(8, 10, 15, 1) 100%) !important;
+    background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px, 100% 100% !important;
+    background-attachment: fixed !important;
+}
+
+html[data-theme='voltage'] body {
+    background: transparent !important;
+}
+
+/* Advanced Overlays: Vignette & Scanlines */
+html[data-theme='voltage']::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Industrial Traces & Decals Layer */
+html[data-theme='voltage']::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        /* Technical Crosshairs/Nodes */
+        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='0' cy='0' r='1.5' fill='%2300e5ff' fill-opacity='0.3'/%3E%3C/svg%3E"),
+        /* Circuit Traces */
+        url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 200 H400 M200 0 V400 M300 100 V300 H400 M0 300 H100 V400' fill='none' stroke='%2300e5ff' stroke-opacity='0.15' stroke-width='1.5'/%3E%3C/svg%3E"),
+        /* CRT Scanlines */
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+    background-size: 100px 100px, 400px 400px, 100% 4px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.8;
+}
+
+html[data-theme='voltage'] h1,
+html[data-theme='voltage'] h2,
+html[data-theme='voltage'] .page-title h1 {
+    font-family: 'JetBrains Mono', 'Share Tech Mono', monospace !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #f0f0f5;
+    text-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+}
+
+html[data-theme='voltage'] .glass-card {
+    border-radius: 4px;
+    border: 1px solid rgba(0, 229, 255, 0.15);
+    border-left: 4px solid #ffcc00;
+    background: linear-gradient(145deg, #161a26, #0c0e14);
+    box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.5), inset 1px 1px 0 rgba(255, 255, 255, 0.02);
+    position: relative;
+}
+
+/* Card Corner Decals */
+html[data-theme='voltage'] .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid rgba(255, 204, 0, 0.3);
+    border-right: 2px solid rgba(255, 204, 0, 0.3);
+    pointer-events: none;
+}
+
+html[data-theme='voltage'] .glass-card:hover {
+    border-color: #00e5ff;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
+    animation: electricFlickerRefined 0.15s infinite;
+    transform: scale(1.01) translateY(-2px);
+}
+
+html[data-theme='voltage'] button {
+    background: #ffcc00 !important;
+    color: #000 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-weight: 900 !important;
+    border-radius: 2px !important;
+    text-transform: uppercase;
+    border: none !important;
+    box-shadow: 0 4px 0 #997a00, 0 10px 20px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.1s !important;
+}
+
+html[data-theme='voltage'] button:hover {
+    background: #ffdb4d !important;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 #997a00, 0 12px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+html[data-theme='voltage'] button:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #997a00 !important;
+}
+
+/* LCD Style Stats */
+html[data-theme='voltage'] .stat-card {
+    background: #080a0f !important;
+    border: 1px solid #1a1d2d !important;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8) !important;
+}
+
+html[data-theme='voltage'] .stat-value {
+    font-family: 'Share Tech Mono', 'JetBrains Mono', monospace !important;
+    color: #00e5ff !important;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8) !important;
+}
+
+/* Neon Progress Bars */
+html[data-theme='voltage'] .progress-fill {
+    background: linear-gradient(90deg, #007c91, #00e5ff) !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5) !important;
+}
+
+html[data-theme='voltage'] .nav-item.active {
+    background: rgba(0, 229, 255, 0.05);
+    border-left: 4px solid #00e5ff;
+    color: #00e5ff;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+}
+
+html[data-theme='voltage'] .orb {
+    background: #00e5ff;
+    filter: blur(150px);
+    opacity: 0.05;
+}
+
+@keyframes electricFlickerRefined {
+    0% {
+        opacity: 1;
+        filter: brightness(1) contrast(1);
+        transform: scale(1.01) translate(0, 0);
+    }
+
+    25% {
+        opacity: 0.98;
+        filter: brightness(1.1) contrast(1.1);
+        transform: scale(1.01) translate(1px, -1px);
+    }
+
+    50% {
+        opacity: 0.95;
+        filter: brightness(0.9) contrast(0.9);
+        transform: scale(1.01) translate(-1px, 1px);
+    }
+
+    75% {
+        opacity: 0.99;
+        filter: brightness(1.2) contrast(1.2);
+        transform: scale(1.01) translate(1px, 1px);
+    }
+
+    100% {
+        opacity: 1;
+        filter: brightness(1) contrast(1);
+        transform: scale(1.01) translate(0, 0);
+    }
+}
+
 html[data-theme='milwaukee'] .glass-card {
     border-radius: 4px;
     /* Boxy */
@@ -548,6 +739,30 @@ html[data-theme='milwaukee'] .glass-card {
     /* Red Top Stripe */
     box-shadow: 0 4px 0 rgba(0, 0, 0, 0.5);
     background: #222;
+}
+
+@keyframes electricFlicker {
+
+    0%,
+    100% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+
+    33% {
+        opacity: 0.95;
+        filter: brightness(1.2);
+    }
+
+    66% {
+        opacity: 0.98;
+        filter: brightness(0.9);
+    }
+
+    90% {
+        opacity: 0.92;
+        filter: brightness(1.1);
+    }
 }
 
 html[data-theme='milwaukee'] button {
@@ -1037,6 +1252,45 @@ body {
     border-radius: 16px;
     margin-bottom: 1rem;
     transition: 0.2s;
+}
+
+/* V3 Lesson Cards (Global Defaults) */
+.lesson-card-v3 {
+    background: rgba(20, 20, 35, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.lesson-card-v3:hover {
+    border-color: var(--category-color);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(var(--category-rgb, 255, 255, 255), 0.2);
+}
+
+.lesson-card-v3:hover .shine-lesson {
+    left: 100% !important;
+}
+
+/* Theme Overrides for Voltage */
+html[data-theme='voltage'] .lesson-card-v3 {
+    border-radius: 4px !important;
+    border: 1px solid rgba(0, 229, 255, 0.1) !important;
+    border-left: 4px solid #ffcc00 !important;
+    background: linear-gradient(145deg, #161a26, #0c0e14) !important;
+    box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.5), inset 1px 1px 0 rgba(255, 255, 255, 0.02) !important;
+}
+
+html[data-theme='voltage'] .lesson-card-v3:hover {
+    border-color: #00e5ff !important;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.15) !important;
+    animation: electricFlickerRefined 0.15s infinite !important;
+    transform: scale(1.01) translateY(-2px) !important;
 }
 
 .mission-item:hover {
@@ -1941,7 +2195,8 @@ html[data-theme='modern-ios'] ::selection {
     --glass-border: rgba(0, 255, 157, 0.2);
     --text-main: #ffffff;
     --text-muted: #8899a6;
-    --neon-purple: #00ff9d; /* Primary Green */
+    --neon-purple: #00ff9d;
+    /* Primary Green */
     --neon-blue: #00d4ff;
     --neon-gold: #f3ba2f;
     --neon-red: #ff4d4d;
@@ -1949,7 +2204,7 @@ html[data-theme='modern-ios'] ::selection {
 
 html[data-theme='moonshot'] {
     background: #05070a !important;
-    background-image: 
+    background-image:
         radial-gradient(circle at 50% 50%, rgba(0, 255, 157, 0.05) 0%, transparent 70%),
         linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px) !important;
@@ -1973,7 +2228,8 @@ html[data-theme='moonshot'] .level-badge {
 html[data-theme='moonshot'] .glass-card {
     background: rgba(10, 15, 20, 0.9) !important;
     border: 1px solid rgba(0, 255, 157, 0.15) !important;
-    border-radius: 4px !important; /* Sharper corners */
+    border-radius: 4px !important;
+    /* Sharper corners */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 255, 157, 0.02) !important;
 }
 
@@ -2011,7 +2267,7 @@ html[data-theme='moonshot'] .orb {
 }
 
 /* Headers */
-html[data-theme='moonshot'] h1, 
+html[data-theme='moonshot'] h1,
 html[data-theme='moonshot'] h2,
 html[data-theme='moonshot'] .page-title h1 {
     font-weight: 900 !important;
@@ -2019,7 +2275,9 @@ html[data-theme='moonshot'] .page-title h1 {
     background: linear-gradient(to bottom, #ffffff, #00ff9d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}/* =========================================
+}
+
+/* =========================================
    LAYOUT COMPONENTS (Themeable)
    ========================================= */
 
@@ -2119,6 +2377,7 @@ html[data-theme='milwaukee'] .nav-sidebar {
     background: #111 !important;
     border-right: 4px solid #db0000 !important;
 }
+
 /* =========================================
    NAVIGATION ITEMS (Themeable)
    ========================================= */
@@ -2181,6 +2440,7 @@ html[data-theme='milwaukee'] .nav-sidebar {
         padding: 8px;
     }
 }
+
 /* =========================================
    BOTTOM NAV ITEMS (Themeable)
    ========================================= */

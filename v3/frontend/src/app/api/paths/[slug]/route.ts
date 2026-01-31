@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 interface RouteParams {
     params: Promise<{
         slug: string;
@@ -25,7 +27,7 @@ export async function GET(
             .select('*')
             .eq('path_slug', slug)
             .single();
-        
+
         path = data;
         pathError = error;
 
@@ -68,10 +70,12 @@ export async function GET(
                 difficulty, 
                 category, 
                 content,
+                track,
                 module_id,
                 modules (
                     id,
                     title,
+                    track,
                     display_order
                 )
             `)
@@ -82,31 +86,83 @@ export async function GET(
             return NextResponse.json({ error: lessonsError.message }, { status: 500 });
         }
 
-        const allLessons = lessons || [];
+        const allLessons = (lessons || []).map(lesson => {
+            let cardCount = 0;
+            try {
+                if (typeof lesson.content === 'string') {
+                    const parsed = JSON.parse(lesson.content);
+                    cardCount = parsed.cards?.length || 0;
+                } else if (lesson.content && typeof lesson.content === 'object') {
+                    cardCount = (lesson.content as any).cards?.length || 0;
+                }
+            } catch (e) {
+                console.error(`Error parsing content for lesson ${lesson.lesson_id}:`, e);
+            }
 
-        // INJECT LOCAL MATH LESSON IF NEEDED
-        if (lessonIds.includes('math-g7-l1') && !allLessons.some(l => l.lesson_id === 'math-g7-l1')) {
+            // Enrich track from module if missing
+            const track = lesson.track || (lesson.modules as any)?.track || null;
+
+            return {
+                ...lesson,
+                card_count: cardCount,
+                track: track
+            };
+        });
+
+        // DYNAMICALLY INJECT ALL LOCAL MATH LESSONS FOR MATH PATH
+        if (slug === 'math-grade-7') {
             try {
                 const fs = await import('fs');
                 const pathTool = await import('path');
-                const filePath = pathTool.join(process.cwd(), 'src/data/math/grade7/lesson1.json');
-                if (fs.existsSync(filePath)) {
-                    const localLesson = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-                    allLessons.push({
-                        lesson_id: localLesson.lesson_id,
-                        title: localLesson.title,
-                        description: localLesson.subtitle || "Lekcja matematyki",
-                        duration_minutes: 15,
-                        xp_reward: localLesson.xp_reward || 100,
-                        difficulty: 'beginner',
-                        category: 'Matematyka',
-                        content: localLesson.content,
-                        module_id: null,
-                        modules: []
+                const mathDir = pathTool.join(process.cwd(), 'src/data/math/grade7');
+
+                if (fs.existsSync(mathDir)) {
+                    const files = fs.readdirSync(mathDir).filter(f => f.endsWith('.json'));
+
+                    for (const fileName of files) {
+                        try {
+                            const filePath = pathTool.join(mathDir, fileName);
+                            const fileContent = fs.readFileSync(filePath, 'utf-8');
+                            const localLesson = JSON.parse(fileContent);
+
+                            const mathLesson = {
+                                lesson_id: localLesson.lesson_id,
+                                title: localLesson.title,
+                                subtitle: localLesson.subtitle,
+                                description: localLesson.description || "Lekcja matematyki",
+                                duration_minutes: localLesson.duration_minutes || 20,
+                                xp_reward: localLesson.xp_reward || 100,
+                                difficulty: localLesson.difficulty || 'beginner',
+                                category: 'Matematyka',
+                                status: 'published',
+                                track: 'Matematyka',
+                                content: localLesson.content,
+                                card_count: localLesson.content?.cards?.length || 0,
+                                modules: [],
+                                module_id: null
+                            };
+
+                            if (!allLessons.some(l => l.lesson_id === mathLesson.lesson_id)) {
+                                (allLessons as any).push(mathLesson);
+                            }
+
+                            if (!lessonIds.includes(mathLesson.lesson_id)) {
+                                lessonIds.push(mathLesson.lesson_id);
+                            }
+                        } catch (innerErr) {
+                            console.error(`Error processing math file ${fileName}:`, innerErr);
+                        }
+                    }
+
+                    // Maintain sort based on lesson ID number
+                    lessonIds.sort((a, b) => {
+                        const aNum = parseInt(a.match(/l(\d+)$/)?.[1] || '0');
+                        const bNum = parseInt(b.match(/l(\d+)$/)?.[1] || '0');
+                        return aNum - bNum;
                     });
                 }
             } catch (err) {
-                console.error('Failed to inject local math lesson:', err);
+                console.error('Failed to inject local math lessons for path:', err);
             }
         }
 

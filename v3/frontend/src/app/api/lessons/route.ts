@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
     try {
         const supabase = await createClient();
@@ -22,7 +24,7 @@ export async function GET() {
             return NextResponse.json({ error: (error || modulesError)?.message }, { status: 500 });
         }
 
-        // Parse content for each lesson if it's a string
+        // Parse content and calculate card_count for each lesson
         if (lessons) {
             for (const lesson of lessons) {
                 if (lesson.content && typeof lesson.content === 'string') {
@@ -32,6 +34,9 @@ export async function GET() {
                         console.error(`Failed to parse content for lesson ${lesson.lesson_id}:`, e);
                     }
                 }
+
+                // Add card_count helper for frontend
+                (lesson as any).card_count = lesson.content?.cards?.length || 0;
             }
         }
 
@@ -92,46 +97,73 @@ export async function GET() {
             }
         }
 
-        if (true) { // Injected unconditionally for now to fix access issues
-            try {
-                const fs = await import('fs');
-                const pathTool = await import('path');
-                const filePath = pathTool.join(process.cwd(), 'src/data/math/grade7/lesson1.json');
+        // DYNAMICALLY INJECT ALL LOCAL MATH LESSONS
+        try {
+            const fs = await import('fs');
+            const pathTool = await import('path');
+            const mathDir = pathTool.join(process.cwd(), 'src/data/math/grade7');
 
-                if (fs.existsSync(filePath)) {
-                    const fileContent = fs.readFileSync(filePath, 'utf-8');
-                    const localLesson = JSON.parse(fileContent);
+            if (fs.existsSync(mathDir)) {
+                const files = fs.readdirSync(mathDir).filter(f => f.endsWith('.json'));
 
-                    // Add metadata required for list view
-                    const mathLesson = {
-                        lesson_id: localLesson.lesson_id,
-                        title: localLesson.title,
-                        description: localLesson.subtitle || "Lekcja matematyki",
-                        duration_minutes: 15,
-                        xp_reward: localLesson.xp_reward || 50,
-                        difficulty: 'beginner',
-                        category: 'Matematyka',
-                        status: 'published',
-                        display_order: 0,
-                        release_date: null,
-                        module: 'math-grade7',
-                        track: 'math',
-                        content: localLesson.content,
-                        module_id: mathModuleId
-                    };
+                for (const fileName of files) {
+                    try {
+                        const filePath = pathTool.join(mathDir, fileName);
+                        const fileContent = fs.readFileSync(filePath, 'utf-8');
+                        const localLesson = JSON.parse(fileContent);
 
-                    // Add to beginning ONLY if not already present
-                    // Use a temporary array if lessons is null
-                    if (!lessons || !lessons.some(l => l.lesson_id === mathLesson.lesson_id)) {
-                        if (lessons) {
-                            lessons.unshift(mathLesson);
-                        } else {
-                            (lessons as any) = [mathLesson];
+                        const mathLesson = {
+                            lesson_id: localLesson.lesson_id,
+                            title: localLesson.title,
+                            subtitle: localLesson.subtitle,
+                            description: localLesson.description || "Lekcja matematyki",
+                            duration_minutes: localLesson.duration_minutes || 20,
+                            xp_reward: localLesson.xp_reward || 100,
+                            difficulty: localLesson.difficulty || 'beginner',
+                            category: 'Matematyka',
+                            status: 'published',
+                            display_order: parseInt(localLesson.lesson_id.match(/l(\d+)$/)?.[1] || '0'),
+                            release_date: null,
+                            module: 'math-grade7',
+                            track: 'Matematyka',
+                            content: localLesson.content,
+                            module_id: mathModuleId,
+                            card_count: localLesson.content?.cards?.length || 0
+                        };
+
+                        // Add to list if not already present
+                        if (!lessons || !lessons.some(l => l.lesson_id === mathLesson.lesson_id)) {
+                            if (lessons) {
+                                (lessons as any).push(mathLesson);
+                            } else {
+                                (lessons as any) = [mathLesson];
+                            }
                         }
+                    } catch (innerErr) {
+                        console.error(`Error processing math file ${fileName}:`, innerErr);
                     }
                 }
-            } catch (err) {
-                console.error('Failed to inject local lesson:', err);
+
+                // Sort by display_order
+                if (lessons) {
+                    lessons.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+                }
+            }
+        } catch (err) {
+            console.error('Failed to inject local math lessons:', err);
+        }
+
+        // ENRICH LESSONS WITH MODULE TRACK IF MISSING
+        if (lessons && modules) {
+            const moduleTrackMap = modules.reduce((acc, m) => {
+                if (m.track) acc[m.id] = m.track;
+                return acc;
+            }, {} as Record<string, string>);
+
+            for (const lesson of lessons) {
+                if (!lesson.track && lesson.module_id && moduleTrackMap[lesson.module_id]) {
+                    lesson.track = moduleTrackMap[lesson.module_id];
+                }
             }
         }
 
