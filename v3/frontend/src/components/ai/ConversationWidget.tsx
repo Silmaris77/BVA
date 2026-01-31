@@ -60,8 +60,10 @@ export default function AIConversationWidget() {
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: 50, opacity: 0, scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="fixed bottom-6 right-6 z-[9999] w-[400px] h-[600px] max-h-[80vh] flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-md"
-                style={{ background: 'rgba(15, 23, 42, 0.95)' }} // Deep slate background
+                className="fixed z-[9999] flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-white/10 backdrop-blur-md
+                    bottom-0 left-0 right-0 w-full h-[85vh] rounded-b-none
+                    md:bottom-6 md:right-6 md:left-auto md:w-[400px] md:h-[600px] md:max-h-[80vh] md:rounded-2xl"
+                style={{ background: 'rgba(15, 23, 42, 0.98)' }} // Deep slate background
             >
                 {/* HEADERA */}
                 <div

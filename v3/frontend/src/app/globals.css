@@ -2816,6 +2816,35 @@ html[data-theme='milwaukee'] .nav-sidebar {
     font-weight: 600;
 }
 
+/* Środkowy przycisk AI - specjalny styl */
+.nav-bottom-ai {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: none !important;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-bottom-ai:hover {
+    transform: scale(1.1);
+}
+
+.nav-bottom-ai.active {
+    animation: ai-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ai-pulse {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+    }
+}
+
 .nav-bottom-indicator {
     position: absolute;
     top: 0;

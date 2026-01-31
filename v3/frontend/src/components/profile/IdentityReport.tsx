@@ -130,12 +130,13 @@ export default function IdentityReport() {
                 backdropFilter: 'blur(20px)',
                 border: '1px solid rgba(255, 255, 255, 0.08)',
                 borderRadius: '24px',
-                padding: '64px',
+                padding: '48px 32px',
                 textAlign: 'center',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '24px'
+                gap: '24px',
+                marginBottom: '100px' // Extra space for BottomNav on mobile
             }}>
                 <div style={{
                     padding: '24px',
@@ -182,10 +183,23 @@ export default function IdentityReport() {
                         cursor: 'pointer',
                         fontSize: '18px',
                         boxShadow: '0 0 30px rgba(0, 212, 255, 0.3)',
-                        transition: 'transform 0.2s',
+                        transition: 'transform 0.2s, box-shadow 0.2s',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '12px'
+                        gap: '12px',
+                        WebkitTapHighlightColor: 'transparent',
+                        touchAction: 'manipulation',
+                        userSelect: 'none',
+                        position: 'relative',
+                        zIndex: 10
+                    }}
+                    onTouchStart={(e) => {
+                        const target = e.currentTarget as HTMLButtonElement;
+                        target.style.transform = 'scale(0.95)';
+                    }}
+                    onTouchEnd={(e) => {
+                        const target = e.currentTarget as HTMLButtonElement;
+                        target.style.transform = 'scale(1)';
                     }}
                 >
                     <Sparkles size={20} />
