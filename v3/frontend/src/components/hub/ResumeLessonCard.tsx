@@ -17,32 +17,42 @@ export default function ResumeLessonCard({ lesson }: ResumeLessonCardProps) {
     if (!lesson) return null
 
     return (
-        <div style={{
-            background: 'linear-gradient(135deg, rgba(176, 0, 255, 0.1), rgba(0, 0, 0, 0))',
-            border: '1px solid rgba(176, 0, 255, 0.3)',
-            borderRadius: '20px',
-            padding: '24px',
-            marginBottom: '32px',
-            position: 'relative',
-            overflow: 'hidden'
-        }}>
+        <div 
+            className="theme-card-accent"
+            style={{
+                background: 'linear-gradient(135deg, var(--t-card-bg), transparent)',
+                borderColor: 'var(--t-accent-secondary)',
+                marginBottom: '32px',
+                position: 'relative',
+                overflow: 'hidden'
+            }}
+        >
+            {/* Glow Effect */}
             <div style={{
                 position: 'absolute',
                 top: 0,
                 right: 0,
                 width: '150px',
                 height: '150px',
-                background: 'radial-gradient(circle, rgba(176,0,255,0.2) 0%, rgba(0,0,0,0) 70%)',
+                background: 'radial-gradient(circle, rgba(176,0,255,0.2) 0%, transparent 70%)',
                 pointerEvents: 'none'
             }} />
 
-            <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
+            <div style={{ 
+                position: 'relative', 
+                zIndex: 1, 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                flexWrap: 'wrap', 
+                gap: '20px' 
+            }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                     <div style={{
                         width: '56px',
                         height: '56px',
                         borderRadius: '16px',
-                        background: '#b000ff',
+                        background: 'var(--t-accent-secondary)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -56,37 +66,35 @@ export default function ResumeLessonCard({ lesson }: ResumeLessonCardProps) {
                             textTransform: 'uppercase',
                             letterSpacing: '1px',
                             fontWeight: 700,
-                            color: '#b000ff',
+                            color: 'var(--t-accent-secondary)',
                             marginBottom: '4px'
                         }}>
                             Kontynuuj naukę
                         </div>
-                        <h2 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '4px' }}>
+                        <h2 style={{ 
+                            fontSize: '20px', 
+                            fontWeight: 700, 
+                            marginBottom: '4px',
+                            color: 'var(--t-text)' 
+                        }}>
                             {lesson.title}
                         </h2>
-                        <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                        <p style={{ 
+                            fontSize: '14px', 
+                            color: 'var(--t-text-muted)' 
+                        }}>
                             Ostatnio przerabiana karta #{lesson.progress_index + 1}
                         </p>
                     </div>
                 </div>
 
                 <button
+                    className="theme-button"
                     onClick={() => router.push(`/lessons/${lesson.lesson_id}`)}
                     style={{
-                        padding: '12px 24px',
-                        background: 'white',
-                        color: 'black',
-                        border: 'none',
-                        borderRadius: '12px',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        transition: 'transform 0.2s'
+                        background: 'var(--t-text)',
+                        color: 'var(--t-bg)'
                     }}
-                    onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-                    onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
                 >
                     Wznów
                     <ArrowRight size={18} />

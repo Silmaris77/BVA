@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+    /* Legacy Variables (for compatibility) */
     --bg-deep: #0f0c29;
     --glass-border: rgba(255, 255, 255, 0.08);
     --glass-bg: rgba(20, 20, 35, 0.4);
@@ -17,7 +18,189 @@
     --accent-gold: var(--neon-gold);
     --accent-red: var(--neon-red);
     --accent-green: #00ff9d;
-    --bg-deep: #0f0c29;
+
+    /* ========================================
+       THEME TOKENS (Refactored System)
+       ======================================== */
+    
+    /* Background Tokens */
+    --t-bg: #0f0c29;
+    --t-bg-secondary: rgba(20, 20, 35, 0.6);
+    --t-card-bg: rgba(20, 20, 35, 0.4);
+    --t-card-bg-hover: rgba(30, 30, 50, 0.5);
+    
+    /* Text Tokens */
+    --t-text: #ffffff;
+    --t-text-muted: rgba(255, 255, 255, 0.6);
+    --t-text-accent: #00d4ff;
+    
+    /* Border Tokens */
+    --t-border: rgba(255, 255, 255, 0.08);
+    --t-border-accent: rgba(0, 212, 255, 0.3);
+    
+    /* Accent Tokens */
+    --t-accent: #00d4ff;
+    --t-accent-secondary: #b000ff;
+    --t-accent-warning: #ffd700;
+    --t-accent-success: #00ff88;
+    --t-accent-error: #ff0055;
+    
+    /* Navigation Tokens */
+    --t-nav-bg: rgba(20, 20, 35, 0.8);
+    --t-nav-border: rgba(255, 255, 255, 0.08);
+    --t-nav-active-bg: rgba(0, 212, 255, 0.1);
+    --t-nav-active-border: #00d4ff;
+    
+    /* Button Tokens */
+    --t-btn-primary-bg: #00d4ff;
+    --t-btn-primary-text: #000000;
+    --t-btn-secondary-bg: rgba(255, 255, 255, 0.1);
+    --t-btn-secondary-text: #ffffff;
+    
+    /* Form Tokens */
+    --t-input-bg: rgba(0, 0, 0, 0.3);
+    --t-input-border: rgba(255, 255, 255, 0.15);
+    --t-input-focus-border: #00d4ff;
+    
+    /* Effect Tokens */
+    --t-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --t-shadow-accent: 0 0 20px rgba(0, 212, 255, 0.3);
+    --t-hover-transition: all 0.3s ease;
+    --t-glow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* ========================================
+   THEME UTILITY CLASSES
+   ======================================== */
+
+/* Card Base */
+.theme-card {
+    background: var(--t-card-bg);
+    border: 1px solid var(--t-border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: var(--t-hover-transition);
+}
+
+.theme-card:hover {
+    background: var(--t-card-bg-hover);
+    border-color: var(--t-border-accent);
+    box-shadow: var(--t-shadow-accent);
+}
+
+/* Card with Accent Border (Left) */
+.theme-card-accent {
+    background: var(--t-card-bg);
+    border: 1px solid var(--t-border);
+    border-left: 4px solid var(--t-accent-secondary);
+    border-radius: 16px;
+    padding: 24px;
+    transition: var(--t-hover-transition);
+}
+
+.theme-card-accent:hover {
+    border-color: var(--t-border-accent);
+    box-shadow: var(--t-shadow-accent);
+}
+
+/* Glass Card with Blur */
+.theme-card-glass {
+    background: var(--t-card-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--t-border);
+    border-radius: 20px;
+    padding: 24px;
+    transition: var(--t-hover-transition);
+}
+
+/* Primary Button */
+.theme-button {
+    background: var(--t-btn-primary-bg);
+    color: var(--t-btn-primary-text);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--t-hover-transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.theme-button:hover {
+    transform: scale(1.02);
+    box-shadow: var(--t-shadow-accent);
+}
+
+/* Secondary Button */
+.theme-button-secondary {
+    background: var(--t-btn-secondary-bg);
+    color: var(--t-btn-secondary-text);
+    border: 1px solid var(--t-border);
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--t-hover-transition);
+}
+
+.theme-button-secondary:hover {
+    background: var(--t-card-bg-hover);
+    border-color: var(--t-border-accent);
+}
+
+/* Input Field */
+.theme-input {
+    background: var(--t-input-bg);
+    border: 1px solid var(--t-input-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--t-text);
+    font-size: 14px;
+    transition: var(--t-hover-transition);
+}
+
+.theme-input:focus {
+    outline: none;
+    border-color: var(--t-input-focus-border);
+    box-shadow: 0 0 0 3px rgba(var(--t-input-focus-border), 0.2);
+}
+
+/* Text Colors */
+.theme-text { color: var(--t-text); }
+.theme-text-muted { color: var(--t-text-muted); }
+.theme-text-accent { color: var(--t-text-accent); }
+
+/* Accent Colors */
+.theme-accent { color: var(--t-accent); }
+.theme-accent-secondary { color: var(--t-accent-secondary); }
+.theme-accent-warning { color: var(--t-accent-warning); }
+.theme-accent-success { color: var(--t-accent-success); }
+.theme-accent-error { color: var(--t-accent-error); }
+
+/* Icon Container */
+.theme-icon-container {
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(var(--t-accent), 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Section Header */
+.theme-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.theme-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--t-text-accent);
 }
 
 /* CYBER THEME */
@@ -29,6 +212,23 @@
     --neon-blue: #00f3ff;
     /* Cyber Cyan */
     --text-main: #e2e8f0;
+    
+    /* Theme Tokens */
+    --t-bg: #050510;
+    --t-bg-secondary: rgba(16, 20, 30, 0.8);
+    --t-card-bg: rgba(16, 20, 30, 0.7);
+    --t-card-bg-hover: rgba(26, 30, 45, 0.8);
+    --t-text: #e2e8f0;
+    --t-text-muted: rgba(226, 232, 240, 0.6);
+    --t-text-accent: #00f3ff;
+    --t-border: rgba(0, 212, 255, 0.2);
+    --t-border-accent: rgba(0, 243, 255, 0.4);
+    --t-accent: #00f3ff;
+    --t-accent-secondary: #d946ef;
+    --t-btn-primary-bg: #00f3ff;
+    --t-btn-primary-text: #050510;
+    --t-shadow-accent: 0 0 20px rgba(0, 243, 255, 0.3);
+    --t-glow: 0 0 15px rgba(0, 243, 255, 0.5);
 }
 
 html[data-theme='cyber'] {
@@ -49,6 +249,26 @@ html[data-theme='cyber'] .orb {
     --text-muted: #475569;
     --neon-purple: #7c3aed;
     --neon-blue: #2563eb;
+    
+    /* Theme Tokens */
+    --t-bg: #f8fafc;
+    --t-bg-secondary: #ffffff;
+    --t-card-bg: rgba(255, 255, 255, 0.9);
+    --t-card-bg-hover: #ffffff;
+    --t-text: #0f172a;
+    --t-text-muted: #475569;
+    --t-text-accent: #2563eb;
+    --t-border: rgba(0, 0, 0, 0.1);
+    --t-border-accent: rgba(37, 99, 235, 0.3);
+    --t-accent: #2563eb;
+    --t-accent-secondary: #7c3aed;
+    --t-accent-warning: #f59e0b;
+    --t-accent-success: #10b981;
+    --t-accent-error: #ef4444;
+    --t-btn-primary-bg: #2563eb;
+    --t-btn-primary-text: #ffffff;
+    --t-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    --t-shadow-accent: 0 0 20px rgba(37, 99, 235, 0.2);
 }
 
 html[data-theme='light'] {
@@ -557,19 +777,53 @@ html[data-theme='milwaukee'] .glass-card {
     --neon-blue: #00e5ff;
     /* Electric Cyan */
     --neon-gold: #ffcc00;
+    
+    /* Theme Tokens - Industrial Electric */
+    --t-bg: #1a2636;
+    --t-bg-secondary: #0f1520;
+    --t-card-bg: #0a0e14;
+    --t-card-bg-hover: #0f1520;
+    --t-text: #f0f0f5;
+    --t-text-muted: #8a8d9b;
+    --t-text-accent: #00e5ff;
+    --t-border: rgba(0, 229, 255, 0.15);
+    --t-border-accent: #00e5ff;
+    --t-accent: #00e5ff;
+    --t-accent-secondary: #ffcc00;
+    --t-accent-warning: #ffcc00;
+    --t-accent-success: #00ff88;
+    --t-accent-error: #ff3333;
+    --t-nav-bg: #0a0e14;
+    --t-nav-border: rgba(0, 229, 255, 0.1);
+    --t-nav-active-bg: rgba(0, 229, 255, 0.05);
+    --t-nav-active-border: #00e5ff;
+    --t-btn-primary-bg: #ffcc00;
+    --t-btn-primary-text: #000000;
+    --t-btn-secondary-bg: rgba(0, 229, 255, 0.1);
+    --t-btn-secondary-text: #00e5ff;
+    --t-input-bg: #0a0e14;
+    --t-input-border: rgba(0, 229, 255, 0.2);
+    --t-input-focus-border: #00e5ff;
+    --t-shadow: 8px 8px 24px rgba(0, 0, 0, 0.5);
+    --t-shadow-accent: 0 0 30px rgba(0, 229, 255, 0.15);
+    --t-glow: 0 0 15px rgba(0, 229, 255, 0.5);
+    --t-hover-transition: all 0.3s ease;
 }
 
 html[data-theme='voltage'] {
-    background-color: #080a0f !important;
+    background-color: #1a2636 !important;
     background-image:
-        /* Minor Grid */
-        linear-gradient(rgba(0, 229, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 229, 255, 0.1) 1px, transparent 1px),
-        /* Major Grid */
-        linear-gradient(rgba(0, 229, 255, 0.2) 2px, transparent 2px),
-        linear-gradient(90deg, rgba(0, 229, 255, 0.2) 2px, transparent 2px),
-        radial-gradient(circle at 50% 50%, rgba(26, 31, 51, 1) 0%, rgba(8, 10, 15, 1) 100%) !important;
-    background-size: 20px 20px, 20px 20px, 100px 100px, 100px 100px, 100% 100% !important;
+        /* Węzły siatki - punkty na przecięciach */
+        radial-gradient(circle at center, rgba(0, 229, 255, 0.25) 1.5px, transparent 1.5px),
+        /* Mniejsza siatka - subtelna */
+        linear-gradient(rgba(0, 229, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.08) 1px, transparent 1px),
+        /* Większa siatka - bardziej widoczna */
+        linear-gradient(rgba(0, 229, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.15) 1px, transparent 1px),
+        /* Gradient bazowy */
+        radial-gradient(ellipse at 50% 0%, rgba(40, 60, 85, 0.6) 0%, rgba(26, 38, 54, 1) 70%) !important;
+    background-size: 80px 80px, 20px 20px, 20px 20px, 80px 80px, 80px 80px, 100% 100% !important;
     background-attachment: fixed !important;
 }
 
@@ -616,32 +870,48 @@ html[data-theme='voltage'] .page-title h1 {
 }
 
 html[data-theme='voltage'] .glass-card {
-    border-radius: 4px;
-    border: 1px solid rgba(0, 229, 255, 0.15);
-    border-left: 4px solid #ffcc00;
-    background: linear-gradient(145deg, #161a26, #0c0e14);
-    box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.5), inset 1px 1px 0 rgba(255, 255, 255, 0.02);
+    border-radius: 6px;
+    border: 1px solid rgba(0, 229, 255, 0.2);
+    border-left: 3px solid #00e5ff; /* Charakterystyczna lewa ramka Volta - CYAN */
+    background: linear-gradient(180deg, rgba(14, 20, 30, 0.98) 0%, rgba(10, 14, 22, 0.99) 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(0, 229, 255, 0.05);
     position: relative;
+    color: #e8eef5;
+    overflow: hidden;
 }
 
-/* Card Corner Decals */
+/* Card Corner Decals - Blueprint Style */
 html[data-theme='voltage'] .glass-card::before {
     content: '';
     position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 10px;
-    height: 10px;
-    border-top: 2px solid rgba(255, 204, 0, 0.3);
-    border-right: 2px solid rgba(255, 204, 0, 0.3);
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border-top: 2px solid rgba(0, 229, 255, 0.5);
+    border-right: 2px solid rgba(0, 229, 255, 0.5);
+    pointer-events: none;
+}
+
+html[data-theme='voltage'] .glass-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-bottom: 2px solid rgba(0, 229, 255, 0.5);
+    border-left: 2px solid rgba(0, 229, 255, 0.5);
     pointer-events: none;
 }
 
 html[data-theme='voltage'] .glass-card:hover {
-    border-color: #00e5ff;
-    box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
-    animation: electricFlickerRefined 0.15s infinite;
-    transform: scale(1.01) translateY(-2px);
+    border-color: rgba(0, 229, 255, 0.5);
+    border-left-color: #00e5ff;
+    box-shadow: 0 8px 30px rgba(0, 229, 255, 0.15), inset 0 1px 0 rgba(0, 229, 255, 0.1);
+    transform: translateY(-3px);
+    transition: all 0.3s ease;
+    /* BEZ ANIMACJI - tylko płynne przejście */
 }
 
 html[data-theme='voltage'] button {
@@ -696,7 +966,90 @@ html[data-theme='voltage'] .nav-item.active {
 html[data-theme='voltage'] .orb {
     background: #00e5ff;
     filter: blur(150px);
-    opacity: 0.05;
+    opacity: 0.03; /* Bardzo subtelne */
+}
+
+/* Lesson Cards - taki sam styl jak glass-card */
+html[data-theme='voltage'] .lesson-card-v3 {
+    background: linear-gradient(180deg, rgba(14, 20, 30, 0.98) 0%, rgba(10, 14, 22, 0.99) 100%) !important;
+    border: 1px solid rgba(0, 229, 255, 0.2) !important;
+    border-left: 3px solid #00e5ff !important;
+    border-radius: 6px !important;
+    color: #e8eef5 !important;
+}
+
+html[data-theme='voltage'] .lesson-card-v3:hover {
+    border-color: rgba(0, 229, 255, 0.5) !important;
+    box-shadow: 0 8px 30px rgba(0, 229, 255, 0.15) !important;
+    transform: translateY(-3px);
+    transition: all 0.3s ease !important;
+}
+
+/* Formularze - industrial style */
+html[data-theme='voltage'] input,
+html[data-theme='voltage'] select,
+html[data-theme='voltage'] textarea {
+    background: rgba(10, 14, 20, 0.9) !important;
+    border: 1px solid rgba(0, 229, 255, 0.2) !important;
+    color: #e8eef5 !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    border-radius: 4px !important;
+}
+
+html[data-theme='voltage'] input:focus,
+html[data-theme='voltage'] select:focus,
+html[data-theme='voltage'] textarea:focus {
+    border-color: #00e5ff !important;
+    box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.1) !important;
+    outline: none !important;
+}
+
+/* Bottom Navigation */
+html[data-theme='voltage'] .bottom-nav,
+html[data-theme='voltage'] nav[class*="bottom"] {
+    background: linear-gradient(180deg, rgba(12, 18, 28, 0.98) 0%, rgba(8, 12, 20, 0.99) 100%) !important;
+    border-top: 1px solid rgba(0, 229, 255, 0.2) !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+html[data-theme='voltage'] .bottom-nav a.active,
+html[data-theme='voltage'] nav a.active {
+    color: #00e5ff !important;
+}
+
+/* Sidebar */
+html[data-theme='voltage'] .sidebar,
+html[data-theme='voltage'] aside {
+    background: linear-gradient(180deg, rgba(12, 18, 28, 0.98) 0%, rgba(8, 12, 20, 0.99) 100%) !important;
+    border-right: 1px solid rgba(0, 229, 255, 0.15) !important;
+}
+
+/* Hazard Stripes - paski ostrzegawcze */
+html[data-theme='voltage'] .warning-stripe,
+html[data-theme='voltage'] .hazard-bar {
+    background: repeating-linear-gradient(
+        -45deg,
+        #ffcc00 0px,
+        #ffcc00 10px,
+        #1a1a1a 10px,
+        #1a1a1a 20px
+    );
+    height: 6px;
+    width: 100%;
+    border-radius: 0;
+}
+
+/* LCD Display dla wartości */
+html[data-theme='voltage'] .lcd-display,
+html[data-theme='voltage'] .value-display {
+    background: #080a0f !important;
+    border: 1px solid rgba(0, 229, 255, 0.3) !important;
+    border-radius: 2px !important;
+    padding: 8px 12px !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #00e5ff !important;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.6) !important;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6) !important;
 }
 
 @keyframes electricFlickerRefined {
@@ -1277,21 +1630,7 @@ body {
     left: 100% !important;
 }
 
-/* Theme Overrides for Voltage */
-html[data-theme='voltage'] .lesson-card-v3 {
-    border-radius: 4px !important;
-    border: 1px solid rgba(0, 229, 255, 0.1) !important;
-    border-left: 4px solid #ffcc00 !important;
-    background: linear-gradient(145deg, #161a26, #0c0e14) !important;
-    box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.5), inset 1px 1px 0 rgba(255, 255, 255, 0.02) !important;
-}
-
-html[data-theme='voltage'] .lesson-card-v3:hover {
-    border-color: #00e5ff !important;
-    box-shadow: 0 0 30px rgba(0, 229, 255, 0.15) !important;
-    animation: electricFlickerRefined 0.15s infinite !important;
-    transform: scale(1.01) translateY(-2px) !important;
-}
+/* Theme Overrides for Voltage - USUNIĘTE DUPLIKATY, style przeniesione do sekcji voltage */
 
 .mission-item:hover {
     border-color: var(--neon-purple);

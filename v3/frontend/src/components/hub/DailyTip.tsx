@@ -16,23 +16,22 @@ export default function DailyTip({ tip }: DailyTipProps) {
     if (!tip) return null
 
     return (
-        <div style={{
-            background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 0, 0, 0))',
-            border: '1px solid rgba(0, 212, 255, 0.2)',
-            borderRadius: '20px',
-            padding: '24px',
-            marginBottom: '24px'
-        }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                <div style={{
-                    padding: '8px',
-                    borderRadius: '8px',
-                    background: 'rgba(0, 212, 255, 0.2)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                    <Lightbulb size={18} color="#00d4ff" />
+        <div 
+            className="theme-card"
+            style={{
+                background: 'linear-gradient(135deg, var(--t-card-bg), transparent)',
+                borderColor: 'var(--t-border-accent)',
+                marginBottom: '24px'
+            }}
+        >
+            <div className="theme-section-header">
+                <div 
+                    className="theme-icon-container"
+                    style={{ background: 'rgba(0, 212, 255, 0.2)' }}
+                >
+                    <Lightbulb size={18} style={{ color: 'var(--t-accent)' }} />
                 </div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#00d4ff' }}>Pigułka Wiedzy</h3>
+                <h3 className="theme-section-title">Pigułka Wiedzy</h3>
             </div>
 
             <p style={{
@@ -40,13 +39,17 @@ export default function DailyTip({ tip }: DailyTipProps) {
                 lineHeight: '1.6',
                 fontStyle: 'italic',
                 marginBottom: '12px',
-                color: 'white'
+                color: 'var(--t-text)'
             }}>
                 "{tip.content}"
             </p>
 
             {tip.author && (
-                <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', textAlign: 'right' }}>
+                <div style={{ 
+                    fontSize: '12px', 
+                    color: 'var(--t-text-muted)', 
+                    textAlign: 'right' 
+                }}>
                     — {tip.author}
                 </div>
             )}

@@ -21,20 +21,21 @@ export default function Sidebar() {
 
     return (
         <div
-            className="nav-sidebar flex flex-col fixed left-0 top-0 bottom-0 z-[100] w-[200px] px-4 py-6"
+            className="nav-sidebar flex flex-col fixed left-0 top-0 bottom-0 z-[100] w-[200px] px-4 py-0"
         >
-            {/* Logo */}
+            {/* Logo - wyrównane do wysokości TopBar (65px) */}
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '8px 12px',
-                marginBottom: '48px'
+                height: '65px',
+                marginBottom: '24px',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
             }}>
                 <div style={{
                     fontSize: '18px',
                     fontWeight: 700,
-                    background: 'linear-gradient(135deg, #00d4ff, #b000ff)',
+                    background: 'linear-gradient(135deg, #0E2A47, #1E73B9, #B10A4A)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     backgroundClip: 'text',

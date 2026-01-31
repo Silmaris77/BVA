@@ -156,7 +156,7 @@ export default function TopBar() {
     return (
         <div className="global-topbar sticky top-0 z-50 flex h-[65px] items-center justify-between px-8 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
             {/* LEFT SIDE: Navigation Tabs */}
-            <div style={{ flex: 1, overflow: 'hidden', marginLeft: '16px' }}>
+            <div style={{ flex: 1, overflow: 'hidden' }}>
                 {renderTabs()}
             </div>
 

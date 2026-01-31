@@ -204,5 +204,90 @@ export default function EffectsOverlay() {
         )
     }
 
+    // VOLTAGE MODE ⚡ (Electrical Schematics)
+    if (theme === 'voltage') {
+        return (
+            <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1, overflow: 'hidden' }}>
+                {/* SVG Electrical Schematics Overlay */}
+                <svg 
+                    style={{ 
+                        position: 'absolute', 
+                        inset: 0, 
+                        width: '100%', 
+                        height: '100%',
+                        opacity: 0.06
+                    }}
+                    viewBox="0 0 1920 1080"
+                    preserveAspectRatio="xMidYMid slice"
+                >
+                    {/* Horizontal Circuit Lines */}
+                    <path d="M0 200 H300 L320 180 L340 220 L360 180 L380 220 L400 200 H700" 
+                          stroke="#00e5ff" strokeWidth="1.5" fill="none" />
+                    <path d="M1200 400 H1500 L1520 380 L1540 420 L1560 380 L1580 420 L1600 400 H1920" 
+                          stroke="#00e5ff" strokeWidth="1.5" fill="none" />
+                    <path d="M0 800 H200 L220 780 L240 820 L260 780 L280 820 L300 800 H600" 
+                          stroke="#00e5ff" strokeWidth="1.5" fill="none" />
+                    
+                    {/* Vertical Lines */}
+                    <line x1="700" y1="200" x2="700" y2="500" stroke="#00e5ff" strokeWidth="1.5" />
+                    <line x1="1200" y1="400" x2="1200" y2="700" stroke="#00e5ff" strokeWidth="1.5" />
+                    
+                    {/* Connection Nodes */}
+                    <circle cx="300" cy="200" r="4" fill="#00e5ff" />
+                    <circle cx="700" cy="200" r="4" fill="#00e5ff" />
+                    <circle cx="700" cy="500" r="4" fill="#00e5ff" />
+                    <circle cx="1200" cy="400" r="4" fill="#00e5ff" />
+                    <circle cx="1600" cy="400" r="4" fill="#00e5ff" />
+                    <circle cx="600" cy="800" r="4" fill="#00e5ff" />
+                    
+                    {/* Ground Symbol */}
+                    <g transform="translate(300, 900)">
+                        <line x1="0" y1="0" x2="0" y2="20" stroke="#00e5ff" strokeWidth="1.5" />
+                        <line x1="-12" y1="20" x2="12" y2="20" stroke="#00e5ff" strokeWidth="1.5" />
+                        <line x1="-8" y1="26" x2="8" y2="26" stroke="#00e5ff" strokeWidth="1.5" />
+                        <line x1="-4" y1="32" x2="4" y2="32" stroke="#00e5ff" strokeWidth="1.5" />
+                    </g>
+                    
+                    {/* Capacitor Symbol */}
+                    <g transform="translate(1600, 700)">
+                        <line x1="0" y1="0" x2="0" y2="15" stroke="#00e5ff" strokeWidth="1.5" />
+                        <line x1="-10" y1="15" x2="10" y2="15" stroke="#00e5ff" strokeWidth="2" />
+                        <line x1="-10" y1="22" x2="10" y2="22" stroke="#00e5ff" strokeWidth="2" />
+                        <line x1="0" y1="22" x2="0" y2="37" stroke="#00e5ff" strokeWidth="1.5" />
+                    </g>
+
+                    {/* Another Ground Symbol */}
+                    <g transform="translate(1800, 600)">
+                        <line x1="0" y1="0" x2="0" y2="20" stroke="#00e5ff" strokeWidth="1.5" />
+                        <line x1="-12" y1="20" x2="12" y2="20" stroke="#00e5ff" strokeWidth="1.5" />
+                        <line x1="-8" y1="26" x2="8" y2="26" stroke="#00e5ff" strokeWidth="1.5" />
+                        <line x1="-4" y1="32" x2="4" y2="32" stroke="#00e5ff" strokeWidth="1.5" />
+                    </g>
+                </svg>
+                
+                {/* Scanning Line Animation */}
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    @keyframes voltageScan {
+                        0% { top: -2px; opacity: 0; }
+                        10% { opacity: 0.5; }
+                        90% { opacity: 0.5; }
+                        100% { top: 100%; opacity: 0; }
+                    }
+                `}} />
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent 0%, rgba(0, 229, 255, 0.4) 50%, transparent 100%)',
+                    animation: 'voltageScan 8s linear infinite',
+                    opacity: 0.4
+                }} />
+            </div>
+        )
+    }
+
     return null
 }
